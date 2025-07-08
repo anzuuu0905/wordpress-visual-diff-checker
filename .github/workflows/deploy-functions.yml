@@ -1,0 +1,106 @@
+name: Deploy Cloud Functions
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'cloud-functions/**'
+      - '.github/workflows/deploy-functions.yml'
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  REGION: asia-northeast1
+
+jobs:
+  deploy-sheets-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
+      
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+      
+      - name: Deploy sheets-sync function
+        run: |
+          cd cloud-functions/sheets-sync
+          gcloud functions deploy syncToSheets \
+            --gen2 \
+            --runtime nodejs20 \
+            --region $REGION \
+            --source . \
+            --entry-point syncToSheets \
+            --trigger-event-type google.cloud.firestore.document.v1.written \
+            --trigger-event-filters="database=(default)" \
+            --trigger-event-filters-path-pattern="documents/comparisons/{siteId}_{date}" \
+            --set-env-vars="SHEET_ID=${{ secrets.SHEET_ID }},SLACK_WEBHOOK_URL=${{ secrets.SLACK_WEBHOOK_URL }},DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}" \
+            --memory 512MB \
+            --timeout 540s
+
+  deploy-cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
+      
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+      
+      - name: Deploy cleanup function
+        run: |
+          cd cloud-functions/cleanup
+          gcloud functions deploy cleanupOldData \
+            --gen2 \
+            --runtime nodejs20 \
+            --region $REGION \
+            --source . \
+            --entry-point cleanupOldData \
+            --trigger-http \
+            --allow-unauthenticated \
+            --set-env-vars="DRIVE_ROOT=${{ secrets.DRIVE_ROOT }},DATA_RETENTION_DAYS=90" \
+            --memory 1GB \
+            --timeout 1800s
+
+  setup-scheduler:
+    runs-on: ubuntu-latest
+    needs: deploy-cleanup
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
+      
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+      
+      - name: Create or update Cloud Scheduler job
+        run: |
+          # Check if job already exists
+          if gcloud scheduler jobs describe cleanup-old-data --location=$REGION 2>/dev/null; then
+            echo "Updating existing scheduler job"
+            gcloud scheduler jobs update http cleanup-old-data \
+              --location=$REGION \
+              --schedule="0 2 * * *" \
+              --uri="https://$REGION-$PROJECT_ID.cloudfunctions.net/cleanupOldData" \
+              --http-method=GET \
+              --time-zone="Asia/Tokyo"
+          else
+            echo "Creating new scheduler job"
+            gcloud scheduler jobs create http cleanup-old-data \
+              --location=$REGION \
+              --schedule="0 2 * * *" \
+              --uri="https://$REGION-$PROJECT_ID.cloudfunctions.net/cleanupOldData" \
+              --http-method=GET \
+              --time-zone="Asia/Tokyo" \
+              --description="Daily cleanup of old VRT data"
+          fi
