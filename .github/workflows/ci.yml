@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20, 22]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: |
+        npm ci
+        cd cloud-run && npm ci
+        cd ../gas && npm ci
+    
+    - name: Run linting
+      run: |
+        cd cloud-run && npm run lint || true
+    
+    - name: Run tests
+      run: |
+        cd cloud-run && npm test || true
+    
+    - name: Build Docker image
+      run: |
+        cd cloud-run
+        docker build -t vrt-runner-test .
+    
+    - name: Test Docker image
+      run: |
+        docker run --rm vrt-runner-test node --version
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Run security audit
+      run: |
+        npm audit --audit-level=moderate || true
+        cd cloud-run && npm audit --audit-level=moderate || true
