@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WordPress Visual Diff Checker</title>
+  <?!= include('styles'); ?>
+</head>
+<body>
+  <div class="container">
+    <!-- ヘッダー -->
+    <header class="header">
+      <h1>
+        <span class="logo">🔍</span>
+        WordPress Visual Diff Checker
+      </h1>
+      <div class="header-actions">
+        <button id="refreshBtn" class="btn btn-secondary">
+          <span class="icon">🔄</span>
+          更新
+        </button>
+        <button id="healthCheckBtn" class="btn btn-secondary">
+          <span class="icon">💚</span>
+          ヘルスチェック
+        </button>
+      </div>
+    </header>
+
+    <!-- サイト追加フォーム -->
+    <section class="add-site-section">
+      <h2>🆕 新規サイト追加</h2>
+      <form id="addSiteForm" class="add-site-form">
+        <div class="form-group">
+          <label for="siteName">サイト名 <span class="required">*</span></label>
+          <input type="text" id="siteName" placeholder="例: コーポレートサイト" required>
+        </div>
+        <div class="form-group">
+          <label for="siteUrl">URL <span class="required">*</span></label>
+          <input type="url" id="siteUrl" placeholder="例: https://example.com" required>
+        </div>
+        <div class="form-group">
+          <label for="siteDescription">説明</label>
+          <textarea id="siteDescription" placeholder="サイトの説明（任意）" rows="2"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">
+          <span class="icon">➕</span>
+          サイトを追加
+        </button>
+      </form>
+    </section>
+
+    <!-- サイト一覧 -->
+    <section class="sites-section">
+      <h2>📋 登録サイト一覧</h2>
+      
+      <!-- ローディング表示 -->
+      <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <p>読み込み中...</p>
+      </div>
+
+      <!-- エラー表示 -->
+      <div id="error" class="error" style="display: none;">
+        <p id="errorMessage"></p>
+        <button onclick="loadSites()" class="btn btn-secondary">再試行</button>
+      </div>
+
+      <!-- サイト一覧テーブル -->
+      <div id="sitesContainer" style="display: none;">
+        <div class="table-wrapper">
+          <table id="sitesTable" class="sites-table">
+            <thead>
+              <tr>
+                <th>サイト名</th>
+                <th>URL</th>
+                <th>最終実行</th>
+                <th>ステータス</th>
+                <th>アクション</th>
+              </tr>
+            </thead>
+            <tbody id="sitesBody">
+            </tbody>
+          </table>
+        </div>
+        
+        <div id="noSites" class="no-sites" style="display: none;">
+          <div class="empty-state">
+            <span class="empty-icon">📝</span>
+            <h3>サイトが登録されていません</h3>
+            <p>上のフォームから新しいサイトを追加してください</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 実行結果モーダル -->
+    <div id="resultModal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>実行結果</h3>
+          <button class="modal-close" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div id="resultContent"></div>
+        </div>
+        <div class="modal-footer">
+          <button onclick="closeModal()" class="btn btn-secondary">閉じる</button>
+          <button onclick="openSheets()" class="btn btn-primary">
+            <span class="icon">📊</span>
+            結果をSheetで確認
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- サイト編集モーダル -->
+    <div id="editModal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>サイト編集</h3>
+          <button class="modal-close" onclick="closeEditModal()">&times;</button>
+        </div>
+        <form id="editSiteForm" class="modal-body">
+          <input type="hidden" id="editSiteId">
+          <div class="form-group">
+            <label for="editSiteName">サイト名 <span class="required">*</span></label>
+            <input type="text" id="editSiteName" required>
+          </div>
+          <div class="form-group">
+            <label for="editSiteUrl">URL <span class="required">*</span></label>
+            <input type="url" id="editSiteUrl" required>
+          </div>
+          <div class="form-group">
+            <label for="editSiteDescription">説明</label>
+            <textarea id="editSiteDescription" rows="2"></textarea>
+          </div>
+        </form>
+        <div class="modal-footer">
+          <button onclick="closeEditModal()" class="btn btn-secondary">キャンセル</button>
+          <button onclick="updateSite()" class="btn btn-primary">更新</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 確認モーダル -->
+    <div id="confirmModal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="confirmTitle">確認</h3>
+          <button class="modal-close" onclick="closeConfirmModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p id="confirmMessage"></p>
+        </div>
+        <div class="modal-footer">
+          <button onclick="closeConfirmModal()" class="btn btn-secondary">キャンセル</button>
+          <button id="confirmAction" class="btn btn-danger">実行</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- トースト通知 -->
+    <div id="toast" class="toast" style="display: none;">
+      <div class="toast-content">
+        <span id="toastIcon" class="toast-icon"></span>
+        <span id="toastMessage" class="toast-message"></span>
+      </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+      <p>WordPress Visual Diff Checker v1.0.0</p>
+      <p>
+        <a href="https://github.com/anzuuu0905/wordpress-visual-diff-checker" target="_blank">
+          GitHub
+        </a>
+      </p>
+    </footer>
+  </div>
+
+  <?!= include('script'); ?>
+</body>
+</html>
