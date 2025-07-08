@@ -1,6 +1,6 @@
 # 🤖 WordPress Visual Diff Checker - 完全自動化版
 
-**設定20分、その後は完全放置でWordPress のUI崩れを自動検知！**
+**設定1分、その後は完全放置でWordPress のUI崩れを自動検知！**
 
 WordPress プラグイン・テーマ更新時に **自動で** ビジュアル差分をチェックし、Slack/Discord に通知する完全自動化システムです。
 
@@ -42,7 +42,28 @@ WordPress プラグイン・テーマ更新時に **自動で** ビジュアル�
 └─────────────────┘     └──────────────┘     └─────────────────┘
 ```
 
-## セットアップ
+## ⚡ 1分セットアップ
+
+### 🚀 **たった1つのコマンドで完全自動化開始！**
+
+#### macOS / Linux
+```bash
+curl -sL https://raw.githubusercontent.com/anzuuu0905/wordpress-visual-diff-checker/main/setup/one-minute-setup.sh | bash
+```
+
+#### Windows (PowerShell)
+```powershell
+iwr https://raw.githubusercontent.com/anzuuu0905/wordpress-visual-diff-checker/main/setup/one-minute-setup.ps1 | iex
+```
+
+### 📱 **その後30秒:**
+1. WordPress プラグインをダウンロード（URL が表示される）
+2. 各 WordPress サイトにアップロード・有効化
+3. **完全自動化開始！**
+
+---
+
+## 📋 従来のセットアップ（詳細制御したい場合）
 
 ### 前提条件
 
