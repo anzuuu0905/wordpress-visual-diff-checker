@@ -1,0 +1,547 @@
+<script>
+// WordPress Visual Diff Checker - フロントエンド JavaScript
+
+let sites = [];
+let currentEditingSite = null;
+
+// ページ読み込み時の初期化
+document.addEventListener('DOMContentLoaded', function() {
+  initializeApp();
+  setupEventListeners();
+});
+
+/**
+ * アプリケーションの初期化
+ */
+function initializeApp() {
+  loadSites();
+}
+
+/**
+ * イベントリスナーの設定
+ */
+function setupEventListeners() {
+  // サイト追加フォーム
+  document.getElementById('addSiteForm').addEventListener('submit', handleAddSite);
+  
+  // ヘッダーボタン
+  document.getElementById('refreshBtn').addEventListener('click', loadSites);
+  document.getElementById('healthCheckBtn').addEventListener('click', performHealthCheck);
+  
+  // モーダル外クリックで閉じる
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('modal')) {
+      closeModal();
+      closeEditModal();
+      closeConfirmModal();
+    }
+  });
+  
+  // ESCキーでモーダルを閉じる
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeModal();
+      closeEditModal();
+      closeConfirmModal();
+    }
+  });
+}
+
+/**
+ * サイト一覧を読み込み
+ */
+function loadSites() {
+  showLoading();
+  hideError();
+  
+  google.script.run
+    .withSuccessHandler(handleLoadSitesSuccess)
+    .withFailureHandler(handleLoadSitesError)
+    .getSites();
+}
+
+/**
+ * サイト一覧読み込み成功時の処理
+ */
+function handleLoadSitesSuccess(data) {
+  hideLoading();
+  sites = data || [];
+  displaySites();
+}
+
+/**
+ * サイト一覧読み込み失敗時の処理
+ */
+function handleLoadSitesError(error) {
+  hideLoading();
+  showError('サイト一覧の読み込みに失敗しました: ' + error.message);
+}
+
+/**
+ * サイト一覧を表示
+ */
+function displaySites() {
+  const sitesBody = document.getElementById('sitesBody');
+  const sitesContainer = document.getElementById('sitesContainer');
+  const noSites = document.getElementById('noSites');
+  
+  if (sites.length === 0) {
+    sitesContainer.style.display = 'block';
+    noSites.style.display = 'block';
+    sitesBody.innerHTML = '';
+    return;
+  }
+  
+  sitesContainer.style.display = 'block';
+  noSites.style.display = 'none';
+  
+  sitesBody.innerHTML = sites.map(site => `
+    <tr>
+      <td>
+        <div>
+          <strong>${escapeHtml(site.name)}</strong>
+          ${site.description ? `<br><small style="color: #666;">${escapeHtml(site.description)}</small>` : ''}
+        </div>
+      </td>
+      <td>
+        <a href="${escapeHtml(site.url)}" target="_blank" class="url-display" title="${escapeHtml(site.url)}">
+          ${escapeHtml(site.url)}
+        </a>
+      </td>
+      <td>
+        <small>${site.lastRun || '-'}</small>
+      </td>
+      <td>
+        <span class="status-badge status-${site.status}">
+          ${getStatusDisplay(site.status)}
+        </span>
+      </td>
+      <td>
+        <div class="action-buttons">
+          <button onclick="runVrt('${site.id}', 'full')" class="btn btn-primary btn-small" 
+                  ${site.status === 'running' ? 'disabled' : ''}>
+            <span class="icon">▶️</span>
+            完全実行
+          </button>
+          <button onclick="runVrt('${site.id}', 'baseline')" class="btn btn-secondary btn-small"
+                  ${site.status === 'running' ? 'disabled' : ''}>
+            Baseline
+          </button>
+          <button onclick="runVrt('${site.id}', 'after')" class="btn btn-secondary btn-small"
+                  ${site.status === 'running' ? 'disabled' : ''}>
+            After
+          </button>
+          <button onclick="openEditModal('${site.id}')" class="btn btn-secondary btn-small">
+            <span class="icon">✏️</span>
+            編集
+          </button>
+          <button onclick="confirmDelete('${site.id}', '${escapeHtml(site.name)}')" class="btn btn-danger btn-small">
+            <span class="icon">🗑️</span>
+            削除
+          </button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+/**
+ * 新しいサイトを追加
+ */
+function handleAddSite(e) {
+  e.preventDefault();
+  
+  const name = document.getElementById('siteName').value.trim();
+  const url = document.getElementById('siteUrl').value.trim();
+  const description = document.getElementById('siteDescription').value.trim();
+  
+  if (!name || !url) {
+    showToast('サイト名とURLは必須です', 'error');
+    return;
+  }
+  
+  // ボタンを無効化
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span class="icon">⏳</span> 追加中...';
+  
+  google.script.run
+    .withSuccessHandler(function(result) {
+      if (result.success) {
+        showToast('サイトを追加しました', 'success');
+        document.getElementById('addSiteForm').reset();
+        loadSites();
+      } else {
+        showToast(result.error || 'サイトの追加に失敗しました', 'error');
+      }
+    })
+    .withFailureHandler(function(error) {
+      showToast('サイトの追加に失敗しました: ' + error.message, 'error');
+    })
+    .withFinish(function() {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<span class="icon">➕</span> サイトを追加';
+    })
+    .addSite(name, url, description);
+}
+
+/**
+ * VRT チェックを実行
+ */
+function runVrt(siteId, mode) {
+  const site = sites.find(s => s.id === siteId);
+  if (!site) {
+    showToast('サイトが見つかりません', 'error');
+    return;
+  }
+  
+  // 実行確認
+  const modeNames = {
+    full: '完全実行（Baseline → After → 比較）',
+    baseline: 'Baseline 実行',
+    after: 'After 実行',
+    compare: '比較実行'
+  };
+  
+  if (!confirm(`${site.name} の ${modeNames[mode]} を開始しますか？\n\n実行には数分かかる場合があります。`)) {
+    return;
+  }
+  
+  // UI を更新
+  updateSiteStatus(siteId, 'running');
+  showToast(`${site.name} の ${modeNames[mode]} を開始しました`, 'success');
+  
+  // バックグラウンドで実行
+  google.script.run
+    .withSuccessHandler(function(result) {
+      if (result.success) {
+        showToast(`${site.name} の実行が完了しました`, 'success');
+        showResultModal(result);
+      } else {
+        showToast(`実行エラー: ${result.error}`, 'error');
+      }
+      loadSites(); // ステータスを更新
+    })
+    .withFailureHandler(function(error) {
+      showToast(`実行エラー: ${error.message}`, 'error');
+      loadSites(); // ステータスを更新
+    })
+    .runVrtCheck(siteId, mode);
+}
+
+/**
+ * サイトのステータスをリアルタイム更新
+ */
+function updateSiteStatus(siteId, status) {
+  const site = sites.find(s => s.id === siteId);
+  if (site) {
+    site.status = status;
+    displaySites();
+  }
+}
+
+/**
+ * サイト編集モーダルを開く
+ */
+function openEditModal(siteId) {
+  const site = sites.find(s => s.id === siteId);
+  if (!site) return;
+  
+  currentEditingSite = site;
+  
+  document.getElementById('editSiteId').value = site.id;
+  document.getElementById('editSiteName').value = site.name;
+  document.getElementById('editSiteUrl').value = site.url;
+  document.getElementById('editSiteDescription').value = site.description || '';
+  
+  document.getElementById('editModal').style.display = 'flex';
+}
+
+/**
+ * サイト編集モーダルを閉じる
+ */
+function closeEditModal() {
+  document.getElementById('editModal').style.display = 'none';
+  currentEditingSite = null;
+}
+
+/**
+ * サイト情報を更新
+ */
+function updateSite() {
+  const siteId = document.getElementById('editSiteId').value;
+  const name = document.getElementById('editSiteName').value.trim();
+  const url = document.getElementById('editSiteUrl').value.trim();
+  const description = document.getElementById('editSiteDescription').value.trim();
+  
+  if (!name || !url) {
+    showToast('サイト名とURLは必須です', 'error');
+    return;
+  }
+  
+  google.script.run
+    .withSuccessHandler(function(result) {
+      if (result.success) {
+        showToast('サイト情報を更新しました', 'success');
+        closeEditModal();
+        loadSites();
+      } else {
+        showToast(result.error || 'サイトの更新に失敗しました', 'error');
+      }
+    })
+    .withFailureHandler(function(error) {
+      showToast('サイトの更新に失敗しました: ' + error.message, 'error');
+    })
+    .updateSite(siteId, name, url, description);
+}
+
+/**
+ * サイト削除の確認
+ */
+function confirmDelete(siteId, siteName) {
+  showConfirmModal(
+    'サイト削除の確認',
+    `「${siteName}」を削除してもよろしいですか？\n\nこの操作は取り消せません。`,
+    function() {
+      deleteSite(siteId);
+    }
+  );
+}
+
+/**
+ * サイトを削除
+ */
+function deleteSite(siteId) {
+  google.script.run
+    .withSuccessHandler(function(result) {
+      if (result.success) {
+        showToast('サイトを削除しました', 'success');
+        loadSites();
+      } else {
+        showToast(result.error || 'サイトの削除に失敗しました', 'error');
+      }
+    })
+    .withFailureHandler(function(error) {
+      showToast('サイトの削除に失敗しました: ' + error.message, 'error');
+    })
+    .deleteSite(siteId);
+  
+  closeConfirmModal();
+}
+
+/**
+ * 結果モーダルを表示
+ */
+function showResultModal(result) {
+  const content = document.getElementById('resultContent');
+  
+  let html = `
+    <div class="progress-steps">
+      <div class="result-summary">
+        <h4>${result.siteName} の実行結果</h4>
+        <p><strong>実行モード:</strong> ${result.mode}</p>
+        <p><strong>実行時間:</strong> ${new Date(result.startTime).toLocaleString('ja-JP')} 〜 ${new Date(result.endTime).toLocaleString('ja-JP')}</p>
+        ${result.ngCount !== undefined ? `<p><strong>検出された差分:</strong> ${result.ngCount} 件</p>` : ''}
+      </div>
+  `;
+  
+  if (result.steps && result.steps.length > 0) {
+    html += '<h5>実行ステップ:</h5>';
+    result.steps.forEach(step => {
+      const stepNames = {
+        baseline: 'Baseline スクリーンショット',
+        after: 'After スクリーンショット', 
+        compare: '差分比較'
+      };
+      
+      html += `
+        <div class="progress-step ${step.status}">
+          <span class="step-icon">
+            ${step.status === 'completed' ? '✅' : step.status === 'running' ? '⏳' : '❌'}
+          </span>
+          <div class="step-details">
+            <div class="step-name">${stepNames[step.step] || step.step}</div>
+            <div class="step-time">
+              ${step.startTime ? new Date(step.startTime).toLocaleTimeString('ja-JP') : ''} 
+              ${step.endTime ? ' 〜 ' + new Date(step.endTime).toLocaleTimeString('ja-JP') : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    });
+  }
+  
+  if (result.error) {
+    html += `
+      <div class="progress-step error">
+        <span class="step-icon">❌</span>
+        <div class="step-details">
+          <div class="step-name">エラー</div>
+          <div class="step-time">${result.error}</div>
+        </div>
+      </div>
+    `;
+  }
+  
+  html += '</div>';
+  content.innerHTML = html;
+  
+  document.getElementById('resultModal').style.display = 'flex';
+}
+
+/**
+ * 結果モーダルを閉じる
+ */
+function closeModal() {
+  document.getElementById('resultModal').style.display = 'none';
+}
+
+/**
+ * Google Sheets を開く
+ */
+function openSheets() {
+  const sheetId = 'YOUR_SHEET_ID'; // 環境変数から取得する必要がある
+  window.open(`https://docs.google.com/spreadsheets/d/${sheetId}`, '_blank');
+}
+
+/**
+ * 確認モーダルを表示
+ */
+function showConfirmModal(title, message, onConfirm) {
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmMessage').textContent = message;
+  document.getElementById('confirmAction').onclick = onConfirm;
+  document.getElementById('confirmModal').style.display = 'flex';
+}
+
+/**
+ * 確認モーダルを閉じる
+ */
+function closeConfirmModal() {
+  document.getElementById('confirmModal').style.display = 'none';
+}
+
+/**
+ * ヘルスチェックを実行
+ */
+function performHealthCheck() {
+  const btn = document.getElementById('healthCheckBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="icon">⏳</span> チェック中...';
+  
+  google.script.run
+    .withSuccessHandler(function(result) {
+      if (result.cloudRunStatus === 'healthy' || result.cloudRunStatus === 'ok') {
+        showToast('システムは正常に動作しています', 'success');
+      } else {
+        showToast('Cloud Run に接続できません', 'warning');
+      }
+    })
+    .withFailureHandler(function(error) {
+      showToast('ヘルスチェックに失敗しました: ' + error.message, 'error');
+    })
+    .withFinish(function() {
+      btn.disabled = false;
+      btn.innerHTML = '<span class="icon">💚</span> ヘルスチェック';
+    })
+    .healthCheck();
+}
+
+/**
+ * トースト通知を表示
+ */
+function showToast(message, type = 'success') {
+  const toast = document.getElementById('toast');
+  const icon = document.getElementById('toastIcon');
+  const messageEl = document.getElementById('toastMessage');
+  
+  const icons = {
+    success: '✅',
+    error: '❌',
+    warning: '⚠️',
+    info: 'ℹ️'
+  };
+  
+  toast.className = `toast ${type}`;
+  icon.textContent = icons[type] || icons.success;
+  messageEl.textContent = message;
+  
+  toast.style.display = 'block';
+  
+  setTimeout(() => {
+    toast.style.display = 'none';
+  }, 5000);
+}
+
+/**
+ * ローディング表示
+ */
+function showLoading() {
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('sitesContainer').style.display = 'none';
+  document.getElementById('error').style.display = 'none';
+}
+
+/**
+ * ローディング非表示
+ */
+function hideLoading() {
+  document.getElementById('loading').style.display = 'none';
+}
+
+/**
+ * エラー表示
+ */
+function showError(message) {
+  document.getElementById('errorMessage').textContent = message;
+  document.getElementById('error').style.display = 'block';
+  document.getElementById('sitesContainer').style.display = 'none';
+}
+
+/**
+ * エラー非表示
+ */
+function hideError() {
+  document.getElementById('error').style.display = 'none';
+}
+
+/**
+ * ステータス表示名を取得
+ */
+function getStatusDisplay(status) {
+  const statusMap = {
+    pending: '待機中',
+    running: '実行中',
+    completed: '完了',
+    ok: '正常',
+    ng: '差分あり',
+    error: 'エラー'
+  };
+  
+  return statusMap[status] || status;
+}
+
+/**
+ * HTML エスケープ
+ */
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+/**
+ * 定期的なサイト一覧更新（実行中のものがある場合）
+ */
+function startPeriodicUpdate() {
+  setInterval(() => {
+    const runningSites = sites.filter(site => site.status === 'running');
+    if (runningSites.length > 0) {
+      loadSites();
+    }
+  }, 30000); // 30秒間隔
+}
+
+// 定期更新開始
+startPeriodicUpdate();
+</script>
