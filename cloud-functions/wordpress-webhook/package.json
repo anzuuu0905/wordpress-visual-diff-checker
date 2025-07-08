@@ -1,0 +1,24 @@
+{
+  "name": "wordpress-webhook-function",
+  "version": "1.0.0",
+  "description": "WordPress webhook receiver for VRT automation",
+  "main": "index.js",
+  "scripts": {
+    "start": "functions-framework --target=wordpressWebhook",
+    "deploy": "gcloud functions deploy wordpressWebhook --runtime nodejs20 --trigger-http --allow-unauthenticated",
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.2.0",
+    "@google-cloud/firestore": "^7.1.0",
+    "@google-cloud/tasks": "^4.1.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "eslint": "^8.55.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

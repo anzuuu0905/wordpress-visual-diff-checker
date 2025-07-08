@@ -1,0 +1,347 @@
+name: Complete Auto Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      deploy_all:
+        description: 'Deploy all components'
+        required: false
+        default: 'true'
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  REGION: asia-northeast1
+
+jobs:
+  deploy-cloud-run:
+    runs-on: ubuntu-latest
+    outputs:
+      cloud-run-url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
+      
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+      
+      - name: Configure Docker
+        run: gcloud auth configure-docker
+      
+      - name: Build and Push Container
+        run: |
+          cd cloud-run
+          docker build -t gcr.io/$PROJECT_ID/vrt-runner:$GITHUB_SHA .
+          docker push gcr.io/$PROJECT_ID/vrt-runner:$GITHUB_SHA
+      
+      - id: deploy
+        name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy vrt-runner \
+            --image gcr.io/$PROJECT_ID/vrt-runner:$GITHUB_SHA \
+            --platform managed \
+            --region $REGION \
+            --memory 1Gi \
+            --cpu 2 \
+            --timeout 900 \
+            --max-instances 5 \
+            --min-instances 0 \
+            --concurrency 10 \
+            --set-env-vars "DRIVE_ROOT=${{ secrets.DRIVE_ROOT }},SHEET_ID=${{ secrets.SHEET_ID }},MAX_CRAWL_URLS=300,DIFF_THRESHOLD=2.0" \
+            --allow-unauthenticated
+          
+          SERVICE_URL=$(gcloud run services describe vrt-runner --region $REGION --format 'value(status.url)')
+          echo "url=$SERVICE_URL" >> $GITHUB_OUTPUT
+
+  deploy-functions:
+    runs-on: ubuntu-latest
+    needs: deploy-cloud-run
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
+      
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+      
+      - name: Deploy sheets-sync function
+        run: |
+          cd cloud-functions/sheets-sync
+          gcloud functions deploy syncToSheets \
+            --gen2 \
+            --runtime nodejs20 \
+            --region $REGION \
+            --source . \
+            --entry-point syncToSheets \
+            --trigger-event-type google.cloud.firestore.document.v1.written \
+            --trigger-event-filters="database=(default)" \
+            --trigger-event-filters-path-pattern="documents/comparisons/{siteId}_{date}" \
+            --set-env-vars="SHEET_ID=${{ secrets.SHEET_ID }},SLACK_WEBHOOK_URL=${{ secrets.SLACK_WEBHOOK_URL }},DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}" \
+            --memory 512MB \
+            --timeout 540s
+      
+      - name: Deploy cleanup function
+        run: |
+          cd cloud-functions/cleanup
+          gcloud functions deploy cleanupOldData \
+            --gen2 \
+            --runtime nodejs20 \
+            --region $REGION \
+            --source . \
+            --entry-point cleanupOldData \
+            --trigger-http \
+            --allow-unauthenticated \
+            --set-env-vars="DRIVE_ROOT=${{ secrets.DRIVE_ROOT }},DATA_RETENTION_DAYS=90" \
+            --memory 1GB \
+            --timeout 1800s
+      
+      - name: Deploy wordpress-webhook function
+        run: |
+          cd cloud-functions/wordpress-webhook
+          gcloud functions deploy wordpressWebhook \
+            --gen2 \
+            --runtime nodejs20 \
+            --region $REGION \
+            --source . \
+            --entry-point wordpressWebhook \
+            --trigger-http \
+            --allow-unauthenticated \
+            --set-env-vars="GCP_PROJECT_ID=$PROJECT_ID" \
+            --memory 512MB \
+            --timeout 540s
+      
+      - name: Deploy auto-execution function
+        run: |
+          cd cloud-functions/auto-execution
+          gcloud functions deploy autoVrtExecution \
+            --gen2 \
+            --runtime nodejs20 \
+            --region $REGION \
+            --source . \
+            --entry-point autoVrtExecution \
+            --trigger-http \
+            --allow-unauthenticated \
+            --set-env-vars="CLOUD_RUN_URL=${{ needs.deploy-cloud-run.outputs.cloud-run-url }},SHEET_ID=${{ secrets.SHEET_ID }},SLACK_WEBHOOK_URL=${{ secrets.SLACK_WEBHOOK_URL }},DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}" \
+            --memory 512MB \
+            --timeout 900s
+          
+          gcloud functions deploy autoBaselineCapture \
+            --gen2 \
+            --runtime nodejs20 \
+            --region $REGION \
+            --source . \
+            --entry-point autoBaselineCapture \
+            --trigger-http \
+            --allow-unauthenticated \
+            --set-env-vars="CLOUD_RUN_URL=${{ needs.deploy-cloud-run.outputs.cloud-run-url }}" \
+            --memory 1GB \
+            --timeout 1800s
+
+  setup-schedulers:
+    runs-on: ubuntu-latest
+    needs: deploy-functions
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
+      
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+      
+      - name: Create Cloud Scheduler jobs
+        run: |
+          # Cleanup job
+          if gcloud scheduler jobs describe cleanup-old-data --location=$REGION 2>/dev/null; then
+            gcloud scheduler jobs update http cleanup-old-data \
+              --location=$REGION \
+              --schedule="0 2 * * *" \
+              --uri="https://$REGION-$PROJECT_ID.cloudfunctions.net/cleanupOldData" \
+              --http-method=GET \
+              --time-zone="Asia/Tokyo"
+          else
+            gcloud scheduler jobs create http cleanup-old-data \
+              --location=$REGION \
+              --schedule="0 2 * * *" \
+              --uri="https://$REGION-$PROJECT_ID.cloudfunctions.net/cleanupOldData" \
+              --http-method=GET \
+              --time-zone="Asia/Tokyo" \
+              --description="Daily cleanup of old VRT data"
+          fi
+          
+          # Auto baseline job
+          if gcloud scheduler jobs describe auto-baseline-capture --location=$REGION 2>/dev/null; then
+            gcloud scheduler jobs update http auto-baseline-capture \
+              --location=$REGION \
+              --schedule="0 3 * * *" \
+              --uri="https://$REGION-$PROJECT_ID.cloudfunctions.net/autoBaselineCapture" \
+              --http-method=POST \
+              --time-zone="Asia/Tokyo"
+          else
+            gcloud scheduler jobs create http auto-baseline-capture \
+              --location=$REGION \
+              --schedule="0 3 * * *" \
+              --uri="https://$REGION-$PROJECT_ID.cloudfunctions.net/autoBaselineCapture" \
+              --http-method=POST \
+              --time-zone="Asia/Tokyo" \
+              --description="Daily automatic baseline capture"
+          fi
+
+  deploy-gas:
+    runs-on: ubuntu-latest
+    needs: deploy-functions
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install clasp
+        run: npm install -g @google/clasp
+      
+      - name: Setup clasp authentication
+        if: secrets.CLASP_CREDENTIALS != ''
+        run: |
+          echo '${{ secrets.CLASP_CREDENTIALS }}' > ~/.clasprc.json
+      
+      - name: Update GAS configuration
+        run: |
+          cd gas/src
+          # Cloud Run URL を実際の値に置換
+          sed -i "s|https://vrt-runner-asia-northeast1-PROJECT_ID.a.run.app|${{ needs.deploy-cloud-run.outputs.cloud-run-url }}|g" Code.gs
+          
+          # Project ID を置換
+          sed -i "s/YOUR_PROJECT_ID/$PROJECT_ID/g" Code.gs
+      
+      - name: Push to GAS
+        if: secrets.CLASP_CREDENTIALS != ''
+        run: |
+          cd gas
+          clasp push --force
+          
+          # 新しいバージョンをデプロイ
+          VERSION=$(clasp version "Auto deployment from GitHub Actions - $(date)")
+          echo "Deployed GAS version: $VERSION"
+
+  smoke-test:
+    runs-on: ubuntu-latest
+    needs: [deploy-cloud-run, deploy-functions]
+    steps:
+      - name: Setup Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
+      
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+      
+      - name: Run smoke tests
+        run: |
+          # Cloud Run health check
+          echo "Testing Cloud Run health endpoint..."
+          CLOUD_RUN_URL="${{ needs.deploy-cloud-run.outputs.cloud-run-url }}"
+          
+          response=$(curl -s -o /dev/null -w "%{http_code}" "$CLOUD_RUN_URL/health")
+          if [ "$response" != "200" ]; then
+            echo "❌ Cloud Run health check failed: $response"
+            exit 1
+          fi
+          echo "✅ Cloud Run health check passed"
+          
+          # Cloud Functions test
+          echo "Testing Cloud Functions..."
+          
+          # Test webhook function
+          webhook_response=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -d '{"site_url":"https://example.com","action":"health_check","test":true}' \
+            "https://$REGION-$PROJECT_ID.cloudfunctions.net/wordpressWebhook")
+          
+          if [ "$webhook_response" != "200" ]; then
+            echo "⚠️ WordPress webhook test returned: $webhook_response"
+          else
+            echo "✅ WordPress webhook test passed"
+          fi
+          
+          # Test cleanup function
+          cleanup_response=$(curl -s -o /dev/null -w "%{http_code}" \
+            "https://$REGION-$PROJECT_ID.cloudfunctions.net/cleanupOldData")
+          
+          if [ "$cleanup_response" != "200" ]; then
+            echo "⚠️ Cleanup function test returned: $cleanup_response"
+          else
+            echo "✅ Cleanup function test passed"
+          fi
+          
+          echo "🎉 All smoke tests completed"
+
+  create-release-info:
+    runs-on: ubuntu-latest
+    needs: [deploy-cloud-run, deploy-functions, setup-schedulers, smoke-test]
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Create deployment summary
+        run: |
+          cat > deployment-summary.md << EOF
+          # 🚀 WordPress VRT Checker デプロイ完了
+          
+          **デプロイ日時**: $(date '+%Y-%m-%d %H:%M:%S JST')
+          **Git Commit**: $GITHUB_SHA
+          **Project ID**: $PROJECT_ID
+          
+          ## 📍 デプロイされたコンポーネント
+          
+          ### Cloud Run
+          - **Service**: vrt-runner
+          - **URL**: ${{ needs.deploy-cloud-run.outputs.cloud-run-url }}
+          - **Region**: $REGION
+          
+          ### Cloud Functions
+          - **syncToSheets**: Firestore → Sheets 同期
+          - **cleanupOldData**: 古いデータ自動削除  
+          - **wordpressWebhook**: WordPress 更新通知受信
+          - **autoVrtExecution**: 自動VRT実行
+          - **autoBaselineCapture**: 定期Baseline撮影
+          
+          ### Cloud Scheduler
+          - **cleanup-old-data**: 毎日2時にデータクリーンアップ
+          - **auto-baseline-capture**: 毎日3時にBaseline自動撮影
+          
+          ## 🔗 次のステップ
+          
+          1. **WordPress プラグインインストール**:
+             \`wordpress-plugin/wordpress-vrt-auto.php\` を各サイトにアップロード
+          
+          2. **サイト登録**: 
+             Web UI からサイトを登録
+          
+          3. **初回Baseline撮影**:
+             「完全実行」で初回Baselineを撮影
+          
+          ## 🎉 これで完全自動化開始！
+          
+          WordPress 更新時に自動で差分チェックが実行されます。
+          EOF
+          
+          cat deployment-summary.md
+      
+      - name: Save deployment info
+        uses: actions/upload-artifact@v3
+        with:
+          name: deployment-summary
+          path: deployment-summary.md

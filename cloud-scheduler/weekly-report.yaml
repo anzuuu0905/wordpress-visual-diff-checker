@@ -1,0 +1,11 @@
+# 毎週月曜日に週次レポートを自動送信
+name: weekly-vrt-report
+description: "Weekly VRT summary report"
+schedule: "0 9 * * 1"  # 毎週月曜日午前9時
+timeZone: "Asia/Tokyo"
+
+httpTarget:
+  uri: https://asia-northeast1-PROJECT_ID.cloudfunctions.net/generateWeeklyReport
+  httpMethod: POST
+  headers:
+    Content-Type: application/json
