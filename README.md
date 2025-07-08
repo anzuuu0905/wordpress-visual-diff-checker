@@ -1,17 +1,19 @@
-# 🤖 WordPress Visual Diff Checker - 完全自動化版
+# WordPress Visual Diff Checker
 
-**設定1分、その後は完全放置でWordPress のUI崩れを自動検知！**
+WordPress プラグイン更新による UI 崩れをブラウザ操作ゼロで検知し、Slack / Discord / Google Sheets にレポートする手動実行型 Web アプリケーション。
 
-WordPress プラグイン・テーマ更新時に **自動で** ビジュアル差分をチェックし、Slack/Discord に通知する完全自動化システムです。
+## 概要
+
+WordPress サイトの管理者向けに、プラグインやテーマの更新前後でビジュアルレグレッションテスト（VRT）を手動実行し、UI の崩れを検出するツールです。
 
 ## ✨ 特徴
 
-- 🎯 **完全自動化**: WordPress更新を検知して自動でVRT実行
-- 🔄 **定期Baseline更新**: 毎日最新の正常状態を記録
+- 🎯 **手動制御**: 更新タイミングを完全にコントロール
 - 📱 **即座に通知**: 差分検出時にSlack/Discordへ自動通知
 - 🎌 **日本語UI**: 使いやすい日本語インターフェース
-- ⚡ **設定不要**: プラグインインストールで即座に動作開始
+- ⚡ **プラグイン不要**: WordPressに何もインストール不要
 - 🛡️ **スケーラブル**: 複数サイト・大量ページに対応
+- 🔧 **分離実行**: Baseline/After/Compare を個別実行可能
 
 ### 主な機能
 
@@ -42,28 +44,7 @@ WordPress プラグイン・テーマ更新時に **自動で** ビジュアル�
 └─────────────────┘     └──────────────┘     └─────────────────┘
 ```
 
-## ⚡ 1分セットアップ
-
-### 🚀 **たった1つのコマンドで完全自動化開始！**
-
-#### macOS / Linux
-```bash
-curl -sL https://raw.githubusercontent.com/anzuuu0905/wordpress-visual-diff-checker/main/setup/one-minute-setup.sh | bash
-```
-
-#### Windows (PowerShell)
-```powershell
-iwr https://raw.githubusercontent.com/anzuuu0905/wordpress-visual-diff-checker/main/setup/one-minute-setup.ps1 | iex
-```
-
-### 📱 **その後30秒:**
-1. WordPress プラグインをダウンロード（URL が表示される）
-2. 各 WordPress サイトにアップロード・有効化
-3. **完全自動化開始！**
-
----
-
-## 📋 従来のセットアップ（詳細制御したい場合）
+## セットアップ
 
 ### 前提条件
 
@@ -147,12 +128,15 @@ git push origin main
 
 ### 2. 差分チェックの実行
 
+#### 手動実行フロー
 1. Google Apps Script の Web アプリを開く
-2. チェックしたいサイトの「実行」ボタンをクリック
-3. 自動的に以下が実行されます：
-   - Baseline（更新前）のスクリーンショット撮影
-   - After（更新後）のスクリーンショット撮影
-   - 差分比較と結果の保存
+2. 「Baseline撮影」ボタンをクリック（更新前のスクリーンショット）
+3. **手動でWordPress更新を実施**
+4. 「After撮影」ボタンをクリック（更新後のスクリーンショット）
+5. 「差分比較」ボタンをクリック（結果確認・通知）
+
+#### 一括実行
+「Full実行」ボタンで上記1〜5を連続実行も可能
 
 ### 3. 結果の確認
 
