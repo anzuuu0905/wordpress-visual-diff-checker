@@ -1,0 +1,23 @@
+{
+  "name": "sheets-sync-function",
+  "version": "1.0.0",
+  "description": "Cloud Function to sync Firestore data to Google Sheets",
+  "main": "index.js",
+  "scripts": {
+    "start": "functions-framework --target=syncToSheets",
+    "deploy": "gcloud functions deploy syncToSheets --runtime nodejs20 --trigger-event providers/cloud.firestore/eventTypes/document.write --trigger-resource \"projects/{project_id}/databases/(default)/documents/comparisons/{siteId}_{date}\"",
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.2.0",
+    "googleapis": "^126.0.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "eslint": "^8.55.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
