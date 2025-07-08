@@ -52,3 +52,11 @@ build/
 # GAS
 .clasp.json
 *.gs~
+
+# Setup files (contains secrets)
+setup/service-account-key.json
+setup/generated.env
+setup/github-secrets.txt
+
+# WordPress plugin zip
+wordpress-plugin/*.zip
