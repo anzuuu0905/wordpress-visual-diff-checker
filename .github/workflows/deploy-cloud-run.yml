@@ -1,0 +1,57 @@
+name: Deploy Cloud Run
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'cloud-run/**'
+      - '.github/workflows/deploy-cloud-run.yml'
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  SERVICE_NAME: vrt-runner
+  REGION: asia-northeast1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
+      
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+      
+      - name: Configure Docker
+        run: gcloud auth configure-docker
+      
+      - name: Build and Push Container
+        run: |
+          cd cloud-run
+          docker build -t gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA .
+          docker push gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA
+      
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy $SERVICE_NAME \
+            --image gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA \
+            --platform managed \
+            --region $REGION \
+            --memory 512Mi \
+            --cpu 1 \
+            --timeout 900 \
+            --max-instances 3 \
+            --set-env-vars "DRIVE_ROOT=${{ secrets.DRIVE_ROOT }},SHEET_ID=${{ secrets.SHEET_ID }}"
+      
+      - name: Run Smoke Test
+        run: |
+          SERVICE_URL=$(gcloud run services describe $SERVICE_NAME --region $REGION --format 'value(status.url)')
+          response=$(curl -s -o /dev/null -w "%{http_code}" $SERVICE_URL/health)
+          if [ $response != "200" ]; then
+            echo "Smoke test failed"
+            exit 1
+          fi
