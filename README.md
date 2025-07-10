@@ -175,6 +175,18 @@ const status = diffPercent < 2 ? 'OK' : 'NG'; // 2% がデフォルト
 const urls = await crawler.crawl(browser, url, { maxUrls: 300 });
 ```
 
+#### スクリーンショット設定
+
+`cloud-run/src/screenshot.js` でスクロール設定を調整：
+
+```javascript
+await waitForContentAndScroll(page, {
+  scrollSteps: 10,      // スクロール段階数
+  scrollDelay: 800,     // 各段階の待機時間（ms）
+  finalWait: 2000       // 最終待機時間（ms）
+});
+```
+
 ## トラブルシューティング
 
 ### Cloud Run がタイムアウトする
@@ -187,6 +199,8 @@ const urls = await crawler.crawl(browser, url, { maxUrls: 300 });
 
 - Puppeteer の待機時間を調整
 - `networkidle0` → `networkidle2` に変更
+- スクロール設定を調整（scrollSteps、scrollDelay）
+- 遅延読み込み画像の待機時間を延長
 
 ### Drive の容量不足
 

@@ -30,20 +30,22 @@ async function capture(browser, url, options = {}) {
     // Set user agent
     await page.setUserAgent('WordPress-Visual-Diff-Bot/1.0 (Compatible; Screenshot Generator)');
     
-    // Block unnecessary resources to speed up loading
+    // Control resource loading for better visual accuracy
     await page.setRequestInterception(true);
     page.on('request', (request) => {
       const resourceType = request.resourceType();
-      if (['font', 'stylesheet'].includes(resourceType)) {
-        // Allow fonts and stylesheets for visual accuracy
+      const url = request.url();
+      
+      if (['font', 'stylesheet', 'document', 'script'].includes(resourceType)) {
+        // Allow critical resources for visual accuracy
         request.continue();
       } else if (['image', 'media'].includes(resourceType)) {
-        // Block images and media to focus on layout
-        const url = request.url();
-        if (url.includes('logo') || url.includes('icon') || url.includes('avatar')) {
-          request.continue(); // Allow important images
-        } else {
+        // Allow images for complete visual representation
+        // Block only heavy video content and ads
+        if (url.includes('video') || url.includes('ads') || url.includes('doubleclick')) {
           request.abort();
+        } else {
+          request.continue();
         }
       } else {
         request.continue();
@@ -58,8 +60,12 @@ async function capture(browser, url, options = {}) {
       timeout: timeout
     });
     
-    // Wait for any lazy-loaded content
-    await page.waitForTimeout(2000);
+    // Enhanced waiting and scrolling for lazy-loaded content
+    await waitForContentAndScroll(page, {
+      scrollSteps: 10,
+      scrollDelay: 800,
+      finalWait: 2000
+    });
     
     // Hide scrollbars and other dynamic elements
     await page.addStyleTag({
@@ -174,8 +180,161 @@ async function cleanup(filePaths) {
   }
 }
 
+/**
+ * Enhanced waiting and scrolling for lazy-loaded content
+ * @param {Object} page - Puppeteer page instance
+ * @param {Object} options - Scrolling options
+ */
+async function waitForContentAndScroll(page, options = {}) {
+  const {
+    scrollSteps = 10,
+    scrollDelay = 800,
+    finalWait = 2000,
+    maxWaitTime = 30000
+  } = options;
+  
+  const startTime = Date.now();
+  
+  try {
+    // Wait for initial content load
+    await page.waitForTimeout(1000);
+    
+    // Get page dimensions
+    const pageHeight = await page.evaluate(() => {
+      return Math.max(
+        document.body.scrollHeight,
+        document.body.offsetHeight,
+        document.documentElement.clientHeight,
+        document.documentElement.scrollHeight,
+        document.documentElement.offsetHeight
+      );
+    });
+    
+    const viewportHeight = page.viewport().height;
+    const scrollStep = Math.max(viewportHeight * 0.8, pageHeight / scrollSteps);
+    
+    console.log(`Page height: ${pageHeight}px, Scroll step: ${scrollStep}px`);
+    
+    // Track network activity
+    let networkIdle = true;
+    let networkIdleTimer;
+    
+    const resetNetworkIdleTimer = () => {
+      networkIdle = false;
+      clearTimeout(networkIdleTimer);
+      networkIdleTimer = setTimeout(() => {
+        networkIdle = true;
+      }, 500);
+    };
+    
+    // Monitor network requests
+    page.on('request', resetNetworkIdleTimer);
+    page.on('response', resetNetworkIdleTimer);
+    
+    // Progressive scrolling
+    let currentPosition = 0;
+    let previousImageCount = 0;
+    
+    while (currentPosition < pageHeight && (Date.now() - startTime) < maxWaitTime) {
+      // Scroll to next position
+      await page.evaluate((scrollTo) => {
+        window.scrollTo(0, scrollTo);
+      }, currentPosition);
+      
+      // Wait for content to load
+      await page.waitForTimeout(scrollDelay);
+      
+      // Check for new images loaded
+      const currentImageCount = await page.evaluate(() => {
+        const images = document.querySelectorAll('img');
+        let loadedCount = 0;
+        images.forEach(img => {
+          if (img.complete && img.naturalWidth > 0) {
+            loadedCount++;
+          }
+        });
+        return loadedCount;
+      });
+      
+      // If new images were loaded, wait a bit more
+      if (currentImageCount > previousImageCount) {
+        console.log(`New images loaded: ${currentImageCount - previousImageCount}`);
+        await page.waitForTimeout(1000);
+        previousImageCount = currentImageCount;
+      }
+      
+      // Move to next scroll position
+      currentPosition += scrollStep;
+      
+      // Check if we've reached the bottom
+      const isAtBottom = await page.evaluate(() => {
+        return (window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 100;
+      });
+      
+      if (isAtBottom) {
+        console.log('Reached bottom of page');
+        break;
+      }
+    }
+    
+    // Final scroll to bottom to ensure all content is loaded
+    await page.evaluate(() => {
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+    
+    // Wait for any final network activity to complete
+    let waitCount = 0;
+    while (!networkIdle && waitCount < 20) {
+      await page.waitForTimeout(500);
+      waitCount++;
+    }
+    
+    // Final wait for any remaining content
+    await page.waitForTimeout(finalWait);
+    
+    // Scroll back to top for consistent screenshots
+    await page.evaluate(() => {
+      window.scrollTo(0, 0);
+    });
+    
+    await page.waitForTimeout(500);
+    
+    console.log(`Content loading completed in ${Date.now() - startTime}ms`);
+    
+    // Clean up event listeners
+    page.removeAllListeners('request');
+    page.removeAllListeners('response');
+    
+  } catch (error) {
+    console.error('Error during content loading and scrolling:', error);
+    // Continue with screenshot even if scrolling fails
+  }
+}
+
+/**
+ * Wait for images to load completely
+ * @param {Object} page - Puppeteer page instance
+ * @param {number} timeout - Maximum wait time in milliseconds
+ */
+async function waitForImages(page, timeout = 10000) {
+  try {
+    await page.waitForFunction(
+      () => {
+        const images = Array.from(document.querySelectorAll('img'));
+        return images.every(img => img.complete && img.naturalWidth > 0);
+      },
+      { timeout }
+    );
+    console.log('All images loaded successfully');
+  } catch (error) {
+    console.log('Some images may not have loaded completely:', error.message);
+  }
+}
+
 module.exports = {
   capture,
   captureMultipleViewports,
-  cleanup
+  cleanup,
+  waitForContentAndScroll,
+  waitForImages
 };
