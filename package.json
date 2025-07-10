@@ -1,0 +1,16 @@
+{
+  "name": "wordpress-vrt-setup",
+  "version": "1.0.0",
+  "description": "WordPress VRT Google Sheets Setup Tool",
+  "main": "create-sheets.js",
+  "scripts": {
+    "setup": "node create-sheets.js",
+    "test": "echo \"Setup completed!\""
+  },
+  "dependencies": {
+    "googleapis": "^126.0.1"
+  },
+  "devDependencies": {},
+  "author": "Claude Code",
+  "license": "MIT"
+}

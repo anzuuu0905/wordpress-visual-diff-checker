@@ -1,0 +1,128 @@
+name: Manual VRT Check
+
+on:
+  workflow_dispatch:
+    inputs:
+      site_url:
+        description: 'チェック対象サイトのURL'
+        required: true
+        type: string
+      mode:
+        description: '実行モード'
+        required: true
+        default: 'full'
+        type: choice
+        options:
+        - full
+        - baseline
+        - after
+        - compare
+      auto_update:
+        description: 'WordPress自動更新を有効にする'
+        required: false
+        type: boolean
+        default: false
+      notify_slack:
+        description: 'Slackに通知する'
+        required: false
+        type: boolean
+        default: true
+
+env:
+  TZ: 'Asia/Tokyo'
+
+jobs:
+  manual-vrt-check:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      id-token: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
+      
+      - name: Get Cloud Run URL
+        id: get-url
+        run: |
+          URL=$(gcloud run services describe vrt-runner \
+            --region=us-central1 \
+            --format='value(status.url)' \
+            --project=${{ secrets.GCP_PROJECT_ID }})
+          echo "cloud_run_url=$URL" >> $GITHUB_OUTPUT
+      
+      - name: Execute VRT Check
+        id: vrt-check
+        run: |
+          echo "Starting VRT check for ${{ github.event.inputs.site_url }}..."
+          
+          RESPONSE=$(curl -X POST \
+            -H "Authorization: Bearer $(gcloud auth print-identity-token)" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "url": "${{ github.event.inputs.site_url }}",
+              "mode": "${{ github.event.inputs.mode }}",
+              "autoUpdate": ${{ github.event.inputs.auto_update }},
+              "notifySlack": ${{ github.event.inputs.notify_slack }}
+            }' \
+            "${{ steps.get-url.outputs.cloud_run_url }}/vrt-check" \
+            --fail \
+            --show-error)
+          
+          echo "response=$RESPONSE" >> $GITHUB_OUTPUT
+          echo "Response: $RESPONSE"
+      
+      - name: Generate Report
+        run: |
+          # 結果をパース
+          RESULT=$(echo '${{ steps.vrt-check.outputs.response }}' | jq -r '.result')
+          STATUS=$(echo '${{ steps.vrt-check.outputs.response }}' | jq -r '.status')
+          DIFF_PERCENT=$(echo '${{ steps.vrt-check.outputs.response }}' | jq -r '.diffPercent // 0')
+          
+          # サマリーを作成
+          echo "## VRT Check Report" >> $GITHUB_STEP_SUMMARY
+          echo "- **Site**: ${{ github.event.inputs.site_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Mode**: ${{ github.event.inputs.mode }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: $STATUS" >> $GITHUB_STEP_SUMMARY
+          echo "- **Diff**: ${DIFF_PERCENT}%" >> $GITHUB_STEP_SUMMARY
+          echo "- **Executed**: $(date '+%Y-%m-%d %H:%M:%S JST')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "$STATUS" = "NG" ]; then
+            echo "⚠️ **差分が検出されました**" >> $GITHUB_STEP_SUMMARY
+            echo "詳細はGoogle Sheetsを確認してください。" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ **問題ありません**" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # 結果の詳細を追加
+          echo "### Details" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo '${{ steps.vrt-check.outputs.response }}' | jq '.' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Notify Slack on Failure
+        if: failure()
+        run: |
+          if [ -n "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
+            curl -X POST \
+              -H "Content-Type: application/json" \
+              -d '{
+                "text": "🚨 VRT Check Failed",
+                "attachments": [{
+                  "color": "danger",
+                  "fields": [
+                    {"title": "Site", "value": "${{ github.event.inputs.site_url }}", "short": true},
+                    {"title": "Mode", "value": "${{ github.event.inputs.mode }}", "short": true},
+                    {"title": "Workflow", "value": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}", "short": false}
+                  ]
+                }]
+              }' \
+              "${{ secrets.SLACK_WEBHOOK_URL }}"
+          fi

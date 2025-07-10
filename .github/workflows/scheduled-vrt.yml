@@ -1,0 +1,82 @@
+name: Scheduled VRT Check
+
+on:
+  schedule:
+    # 毎日 JST 3:00 (UTC 18:00) に実行
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+    inputs:
+      sites:
+        description: 'チェック対象サイト (all または site1,site2,site3)'
+        required: false
+        default: 'all'
+      autoUpdate:
+        description: 'WordPress自動更新を有効にする'
+        required: false
+        type: boolean
+        default: false
+
+env:
+  TZ: 'Asia/Tokyo'
+
+jobs:
+  scheduled-vrt-check:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      id-token: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
+      
+      - name: Get Cloud Run URL
+        id: get-url
+        run: |
+          URL=$(gcloud run services describe vrt-runner \
+            --region=us-central1 \
+            --format='value(status.url)' \
+            --project=${{ secrets.GCP_PROJECT_ID }})
+          echo "cloud_run_url=$URL" >> $GITHUB_OUTPUT
+      
+      - name: Execute VRT Check
+        run: |
+          # Cloud Runのバッチエンドポイントを呼び出し
+          RESPONSE=$(curl -X POST \
+            -H "Authorization: Bearer $(gcloud auth print-identity-token)" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "sites": "${{ github.event.inputs.sites || 'all' }}",
+              "autoUpdate": ${{ github.event.inputs.autoUpdate || false }},
+              "mode": "full",
+              "notifyOnSuccess": false
+            }' \
+            "${{ steps.get-url.outputs.cloud_run_url }}/batch-check" \
+            --fail \
+            --show-error)
+          
+          echo "Response: $RESPONSE"
+          
+          # 結果をサマリーに追加
+          echo "## VRT Check Results" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo "$RESPONSE" | jq '.' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Check Results
+        run: |
+          # 結果をチェックしてNGがあれば通知
+          NG_COUNT=$(echo "$RESPONSE" | jq '.results[] | select(.status == "NG") | length' | wc -l)
+          
+          if [ "$NG_COUNT" -gt "0" ]; then
+            echo "⚠️ $NG_COUNT サイトで差分が検出されました" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          else
+            echo "✅ 全てのサイトで問題ありません" >> $GITHUB_STEP_SUMMARY
+          fi

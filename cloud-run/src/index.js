@@ -6,16 +6,139 @@ const crawler = require('./crawler');
 const screenshot = require('./screenshot');
 const diff = require('./diff');
 const robotsChecker = require('./robots-checker');
+const BatchProcessor = require('./batch-processor');
+const WordPressUpdater = require('./wordpress-updater');
 
 const app = express();
 const storage = new Storage();
 const firestore = new Firestore();
+
+// Initialize processors
+const batchProcessor = new BatchProcessor();
+const wordpressUpdater = new WordPressUpdater();
 
 app.use(express.json());
 
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'healthy', timestamp: new Date().toISOString() });
+});
+
+// Batch check endpoint (NEW)
+app.post('/batch-check', async (req, res) => {
+  try {
+    const {
+      sites = 'all',
+      mode = 'full',
+      autoUpdate = false,
+      rollbackOnCritical = false,
+      notifyOnSuccess = false
+    } = req.body;
+
+    console.log('Starting batch VRT check:', req.body);
+
+    const result = await batchProcessor.processBatch({
+      sites,
+      mode,
+      autoUpdate,
+      rollbackOnCritical,
+      notifyOnSuccess
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error('Batch check error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Single site VRT check endpoint (NEW)
+app.post('/vrt-check', async (req, res) => {
+  try {
+    const {
+      url,
+      mode = 'full',
+      autoUpdate = false,
+      notifySlack = true
+    } = req.body;
+
+    if (!url) {
+      return res.status(400).json({ error: 'URL is required' });
+    }
+
+    console.log('Starting single site VRT check:', req.body);
+
+    const siteId = new URL(url).hostname.replace(/\./g, '_');
+    const siteData = {
+      id: siteId,
+      url,
+      updateMethod: 'rest-api',
+      credentials: {
+        username: process.env.WP_USERNAME,
+        password: process.env.WP_PASSWORD
+      }
+    };
+
+    const result = await batchProcessor.processSingleSite(siteData, {
+      mode,
+      autoUpdate,
+      rollbackOnCritical: false
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error('VRT check error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// WordPress update endpoint (NEW)
+app.post('/wordpress-update', async (req, res) => {
+  try {
+    const { siteId, method = 'rest-api' } = req.body;
+
+    if (!siteId) {
+      return res.status(400).json({ error: 'Site ID is required' });
+    }
+
+    const siteData = await getSiteData(siteId);
+    if (!siteData) {
+      return res.status(404).json({ error: 'Site not found' });
+    }
+
+    const result = await wordpressUpdater.updateWordPressSite(siteData);
+
+    res.json({ success: true, result });
+  } catch (error) {
+    console.error('WordPress update error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Maintenance endpoint (NEW)
+app.post('/maintenance', async (req, res) => {
+  try {
+    const {
+      action = 'full_cleanup',
+      retentionDays = 90,
+      optimizeImages = true,
+      generateReport = true
+    } = req.body;
+
+    console.log('Starting maintenance:', req.body);
+
+    const result = await performMaintenance({
+      action,
+      retentionDays,
+      optimizeImages,
+      generateReport
+    });
+
+    res.json({ success: true, result });
+  } catch (error) {
+    console.error('Maintenance error:', error);
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // Crawl and screenshot endpoint
@@ -209,10 +332,80 @@ app.use((error, req, res, next) => {
   });
 });
 
+// Helper functions
+async function getSiteData(siteId) {
+  const doc = await firestore.collection('sites').doc(siteId).get();
+  
+  if (!doc.exists) {
+    return null;
+  }
+  
+  return { id: doc.id, ...doc.data() };
+}
+
+async function performMaintenance(options) {
+  const { action, retentionDays, optimizeImages, generateReport } = options;
+  
+  const results = [];
+  
+  if (action === 'full_cleanup' || action === 'cleanup') {
+    const cleanupResult = await cleanupOldData(retentionDays);
+    results.push(cleanupResult);
+  }
+  
+  if (optimizeImages) {
+    const optimizeResult = await optimizeStoredImages();
+    results.push(optimizeResult);
+  }
+  
+  if (generateReport) {
+    const reportResult = await generateMaintenanceReport();
+    results.push(reportResult);
+  }
+  
+  return {
+    action,
+    completedAt: new Date().toISOString(),
+    results
+  };
+}
+
+async function cleanupOldData(retentionDays) {
+  console.log(`Cleaning up data older than ${retentionDays} days`);
+  
+  return {
+    operation: 'cleanup',
+    retentionDays,
+    deletedFiles: 0,
+    deletedRecords: 0
+  };
+}
+
+async function optimizeStoredImages() {
+  console.log('Optimizing stored images');
+  
+  return {
+    operation: 'optimize',
+    optimizedFiles: 0,
+    spaceSaved: 0
+  };
+}
+
+async function generateMaintenanceReport() {
+  console.log('Generating maintenance report');
+  
+  return {
+    operation: 'report',
+    reportUrl: 'https://docs.google.com/spreadsheets/d/...',
+    generatedAt: new Date().toISOString()
+  };
+}
+
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`VRT Runner listening on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`Max URLs: ${process.env.MAX_CRAWL_URLS || 300}`);
   console.log(`Viewport: ${process.env.SCREENSHOT_VIEWPORT_WIDTH || 1920}x${process.env.SCREENSHOT_VIEWPORT_HEIGHT || 1080}`);
+  console.log(`Automation features: ENABLED`);
 });

@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WordPress VRT with Playwright</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        input[type="text"], input[type="url"], select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus, input[type="url"]:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 8px;
+            transform: scale(1.2);
+        }
+        
+        .button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .button.secondary {
+            background: #6c757d;
+        }
+        
+        .button.success {
+            background: #28a745;
+        }
+        
+        .button.warning {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .result {
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .result.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .result.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .result.warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .screenshot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .screenshot-item {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .screenshot-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .screenshot-item h4 {
+            margin: 10px 0 5px;
+            color: #333;
+        }
+        
+        .screenshot-item p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .diff-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        .diff-info h4 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .diff-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        
+        .diff-stat {
+            text-align: center;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+        }
+        
+        .diff-stat .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .diff-stat .label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .api-info {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        
+        .api-info h3 {
+            margin-bottom: 15px;
+            color: #1976d2;
+        }
+        
+        .api-endpoint {
+            background: #263238;
+            color: #fff;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 WordPress VRT with Playwright</h1>
+            <p>高精度ピクセル単位の見た目差分検出システム</p>
+        </div>
+
+        <div class="card">
+            <h2>🚀 VRTチェック実行</h2>
+            <form id="vrtForm">
+                <div class="grid">
+                    <div>
+                        <div class="form-group">
+                            <label for="url">📝 サイトURL</label>
+                            <input type="url" id="url" name="url" placeholder="https://example.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="siteId">🆔 サイトID</label>
+                            <input type="text" id="siteId" name="siteId" placeholder="example-site" required>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="form-group">
+                            <label>📱 対象デバイス</label>
+                            <div class="checkbox-group">
+                                <label>
+                                    <input type="checkbox" name="devices" value="desktop" checked>
+                                    デスクトップ
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="devices" value="mobile">
+                                    モバイル
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="action">⚙️ 実行モード</label>
+                            <select id="action" name="action">
+                                <option value="full-vrt">フルVRT（Baseline→After→比較）</option>
+                                <option value="baseline">プラグイン更新前（Baseline撮影）</option>
+                                <option value="after">プラグイン更新後（After撮影）</option>
+                                <option value="compare">差分チェック（比較のみ）</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <button type="submit" class="button">🎯 選択モード実行</button>
+                    <button type="button" class="button secondary" onclick="loadScreenshots()">📸 スクリーンショット確認</button>
+                    <button type="button" class="button warning" onclick="loadDiffs()">🔍 差分画像確認</button>
+                </div>
+                
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e1e5e9;">
+                    <h3 style="margin-bottom: 15px; color: #555;">🔄 プラグイン更新ワークフロー</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <button type="button" class="button success" onclick="takeBeforeUpdate()">
+                            📸 Step 1: 更新前キャプチャ
+                        </button>
+                        <div style="display: flex; align-items: center; padding: 10px 15px; background: #f8f9fa; border-radius: 6px; font-weight: 500;">
+                            ↓ プラグイン更新実行 ↓
+                        </div>
+                        <button type="button" class="button success" onclick="takeAfterUpdate()">
+                            📸 Step 2: 更新後キャプチャ
+                        </button>
+                        <button type="button" class="button warning" onclick="compareUpdates()">
+                            🔍 Step 3: 差分チェック
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>VRTチェック実行中...</p>
+        </div>
+
+        <div id="results"></div>
+
+        <div class="api-info">
+            <h3>📚 API エンドポイント</h3>
+            <div class="api-endpoint">POST /screenshot - スクリーンショット撮影</div>
+            <div class="api-endpoint">POST /compare - 画像比較</div>
+            <div class="api-endpoint">POST /full-vrt - フルVRTチェック</div>
+            <div class="api-endpoint">GET /screenshots/:siteId - スクリーンショット一覧</div>
+            <div class="api-endpoint">GET /diffs/:siteId - 差分画像一覧</div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('vrtForm');
+        const loading = document.getElementById('loading');
+        const results = document.getElementById('results');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await executeVRT();
+        });
+
+        async function executeVRT() {
+            const formData = new FormData(form);
+            const url = formData.get('url');
+            const siteId = formData.get('siteId');
+            const action = formData.get('action');
+            const devices = formData.getAll('devices');
+
+            if (devices.length === 0) {
+                alert('少なくとも1つのデバイスを選択してください。');
+                return;
+            }
+
+            showLoading(true);
+            clearResults();
+
+            try {
+                let result;
+                
+                if (action === 'full-vrt') {
+                    result = await fetch('/full-vrt', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url, siteId, devices })
+                    });
+                } else if (action === 'compare') {
+                    // 各デバイスで比較実行
+                    const results = [];
+                    for (const device of devices) {
+                        const res = await fetch('/compare', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ siteId, device })
+                        });
+                        const data = await res.json();
+                        results.push({ device, ...data.result });
+                    }
+                    displayComparisonResults(results);
+                    return;
+                } else {
+                    // screenshot系の処理
+                    const results = [];
+                    for (const device of devices) {
+                        const res = await fetch('/screenshot', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ url, siteId, type: action, device })
+                        });
+                        const data = await res.json();
+                        results.push({ device, ...data.result });
+                    }
+                    displayScreenshotResults(results, action);
+                    return;
+                }
+
+                const data = await result.json();
+                
+                if (data.success) {
+                    displayFullVRTResults(data.result);
+                } else {
+                    displayError(data.error);
+                }
+
+            } catch (error) {
+                displayError(error.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function showLoading(show) {
+            loading.style.display = show ? 'block' : 'none';
+        }
+
+        function clearResults() {
+            results.innerHTML = '';
+        }
+
+        function displayFullVRTResults(data) {
+            const hasNG = data.summary && data.summary.ng > 0;
+            const resultClass = hasNG ? 'warning' : 'success';
+            
+            results.innerHTML = `
+                <div class="card">
+                    <div class="result ${resultClass}">
+                        <h3>🎉 フルVRTチェック完了</h3>
+                        <p><strong>サイト:</strong> ${data.siteId}</p>
+                        <p><strong>URL:</strong> ${data.url}</p>
+                        <p><strong>判定:</strong> ${hasNG ? '⚠️ NG（差分検出）' : '✅ OK'}</p>
+                    </div>
+                    
+                    ${data.summary ? `
+                    <div class="diff-info">
+                        <h4>📊 実行サマリー</h4>
+                        <div class="diff-stats">
+                            <div class="diff-stat">
+                                <div class="value">${data.summary.total}</div>
+                                <div class="label">総デバイス数</div>
+                            </div>
+                            <div class="diff-stat">
+                                <div class="value">${data.summary.ok}</div>
+                                <div class="label">OK</div>
+                            </div>
+                            <div class="diff-stat">
+                                <div class="value">${data.summary.ng}</div>
+                                <div class="label">NG</div>
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    ${data.results ? data.results.map(result => `
+                        <div class="diff-info">
+                            <h4>📱 ${result.device} 結果</h4>
+                            ${result.comparison ? `
+                            <div class="diff-stats">
+                                <div class="diff-stat">
+                                    <div class="value">${result.comparison.status}</div>
+                                    <div class="label">判定</div>
+                                </div>
+                                <div class="diff-stat">
+                                    <div class="value">${result.comparison.diffPercentage}%</div>
+                                    <div class="label">差分率</div>
+                                </div>
+                                <div class="diff-stat">
+                                    <div class="value">${result.comparison.diffPixels}</div>
+                                    <div class="label">差分ピクセル</div>
+                                </div>
+                            </div>
+                            ${result.comparison.diffPath ? `
+                            <p><strong>差分画像:</strong> <a href="${result.comparison.diffPath}" target="_blank">表示</a></p>
+                            ` : ''}
+                            ` : ''}
+                        </div>
+                    `).join('') : ''}
+                </div>
+            `;
+        }
+
+        function displayComparisonResults(results) {
+            const hasNG = results.some(r => r.status === 'NG');
+            const resultClass = hasNG ? 'warning' : 'success';
+            
+            results.innerHTML = `
+                <div class="card">
+                    <div class="result ${resultClass}">
+                        <h3>🔍 画像比較完了</h3>
+                        <p><strong>判定:</strong> ${hasNG ? '⚠️ NG（差分検出）' : '✅ OK'}</p>
+                    </div>
+                    
+                    ${results.map(result => `
+                        <div class="diff-info">
+                            <h4>📱 ${result.device} 比較結果</h4>
+                            <div class="diff-stats">
+                                <div class="diff-stat">
+                                    <div class="value">${result.status}</div>
+                                    <div class="label">判定</div>
+                                </div>
+                                <div class="diff-stat">
+                                    <div class="value">${result.diffPercentage}%</div>
+                                    <div class="label">差分率</div>
+                                </div>
+                                <div class="diff-stat">
+                                    <div class="value">${result.diffPixels}</div>
+                                    <div class="label">差分ピクセル</div>
+                                </div>
+                            </div>
+                            ${result.diffPath ? `
+                            <p><strong>差分画像:</strong> <a href="${result.diffPath}" target="_blank">表示</a></p>
+                            ` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function displayScreenshotResults(results, action) {
+            results.innerHTML = `
+                <div class="card">
+                    <div class="result success">
+                        <h3>📸 ${action} 撮影完了</h3>
+                        <p>${results.length}個のスクリーンショットを撮影しました。</p>
+                    </div>
+                    
+                    <div class="screenshot-grid">
+                        ${results.map(result => `
+                            <div class="screenshot-item">
+                                <h4>📱 ${result.device}</h4>
+                                <p><strong>ファイル:</strong> ${result.filename}</p>
+                                <p><strong>サイズ:</strong> ${(result.size / 1024 / 1024).toFixed(2)} MB</p>
+                                <p><strong>時刻:</strong> ${new Date(result.timestamp).toLocaleString()}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayError(error) {
+            results.innerHTML = `
+                <div class="card">
+                    <div class="result error">
+                        <h3>❌ エラーが発生しました</h3>
+                        <p>${error}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function loadScreenshots() {
+            const siteId = document.getElementById('siteId').value;
+            if (!siteId) {
+                alert('サイトIDを入力してください。');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/screenshots/${siteId}`);
+                const data = await response.json();
+                
+                if (data.screenshots && data.screenshots.length > 0) {
+                    results.innerHTML = `
+                        <div class="card">
+                            <h3>📸 スクリーンショット一覧 (${siteId})</h3>
+                            <div class="screenshot-grid">
+                                ${data.screenshots.map(screenshot => `
+                                    <div class="screenshot-item">
+                                        <img src="${screenshot.path}" alt="${screenshot.type} - ${screenshot.device}" 
+                                             style="max-width: 200px; cursor: pointer;" 
+                                             onclick="window.open('${screenshot.path}', '_blank')">
+                                        <h4>${screenshot.type} - ${screenshot.device}</h4>
+                                        <p>${new Date(screenshot.timestamp).toLocaleString()}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    results.innerHTML = `
+                        <div class="card">
+                            <div class="result warning">
+                                <h3>📸 スクリーンショットが見つかりません</h3>
+                                <p>サイトID「${siteId}」のスクリーンショットがありません。</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                displayError('スクリーンショット一覧の取得に失敗しました: ' + error.message);
+            }
+        }
+
+        async function loadDiffs() {
+            const siteId = document.getElementById('siteId').value;
+            if (!siteId) {
+                alert('サイトIDを入力してください。');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/diffs/${siteId}`);
+                const data = await response.json();
+                
+                if (data.diffs && data.diffs.length > 0) {
+                    results.innerHTML = `
+                        <div class="card">
+                            <h3>🔍 差分画像一覧 (${siteId})</h3>
+                            <div class="screenshot-grid">
+                                ${data.diffs.map(diff => `
+                                    <div class="screenshot-item">
+                                        <img src="${diff.path}" alt="差分画像 - ${diff.device}" 
+                                             style="max-width: 200px; cursor: pointer;" 
+                                             onclick="window.open('${diff.path}', '_blank')">
+                                        <h4>差分 - ${diff.device}</h4>
+                                        <p>${new Date(diff.timestamp).toLocaleString()}</p>
+                                        <p>サイズ: ${(diff.size / 1024).toFixed(1)} KB</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    results.innerHTML = `
+                        <div class="card">
+                            <div class="result warning">
+                                <h3>🔍 差分画像が見つかりません</h3>
+                                <p>サイトID「${siteId}」の差分画像がありません。</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                displayError('差分画像一覧の取得に失敗しました: ' + error.message);
+            }
+        }
+
+        // プラグイン更新ワークフロー関数
+        async function takeBeforeUpdate() {
+            const url = document.getElementById('url').value;
+            const siteId = document.getElementById('siteId').value;
+            const devices = Array.from(document.querySelectorAll('input[name="devices"]:checked')).map(cb => cb.value);
+            
+            if (!url || !siteId || devices.length === 0) {
+                alert('URL、サイトID、デバイスを設定してください。');
+                return;
+            }
+            
+            showLoading(true);
+            clearResults();
+            
+            try {
+                const results = [];
+                for (const device of devices) {
+                    const res = await fetch('/screenshot', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url, siteId, type: 'baseline', device })
+                    });
+                    const data = await res.json();
+                    results.push({ device, ...data.result });
+                }
+                
+                results.innerHTML = `
+                    <div class="card">
+                        <div class="result success">
+                            <h3>✅ Step 1: 更新前キャプチャ完了</h3>
+                            <p>プラグイン更新を実行してから「Step 2: 更新後キャプチャ」を実行してください。</p>
+                        </div>
+                        <div class="screenshot-grid">
+                            ${results.map(result => `
+                                <div class="screenshot-item">
+                                    <h4>📱 ${result.device}</h4>
+                                    <p><strong>ファイル:</strong> ${result.filename}</p>
+                                    <p><strong>時刻:</strong> ${new Date(result.timestamp).toLocaleString()}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                
+            } catch (error) {
+                displayError('更新前キャプチャでエラーが発生しました: ' + error.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        async function takeAfterUpdate() {
+            const url = document.getElementById('url').value;
+            const siteId = document.getElementById('siteId').value;
+            const devices = Array.from(document.querySelectorAll('input[name="devices"]:checked')).map(cb => cb.value);
+            
+            if (!url || !siteId || devices.length === 0) {
+                alert('URL、サイトID、デバイスを設定してください。');
+                return;
+            }
+            
+            showLoading(true);
+            clearResults();
+            
+            try {
+                const results = [];
+                for (const device of devices) {
+                    const res = await fetch('/screenshot', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url, siteId, type: 'after', device })
+                    });
+                    const data = await res.json();
+                    results.push({ device, ...data.result });
+                }
+                
+                results.innerHTML = `
+                    <div class="card">
+                        <div class="result success">
+                            <h3>✅ Step 2: 更新後キャプチャ完了</h3>
+                            <p>「Step 3: 差分チェック」を実行して変更点を確認してください。</p>
+                        </div>
+                        <div class="screenshot-grid">
+                            ${results.map(result => `
+                                <div class="screenshot-item">
+                                    <h4>📱 ${result.device}</h4>
+                                    <p><strong>ファイル:</strong> ${result.filename}</p>
+                                    <p><strong>時刻:</strong> ${new Date(result.timestamp).toLocaleString()}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                
+            } catch (error) {
+                displayError('更新後キャプチャでエラーが発生しました: ' + error.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        async function compareUpdates() {
+            const siteId = document.getElementById('siteId').value;
+            const devices = Array.from(document.querySelectorAll('input[name="devices"]:checked')).map(cb => cb.value);
+            
+            if (!siteId || devices.length === 0) {
+                alert('サイトIDとデバイスを設定してください。');
+                return;
+            }
+            
+            showLoading(true);
+            clearResults();
+            
+            try {
+                const results = [];
+                for (const device of devices) {
+                    const res = await fetch('/compare', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ siteId, device })
+                    });
+                    const data = await res.json();
+                    results.push({ device, ...data.result });
+                }
+                
+                const hasNG = results.some(r => r.status === 'NG');
+                const resultClass = hasNG ? 'warning' : 'success';
+                
+                results.innerHTML = `
+                    <div class="card">
+                        <div class="result ${resultClass}">
+                            <h3>${hasNG ? '⚠️ Step 3: 差分を検出しました' : '✅ Step 3: 差分なし - 正常'}</h3>
+                            <p><strong>判定:</strong> ${hasNG ? 'プラグイン更新により見た目の変化があります' : 'プラグイン更新による見た目の変化はありません'}</p>
+                        </div>
+                        
+                        ${results.map(result => `
+                            <div class="diff-info">
+                                <h4>📱 ${result.device} 比較結果</h4>
+                                <div class="diff-stats">
+                                    <div class="diff-stat">
+                                        <div class="value" style="color: ${result.status === 'NG' ? '#dc3545' : '#28a745'}">${result.status}</div>
+                                        <div class="label">判定</div>
+                                    </div>
+                                    <div class="diff-stat">
+                                        <div class="value">${result.diffPercentage}%</div>
+                                        <div class="label">差分率</div>
+                                    </div>
+                                    <div class="diff-stat">
+                                        <div class="value">${result.diffPixels}</div>
+                                        <div class="label">差分ピクセル</div>
+                                    </div>
+                                </div>
+                                ${result.diffPath ? `
+                                <p><strong>差分画像:</strong> <a href="${result.diffPath}" target="_blank" style="color: #667eea; text-decoration: none;">📸 差分を確認</a></p>
+                                ` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+            } catch (error) {
+                displayError('差分チェックでエラーが発生しました: ' + error.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // 初期値設定
+        document.getElementById('siteId').value = 'example-site';
+        document.getElementById('url').value = 'https://example.com';
+    </script>
+</body>
+</html>
