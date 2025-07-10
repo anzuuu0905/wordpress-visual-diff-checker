@@ -694,7 +694,7 @@
                     results.push({ device, ...data.result });
                 }
                 
-                results.innerHTML = `
+                document.getElementById('results').innerHTML = `
                     <div class="card">
                         <div class="result success">
                             <h3>✅ Step 1: 更新前キャプチャ完了</h3>
@@ -744,7 +744,7 @@
                     results.push({ device, ...data.result });
                 }
                 
-                results.innerHTML = `
+                document.getElementById('results').innerHTML = `
                     <div class="card">
                         <div class="result success">
                             <h3>✅ Step 2: 更新後キャプチャ完了</h3>

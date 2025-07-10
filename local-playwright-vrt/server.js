@@ -20,6 +20,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
+// グローバルブラウザインスタンス（再利用）
+let globalBrowser = null;
+
 // スクリーンショット保存ディレクトリ
 const SCREENSHOTS_DIR = path.join(__dirname, 'screenshots');
 const DIFFS_DIR = path.join(__dirname, 'diffs');
@@ -248,21 +251,33 @@ app.use('/screenshots', express.static(SCREENSHOTS_DIR));
 app.use('/diffs', express.static(DIFFS_DIR));
 
 /**
+ * ブラウザインスタンスを取得（再利用）
+ */
+async function getBrowser() {
+  if (!globalBrowser || !globalBrowser.isConnected()) {
+    console.log('🚀 新しいブラウザインスタンスを起動');
+    globalBrowser = await chromium.launch({
+      headless: true,
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-web-security'
+      ]
+    });
+  }
+  return globalBrowser;
+}
+
+/**
  * 高精度スクリーンショット撮影実装
  */
 async function takeHighPrecisionScreenshot(url, siteId, type, device) {
-  const browser = await chromium.launch({
-    headless: true,
-    args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-dev-shm-usage',
-      '--disable-web-security'
-    ]
-  });
+  const browser = await getBrowser();
 
   try {
-    const context = await browser.newContext({
+    // サイトごとのコンテキスト（キャッシュ・Cookie共有）
+    const contextOptions = {
       viewport: device === 'mobile' ? CONFIG.MOBILE_VIEWPORT : CONFIG.VIEWPORT,
       deviceScaleFactor: 1,
       hasTouch: device === 'mobile',
@@ -270,8 +285,12 @@ async function takeHighPrecisionScreenshot(url, siteId, type, device) {
       ignoreHTTPSErrors: true,
       reducedMotion: 'reduce',
       forcedColors: 'none',
-      colorScheme: 'light'
-    });
+      colorScheme: 'light',
+      // キャッシュとCookieを保持
+      storageState: undefined // 同じサイトでは状態を保持
+    };
+    
+    const context = await browser.newContext(contextOptions);
 
     const page = await context.newPage();
     
@@ -325,7 +344,8 @@ async function takeHighPrecisionScreenshot(url, siteId, type, device) {
     };
     
   } finally {
-    await browser.close();
+    // コンテキストのみクローズ（ブラウザは再利用）
+    await context.close();
   }
 }
 
@@ -360,6 +380,12 @@ async function setupWordPressOptimization(page) {
  */
 async function waitForWordPressReady(page) {
   await page.waitForLoadState('networkidle');
+  
+  // 追加の待機時間（画像読み込み対応）
+  await page.waitForTimeout(3000);
+  
+  // スクロールして遅延読み込み画像を表示
+  await autoScroll(page);
   
   // 初期ローディング完了待機
   try {
@@ -617,6 +643,33 @@ async function runFullVRTCheck(url, siteId, devices) {
     },
     timestamp: new Date().toISOString()
   };
+}
+
+/**
+ * 自動スクロール機能（遅延読み込み画像対応）
+ */
+async function autoScroll(page) {
+  await page.evaluate(async () => {
+    await new Promise((resolve) => {
+      let totalHeight = 0;
+      const distance = 100;
+      const timer = setInterval(() => {
+        const scrollHeight = document.body.scrollHeight;
+        window.scrollBy(0, distance);
+        totalHeight += distance;
+        
+        if(totalHeight >= scrollHeight){
+          clearInterval(timer);
+          // 最上部に戻る
+          window.scrollTo(0, 0);
+          resolve();
+        }
+      }, 100);
+    });
+  });
+  
+  // スクロール後の追加待機
+  await page.waitForTimeout(2000);
 }
 
 /**

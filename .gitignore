@@ -60,3 +60,7 @@ setup/github-secrets.txt
 
 # WordPress plugin zip
 wordpress-plugin/*.zip
+
+# VRT generated files (large binary files)
+local-playwright-vrt/screenshots/
+local-playwright-vrt/diffs/
