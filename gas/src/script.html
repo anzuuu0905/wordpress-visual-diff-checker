@@ -118,19 +118,7 @@ function displaySites() {
       </td>
       <td>
         <div class="action-buttons">
-          <button onclick="runVrt('${site.id}', 'full')" class="btn btn-primary btn-small" 
-                  ${site.status === 'running' ? 'disabled' : ''}>
-            <span class="icon">▶️</span>
-            完全実行
-          </button>
-          <button onclick="runVrt('${site.id}', 'baseline')" class="btn btn-secondary btn-small"
-                  ${site.status === 'running' ? 'disabled' : ''}>
-            Baseline
-          </button>
-          <button onclick="runVrt('${site.id}', 'after')" class="btn btn-secondary btn-small"
-                  ${site.status === 'running' ? 'disabled' : ''}>
-            After
-          </button>
+          ${getVrtButtons(site)}
           <button onclick="openEditModal('${site.id}')" class="btn btn-secondary btn-small">
             <span class="icon">✏️</span>
             編集
@@ -143,6 +131,348 @@ function displaySites() {
       </td>
     </tr>
   `).join('');
+}
+
+/**
+ * VRTボタンの生成
+ * @param {Object} site - サイト情報
+ * @returns {string} HTML文字列
+ */
+function getVrtButtons(site) {
+  const isRunning = site.status === 'running';
+  const hasBaseline = site.baselineStatus === 'completed';
+  const baselineReady = site.baselineStatus === 'ready';
+  
+  if (isRunning) {
+    return `
+      <button class="btn btn-secondary btn-small" disabled>
+        <span class="icon">⏳</span>
+        実行中...
+      </button>
+    `;
+  }
+  
+  if (!hasBaseline && !baselineReady) {
+    // 初期状態: 更新前キャプチャーボタンのみ
+    return `
+      <button onclick="runPreUpdateCapture('${site.id}')" class="btn btn-primary btn-small">
+        <span class="icon">📸</span>
+        更新前キャプチャー
+      </button>
+    `;
+  }
+  
+  if (hasBaseline || baselineReady) {
+    // 更新前キャプチャー完了後: 更新後比較ボタンと再キャプチャーボタン
+    return `
+      <div class="vrt-button-group">
+        <button onclick="runPostUpdateCompare('${site.id}')" class="btn btn-primary btn-small">
+          <span class="icon">🔍</span>
+          更新後比較
+        </button>
+        <button onclick="runPreUpdateCapture('${site.id}')" class="btn btn-secondary btn-small">
+          <span class="icon">📸</span>
+          再キャプチャー
+        </button>
+      </div>
+    `;
+  }
+  
+  // フォールバック（既存の3ボタン）
+  return `
+    <button onclick="runVrt('${site.id}', 'full')" class="btn btn-primary btn-small">
+      <span class="icon">▶️</span>
+      完全実行
+    </button>
+  `;
+}
+
+/**
+ * 更新前キャプチャーの実行
+ * @param {string} siteId - サイトID
+ */
+function runPreUpdateCapture(siteId) {
+  const site = sites.find(s => s.id === siteId);
+  if (!site) return;
+  
+  showCaptureModal(site, 'pre-update');
+}
+
+/**
+ * 更新後比較の実行
+ * @param {string} siteId - サイトID
+ */
+function runPostUpdateCompare(siteId) {
+  const site = sites.find(s => s.id === siteId);
+  if (!site) return;
+  
+  showCaptureModal(site, 'post-update');
+}
+
+/**
+ * キャプチャーモーダルの表示
+ * @param {Object} site - サイト情報
+ * @param {string} mode - 'pre-update' or 'post-update'
+ */
+function showCaptureModal(site, mode) {
+  const modal = document.getElementById('captureModal');
+  const titleElement = document.getElementById('captureModalTitle');
+  const contentElement = document.getElementById('captureModalContent');
+  
+  if (mode === 'pre-update') {
+    titleElement.textContent = '更新前キャプチャー';
+    contentElement.innerHTML = `
+      <div class="capture-info">
+        <h3>📸 ${escapeHtml(site.name)}</h3>
+        <p class="capture-description">
+          プラグインやテーマ更新前の画面をキャプチャーします。<br>
+          キャプチャー完了後、手動でWordPressの更新を実施してください。
+        </p>
+        <div class="capture-details">
+          <p><strong>対象URL:</strong> ${escapeHtml(site.url)}</p>
+          <p><strong>処理時間:</strong> 約2-5分（サイト規模による）</p>
+        </div>
+        <div class="capture-actions">
+          <button onclick="executePreUpdateCapture('${site.id}')" class="btn btn-primary">
+            <span class="icon">📸</span>
+            キャプチャー開始
+          </button>
+          <button onclick="closeCaptureModal()" class="btn btn-secondary">
+            キャンセル
+          </button>
+        </div>
+      </div>
+    `;
+  } else {
+    titleElement.textContent = '更新後比較';
+    contentElement.innerHTML = `
+      <div class="capture-info">
+        <h3>🔍 ${escapeHtml(site.name)}</h3>
+        <p class="capture-description">
+          更新後の画面をキャプチャーし、更新前と比較します。<br>
+          <strong>WordPress更新が完了していることを確認してください。</strong>
+        </p>
+        <div class="capture-details">
+          <p><strong>対象URL:</strong> ${escapeHtml(site.url)}</p>
+          <p><strong>処理時間:</strong> 約3-7分（サイト規模による）</p>
+          <p><strong>処理内容:</strong> 更新後キャプチャー + 差分比較 + 通知</p>
+        </div>
+        <div class="manual-update-reminder">
+          <div class="reminder-box">
+            <span class="icon">⚠️</span>
+            <div>
+              <strong>重要:</strong> 実行前に以下を確認してください<br>
+              • WordPressプラグインの更新が完了している<br>
+              • サイトが正常に動作している<br>
+              • 管理画面にエラーがない
+            </div>
+          </div>
+        </div>
+        <div class="capture-actions">
+          <button onclick="executePostUpdateCompare('${site.id}')" class="btn btn-primary">
+            <span class="icon">🔍</span>
+            比較開始
+          </button>
+          <button onclick="closeCaptureModal()" class="btn btn-secondary">
+            キャンセル
+          </button>
+        </div>
+      </div>
+    `;
+  }
+  
+  modal.style.display = 'block';
+}
+
+/**
+ * キャプチャーモーダルを閉じる
+ */
+function closeCaptureModal() {
+  const modal = document.getElementById('captureModal');
+  modal.style.display = 'none';
+}
+
+/**
+ * 更新前キャプチャーを実行
+ * @param {string} siteId - サイトID
+ */
+function executePreUpdateCapture(siteId) {
+  closeCaptureModal();
+  updateSiteStatus(siteId, 'running');
+  
+  google.script.run
+    .withSuccessHandler(function(result) {
+      handlePreUpdateCaptureSuccess(siteId, result);
+    })
+    .withFailureHandler(function(error) {
+      handlePreUpdateCaptureError(siteId, error);
+    })
+    .runVrtCheck(siteId, 'baseline');
+}
+
+/**
+ * 更新後比較を実行
+ * @param {string} siteId - サイトID
+ */
+function executePostUpdateCompare(siteId) {
+  closeCaptureModal();
+  updateSiteStatus(siteId, 'running');
+  
+  google.script.run
+    .withSuccessHandler(function(result) {
+      handlePostUpdateCompareSuccess(siteId, result);
+    })
+    .withFailureHandler(function(error) {
+      handlePostUpdateCompareError(siteId, error);
+    })
+    .runVrtCheck(siteId, 'after-and-compare');
+}
+
+/**
+ * 更新前キャプチャー成功時の処理
+ */
+function handlePreUpdateCaptureSuccess(siteId, result) {
+  updateSiteStatus(siteId, 'ready');
+  updateSiteBaselineStatus(siteId, 'completed');
+  
+  showNotification('✅ 更新前キャプチャーが完了しました', 'success');
+  showManualUpdateGuidance(siteId);
+}
+
+/**
+ * 更新前キャプチャー失敗時の処理
+ */
+function handlePreUpdateCaptureError(siteId, error) {
+  updateSiteStatus(siteId, 'error');
+  showNotification('❌ 更新前キャプチャーに失敗しました: ' + error.message, 'error');
+}
+
+/**
+ * 更新後比較成功時の処理
+ */
+function handlePostUpdateCompareSuccess(siteId, result) {
+  updateSiteStatus(siteId, 'completed');
+  
+  const hasChanges = result.summary && result.summary.totalChanges > 0;
+  const notificationTitle = hasChanges ? 
+    '⚠️ 差分が検出されました' : 
+    '✅ 差分は検出されませんでした';
+  
+  showNotification(notificationTitle, hasChanges ? 'warning' : 'success');
+  showResultModal(result);
+}
+
+/**
+ * 更新後比較失敗時の処理
+ */
+function handlePostUpdateCompareError(siteId, error) {
+  updateSiteStatus(siteId, 'error');
+  showNotification('❌ 更新後比較に失敗しました: ' + error.message, 'error');
+}
+
+/**
+ * 手動更新ガイダンスを表示
+ * @param {string} siteId - サイトID
+ */
+function showManualUpdateGuidance(siteId) {
+  const site = sites.find(s => s.id === siteId);
+  if (!site) return;
+  
+  const modal = document.getElementById('guidanceModal');
+  const contentElement = document.getElementById('guidanceModalContent');
+  
+  contentElement.innerHTML = `
+    <div class="guidance-content">
+      <h3>📸 キャプチャー完了</h3>
+      <p class="guidance-description">
+        <strong>${escapeHtml(site.name)}</strong> の更新前キャプチャーが完了しました。
+      </p>
+      
+      <div class="next-steps">
+        <h4>次のステップ:</h4>
+        <ol>
+          <li>WordPress管理画面にログインする</li>
+          <li>プラグインやテーマを更新する</li>
+          <li>サイトが正常に動作することを確認する</li>
+          <li>下の「更新後比較」ボタンをクリックする</li>
+        </ol>
+      </div>
+      
+      <div class="guidance-actions">
+        <button onclick="closeGuidanceModal()" class="btn btn-primary">
+          確認しました
+        </button>
+        <button onclick="runPostUpdateCompare('${site.id}'); closeGuidanceModal();" class="btn btn-secondary">
+          すぐに比較実行
+        </button>
+      </div>
+    </div>
+  `;
+  
+  modal.style.display = 'block';
+}
+
+/**
+ * ガイダンスモーダルを閉じる
+ */
+function closeGuidanceModal() {
+  const modal = document.getElementById('guidanceModal');
+  modal.style.display = 'none';
+}
+
+/**
+ * サイトのステータスを更新
+ * @param {string} siteId - サイトID
+ * @param {string} status - 新しいステータス
+ */
+function updateSiteStatus(siteId, status) {
+  const site = sites.find(s => s.id === siteId);
+  if (site) {
+    site.status = status;
+    displaySites();
+  }
+}
+
+/**
+ * サイトのベースライン状態を更新
+ * @param {string} siteId - サイトID
+ * @param {string} baselineStatus - 新しいベースライン状態
+ */
+function updateSiteBaselineStatus(siteId, baselineStatus) {
+  const site = sites.find(s => s.id === siteId);
+  if (site) {
+    site.baselineStatus = baselineStatus;
+    displaySites();
+  }
+}
+
+/**
+ * 通知を表示
+ * @param {string} message - 通知メッセージ
+ * @param {string} type - 通知タイプ ('success', 'error', 'warning', 'info')
+ */
+function showNotification(message, type = 'info') {
+  const toast = document.getElementById('toast');
+  const toastIcon = document.getElementById('toastIcon');
+  const toastMessage = document.getElementById('toastMessage');
+  
+  const icons = {
+    success: '✅',
+    error: '❌',
+    warning: '⚠️',
+    info: 'ℹ️'
+  };
+  
+  toastIcon.textContent = icons[type] || icons.info;
+  toastMessage.textContent = message;
+  
+  toast.className = `toast toast-${type}`;
+  toast.style.display = 'block';
+  
+  // 5秒後に自動で閉じる
+  setTimeout(() => {
+    toast.style.display = 'none';
+  }, 5000);
 }
 
 /**

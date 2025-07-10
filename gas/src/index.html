@@ -160,6 +160,36 @@
       </div>
     </div>
 
+    <!-- キャプチャーモーダル -->
+    <div id="captureModal" class="modal" style="display: none;">
+      <div class="modal-content modal-wide">
+        <div class="modal-header">
+          <h3 id="captureModalTitle">キャプチャー実行</h3>
+          <button class="modal-close" onclick="closeCaptureModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div id="captureModalContent">
+            <!-- Dynamic content will be inserted here -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ガイダンスモーダル -->
+    <div id="guidanceModal" class="modal" style="display: none;">
+      <div class="modal-content modal-wide">
+        <div class="modal-header">
+          <h3>次のステップ</h3>
+          <button class="modal-close" onclick="closeGuidanceModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div id="guidanceModalContent">
+            <!-- Dynamic content will be inserted here -->
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- トースト通知 -->
     <div id="toast" class="toast" style="display: none;">
       <div class="toast-content">

@@ -44,7 +44,8 @@ function getSites() {
       lastRun: row[3] || '',
       status: row[4] || 'pending',
       description: row[5] || '',
-      created: row[6] || new Date().toISOString()
+      created: row[6] || new Date().toISOString(),
+      baselineStatus: row[7] || 'none' // 'none', 'completed', 'ready'
     }));
     
   } catch (error) {
@@ -89,7 +90,8 @@ function addSite(name, url, description = '') {
       '', // lastRun
       'pending', // status
       description,
-      new Date().toISOString()
+      new Date().toISOString(),
+      'none' // baselineStatus
     ]);
     
     Logger.log(`サイト追加: ${name} (${normalizedUrl})`);
@@ -225,7 +227,7 @@ function runVrtCheck(siteId, mode = 'full') {
         results.steps[results.steps.length - 1].result = baselineResult;
       }
       
-      if (mode === 'full' || mode === 'after') {
+      if (mode === 'full' || mode === 'after' || mode === 'after-and-compare') {
         // After 実行
         results.steps.push({ step: 'after', status: 'running', startTime: new Date().toISOString() });
         const afterResult = callCloudRun('/crawl', {
@@ -243,7 +245,7 @@ function runVrtCheck(siteId, mode = 'full') {
         results.steps[results.steps.length - 1].result = afterResult;
       }
       
-      if (mode === 'full' || mode === 'compare') {
+      if (mode === 'full' || mode === 'compare' || mode === 'after-and-compare') {
         // 比較実行
         results.steps.push({ step: 'compare', status: 'running', startTime: new Date().toISOString() });
         const date = new Date().toISOString().split('T')[0].replace(/-/g, '');
@@ -271,7 +273,12 @@ function runVrtCheck(siteId, mode = 'full') {
         results.finalStatus = status;
         results.ngCount = ngCount;
       } else {
-        updateSiteStatus(siteId, 'completed', '実行完了');
+        if (mode === 'baseline') {
+          updateSiteStatus(siteId, 'ready', '更新前キャプチャー完了');
+          updateSiteBaselineStatus(siteId, 'completed');
+        } else {
+          updateSiteStatus(siteId, 'completed', '実行完了');
+        }
         results.finalStatus = 'completed';
       }
       
@@ -317,6 +324,29 @@ function updateSiteStatus(siteId, status, message = '') {
     
   } catch (error) {
     console.error('サイトステータス更新エラー:', error);
+  }
+}
+
+/**
+ * サイトのベースライン状態を更新
+ */
+function updateSiteBaselineStatus(siteId, baselineStatus) {
+  try {
+    const sheet = getOrCreateSitesSheet();
+    const data = sheet.getDataRange().getValues();
+    
+    const rowIndex = data.findIndex(row => row[0] === siteId);
+    if (rowIndex === -1) {
+      return;
+    }
+    
+    // ベースライン状態を8列目に保存
+    sheet.getRange(rowIndex + 1, 8).setValue(baselineStatus);
+    
+    Logger.log(`ベースライン状態更新: ${siteId} -> ${baselineStatus}`);
+    
+  } catch (error) {
+    console.error('ベースライン状態更新エラー:', error);
   }
 }
 
@@ -397,11 +427,12 @@ function getOrCreateSitesSheet() {
       '最終実行',
       'ステータス',
       '説明',
-      '作成日時'
+      '作成日時',
+      'ベースライン状態'
     ]);
     
     // ヘッダー行をフォーマット
-    const headerRange = sheet.getRange(1, 1, 1, 7);
+    const headerRange = sheet.getRange(1, 1, 1, 8);
     headerRange.setBackground('#f0f0f0');
     headerRange.setFontWeight('bold');
     headerRange.setHorizontalAlignment('center');
