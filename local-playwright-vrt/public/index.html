@@ -278,18 +278,38 @@
         </div>
 
         <div class="card">
-            <h2>🚀 VRTチェック実行</h2>
+            <h2>🌐 複数サイトVRTチェック</h2>
             <form id="vrtForm">
                 <div class="grid">
                     <div>
                         <div class="form-group">
-                            <label for="url">📝 サイトURL</label>
-                            <input type="url" id="url" name="url" placeholder="https://example.com" required>
+                            <label for="siteSelection">🌐 対象サイト</label>
+                            <select id="siteSelection" name="siteSelection" multiple style="height: 150px;">
+                                <option value="all" selected>全サイト</option>
+                            </select>
+                            <small style="color: #666; display: block; margin-top: 5px;">
+                                Ctrl/Cmdキーを押しながら複数選択可能
+                            </small>
                         </div>
                         
                         <div class="form-group">
-                            <label for="siteId">🆔 サイトID</label>
-                            <input type="text" id="siteId" name="siteId" placeholder="example-site" required>
+                            <label for="executionMode">🚀 実行モード</label>
+                            <select id="executionMode" name="executionMode">
+                                <option value="step1-only">Step1: 更新前撮影のみ</option>
+                                <option value="step2-and-3" selected>Step2+3: 撮影→即座に比較</option>
+                                <option value="step3-only">Step3: 比較のみ</option>
+                                <option value="full-workflow">フルワークフロー</option>
+                                <option value="crawl-only">クロールのみ（URL収集）</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="crawlMode">🕷️ クロール設定</label>
+                            <select id="crawlMode" name="crawlMode">
+                                <option value="auto">自動クロール（全ページ収集）</option>
+                                <option value="single">単一ページ（トップのみ）</option>
+                                <option value="manual">手動URL指定</option>
+                            </select>
                         </div>
                     </div>
                     
@@ -309,21 +329,35 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="action">⚙️ 実行モード</label>
-                            <select id="action" name="action">
-                                <option value="full-vrt">フルVRT（Baseline→After→比較）</option>
-                                <option value="baseline">プラグイン更新前（Baseline撮影）</option>
-                                <option value="after">プラグイン更新後（After撮影）</option>
-                                <option value="compare">差分チェック（比較のみ）</option>
-                            </select>
+                            <label for="threshold">🎯 差分闾値 (%)</label>
+                            <input type="number" id="threshold" name="threshold" value="2.0" step="0.1" min="0.1" max="10.0" style="width: 100px;">
+                            <small style="color: #666; display: block; margin-top: 5px;">
+                                変化率がこの値を超えるとNG判定
+                            </small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="maxPages">📄 最大ページ数</label>
+                            <input type="number" id="maxPages" name="maxPages" value="30" min="1" max="100" style="width: 100px;">
+                            <small style="color: #666; display: block; margin-top: 5px;">
+                                クロール時の上限ページ数
+                            </small>
                         </div>
                     </div>
                 </div>
                 
+                <div id="manualUrlSection" style="display: none; margin-top: 20px;">
+                    <div class="form-group">
+                        <label for="manualUrls">🔗 手動URL指定（一行一URL）</label>
+                        <textarea id="manualUrls" name="manualUrls" rows="5" style="width: 100%; font-family: monospace;" placeholder="https://example.com/\nhttps://example.com/about\nhttps://example.com/contact"></textarea>
+                    </div>
+                </div>
+                
                 <div style="margin-top: 20px;">
-                    <button type="submit" class="button">🎯 選択モード実行</button>
-                    <button type="button" class="button secondary" onclick="loadScreenshots()">📸 スクリーンショット確認</button>
-                    <button type="button" class="button warning" onclick="loadDiffs()">🔍 差分画像確認</button>
+                    <button type="submit" class="button" id="executeButton">🎯 実行</button>
+                    <button type="button" class="button secondary" onclick="showSiteManager()">🌐 サイト管理</button>
+                    <button type="button" class="button secondary" onclick="showResults()">📈 結果確認</button>
+                    <button type="button" class="button warning" onclick="refreshSites()">🔄 サイト一覧更新</button>
                 </div>
                 
                 <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e1e5e9;">
@@ -353,13 +387,31 @@
 
         <div id="results"></div>
 
+        <!-- サイト管理モーダル -->
+        <div id="siteManagerModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+            <div class="card" style="position: relative; max-width: 600px; margin: 50px auto; max-height: 80vh; overflow-y: auto;">
+                <h3>🌐 サイト管理</h3>
+                <div id="sitesList" style="margin: 20px 0;"></div>
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e1e5e9;">
+                    <h4>新規サイト追加</h4>
+                    <div class="grid">
+                        <input type="text" id="newSiteId" placeholder="サイトID" style="margin-bottom: 10px;">
+                        <input type="text" id="newSiteName" placeholder="サイト名" style="margin-bottom: 10px;">
+                    </div>
+                    <input type="url" id="newSiteUrl" placeholder="https://example.com" style="width: 100%; margin-bottom: 10px;">
+                    <button class="button success" onclick="addNewSite()">🎆 サイト追加</button>
+                </div>
+                <button class="button secondary" onclick="closeSiteManager()" style="margin-top: 20px;">閉じる</button>
+            </div>
+        </div>
+        
         <div class="api-info">
             <h3>📚 API エンドポイント</h3>
-            <div class="api-endpoint">POST /screenshot - スクリーンショット撮影</div>
-            <div class="api-endpoint">POST /compare - 画像比較</div>
-            <div class="api-endpoint">POST /full-vrt - フルVRTチェック</div>
-            <div class="api-endpoint">GET /screenshots/:siteId - スクリーンショット一覧</div>
-            <div class="api-endpoint">GET /diffs/:siteId - 差分画像一覧</div>
+            <div class="api-endpoint">POST /capture-and-compare - Step2+3統合実行</div>
+            <div class="api-endpoint">POST /crawl - サイトクロール</div>
+            <div class="api-endpoint">POST /screenshot-multi - 複数ページ撮影</div>
+            <div class="api-endpoint">POST /compare-multi - 複数ページ比較</div>
+            <div class="api-endpoint">GET /sites - サイト一覧</div>
         </div>
     </div>
 
@@ -367,21 +419,90 @@
         const form = document.getElementById('vrtForm');
         const loading = document.getElementById('loading');
         const results = document.getElementById('results');
+        let allSites = [];
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await executeVRT();
+        // 初期化
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadSites();
+            setupEventListeners();
         });
+
+        function setupEventListeners() {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await executeVRT();
+            });
+
+            // クロールモード変更時のUI更新
+            document.getElementById('crawlMode').addEventListener('change', (e) => {
+                const manualSection = document.getElementById('manualUrlSection');
+                manualSection.style.display = e.target.value === 'manual' ? 'block' : 'none';
+            });
+
+            // 実行モード変更時のボタンテキスト更新
+            document.getElementById('executionMode').addEventListener('change', (e) => {
+                updateExecuteButtonText();
+            });
+        }
+
+        function updateExecuteButtonText() {
+            const mode = document.getElementById('executionMode').value;
+            const button = document.getElementById('executeButton');
+            const modeTexts = {
+                'step1-only': '📸 Step1実行',
+                'step2-and-3': '🚀 Step2+3実行',
+                'step3-only': '🔍 Step3実行',
+                'full-workflow': '🎆 フルワークフロー実行',
+                'crawl-only': '🕷️ クロール実行'
+            };
+            button.textContent = modeTexts[mode] || '🎯 実行';
+        }
+
+        async function loadSites() {
+            try {
+                const response = await fetch('/sites');
+                const data = await response.json();
+                
+                if (data.success) {
+                    allSites = data.sites;
+                    updateSiteSelection();
+                } else {
+                    console.error('サイト一覧の取得に失敗:', data.error);
+                }
+            } catch (error) {
+                console.error('サイト一覧の取得エラー:', error);
+            }
+        }
+
+        function updateSiteSelection() {
+            const select = document.getElementById('siteSelection');
+            const enabledSites = allSites.filter(site => site.enabled);
+            
+            select.innerHTML = `
+                <option value="all">全サイト (${enabledSites.length})</option>
+                ${enabledSites.map(site => 
+                    `<option value="${site.id}">${site.name} (${site.baseUrl})</option>`
+                ).join('')}
+            `;
+        }
 
         async function executeVRT() {
             const formData = new FormData(form);
-            const url = formData.get('url');
-            const siteId = formData.get('siteId');
-            const action = formData.get('action');
+            const siteSelection = Array.from(document.getElementById('siteSelection').selectedOptions).map(opt => opt.value);
+            const executionMode = formData.get('executionMode');
+            const crawlMode = formData.get('crawlMode');
             const devices = formData.getAll('devices');
+            const threshold = parseFloat(formData.get('threshold'));
+            const maxPages = parseInt(formData.get('maxPages'));
+            const manualUrls = formData.get('manualUrls');
 
             if (devices.length === 0) {
                 alert('少なくとも1つのデバイスを選択してください。');
+                return;
+            }
+
+            if (siteSelection.length === 0) {
+                alert('少なくとも1つのサイトを選択してください。');
                 return;
             }
 
@@ -389,57 +510,105 @@
             clearResults();
 
             try {
-                let result;
-                
-                if (action === 'full-vrt') {
-                    result = await fetch('/full-vrt', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ url, siteId, devices })
-                    });
-                } else if (action === 'compare') {
-                    // 各デバイスで比較実行
-                    const results = [];
-                    for (const device of devices) {
-                        const res = await fetch('/compare', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ siteId, device })
-                        });
-                        const data = await res.json();
-                        results.push({ device, ...data.result });
-                    }
-                    displayComparisonResults(results);
-                    return;
-                } else {
-                    // screenshot系の処理
-                    const results = [];
-                    for (const device of devices) {
-                        const res = await fetch('/screenshot', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ url, siteId, type: action, device })
-                        });
-                        const data = await res.json();
-                        results.push({ device, ...data.result });
-                    }
-                    displayScreenshotResults(results, action);
-                    return;
+                if (executionMode === 'crawl-only') {
+                    await executeCrawlOnly(siteSelection, maxPages);
+                } else if (executionMode === 'step1-only') {
+                    await executeStep1Only(siteSelection, devices, crawlMode, maxPages, manualUrls);
+                } else if (executionMode === 'step2-and-3') {
+                    await executeStep2And3(siteSelection, devices, threshold, crawlMode, maxPages, manualUrls);
+                } else if (executionMode === 'step3-only') {
+                    await executeStep3Only(siteSelection, devices, threshold);
+                } else if (executionMode === 'full-workflow') {
+                    await executeFullWorkflow(siteSelection, devices, threshold, crawlMode, maxPages, manualUrls);
                 }
-
-                const data = await result.json();
-                
-                if (data.success) {
-                    displayFullVRTResults(data.result);
-                } else {
-                    displayError(data.error);
-                }
-
             } catch (error) {
                 displayError(error.message);
             } finally {
                 showLoading(false);
             }
+        }
+
+        async function executeCrawlOnly(siteSelection, maxPages) {
+            const targetSites = siteSelection.includes('all') ? 
+                allSites.filter(s => s.enabled) : 
+                allSites.filter(s => siteSelection.includes(s.id) && s.enabled);
+
+            const results = [];
+            for (const site of targetSites) {
+                console.log(`🕷️ ${site.id} をクロール中...`);
+                
+                const response = await fetch('/crawl', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        url: site.baseUrl, 
+                        maxPages: maxPages 
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    results.push({
+                        siteId: site.id,
+                        siteName: site.name,
+                        ...data.result
+                    });
+                }
+            }
+            
+            displayCrawlResults(results);
+        }
+
+        async function executeStep2And3(siteSelection, devices, threshold, crawlMode, maxPages, manualUrls) {
+            const requestBody = {
+                threshold: threshold
+            };
+
+            if (siteSelection.includes('all')) {
+                requestBody.siteIds = 'all';
+            } else {
+                requestBody.siteIds = siteSelection;
+            }
+
+            // 手動URL指定の場合
+            if (crawlMode === 'manual' && manualUrls) {
+                const urls = manualUrls.split('\n').filter(url => url.trim());
+                requestBody.pages = urls.map((url, index) => ({
+                    url: url.trim(),
+                    pageId: String(index + 1).padStart(3, '0'),
+                    identifier: `manual-${index + 1}`,
+                    title: `Manual URL ${index + 1}`
+                }));
+            }
+
+            const results = [];
+            for (const device of devices) {
+                const response = await fetch('/capture-and-compare', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ...requestBody, device })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    results.push({ device, ...data });
+                }
+            }
+            
+            displayStep2And3Results(results);
+        }
+
+        // 他の実行モード関数は簡略化
+        async function executeStep1Only(siteSelection, devices, crawlMode, maxPages, manualUrls) {
+            displayInfo('⚙️ Step1のみの実行は開発中です。Step2+3をご利用ください。');
+        }
+
+        async function executeStep3Only(siteSelection, devices, threshold) {
+            displayInfo('⚙️ Step3のみの実行は開発中です。Step2+3をご利用ください。');
+        }
+
+        async function executeFullWorkflow(siteSelection, devices, threshold, crawlMode, maxPages, manualUrls) {
+            displayInfo('⚙️ フルワークフローは開発中です。Step2+3をご利用ください。');
         }
 
         function showLoading(show) {
@@ -835,9 +1004,212 @@
             }
         }
 
+        function displayCrawlResults(results) {
+            const totalPages = results.reduce((sum, r) => sum + r.totalPages, 0);
+            
+            results.innerHTML = `
+                <div class="card">
+                    <div class="result success">
+                        <h3>🕷️ クロール完了</h3>
+                        <p><strong>対象サイト:</strong> ${results.length}サイト</p>
+                        <p><strong>総ページ数:</strong> ${totalPages}ページ</p>
+                    </div>
+                    
+                    ${results.map(result => `
+                        <div class="diff-info">
+                            <h4>🌐 ${result.siteName} (${result.siteId})</h4>
+                            <p><strong>ベースURL:</strong> ${result.baseUrl}</p>
+                            <p><strong>収集ページ数:</strong> ${result.totalPages}ページ</p>
+                            <details>
+                                <summary>ページ一覧を表示</summary>
+                                <ul style="margin-top: 10px; max-height: 200px; overflow-y: auto;">
+                                    ${result.pages.map(page => 
+                                        `<li><a href="${page.url}" target="_blank">${page.title}</a></li>`
+                                    ).join('')}
+                                </ul>
+                            </details>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function displayStep2And3Results(results) {
+            const allResults = results.flatMap(r => r.results || []);
+            const totalSites = allResults.length;
+            const totalPages = allResults.reduce((sum, r) => sum + r.captureCount, 0);
+            const ngSites = allResults.filter(r => 
+                r.compareResults.summary ? r.compareResults.summary.ng > 0 : 
+                r.compareResults.status === 'NG'
+            ).length;
+            
+            results.innerHTML = `
+                <div class="card">
+                    <div class="result ${ngSites > 0 ? 'warning' : 'success'}">
+                        <h3>${ngSites > 0 ? '⚠️' : '✅'} Step2+3統合実行完了</h3>
+                        <p><strong>実行サイト:</strong> ${totalSites}サイト</p>
+                        <p><strong>総ページ数:</strong> ${totalPages}ページ</p>
+                        <p><strong>結果:</strong> OK: ${totalSites - ngSites}サイト, NG: ${ngSites}サイト</p>
+                    </div>
+                    
+                    ${results.map(deviceResult => `
+                        <div class="diff-info">
+                            <h4>📱 ${deviceResult.device} 結果</h4>
+                            ${deviceResult.results.map(siteResult => `
+                                <div style="margin: 15px 0; padding: 15px; background: #f8f9fa; border-radius: 6px;">
+                                    <h5>🌐 ${siteResult.siteName}</h5>
+                                    <p><strong>撮影ページ:</strong> ${siteResult.captureCount}ページ</p>
+                                    ${siteResult.compareResults.summary ? `
+                                        <p><strong>比較結果:</strong> 
+                                            OK: ${siteResult.compareResults.summary.ok}, 
+                                            NG: ${siteResult.compareResults.summary.ng}
+                                        </p>
+                                    ` : `
+                                        <p><strong>比較結果:</strong> ${siteResult.compareResults.status}</p>
+                                    `}
+                                    <p><strong>闾値:</strong> ${siteResult.threshold}%</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function displayInfo(message) {
+            results.innerHTML = `
+                <div class="card">
+                    <div class="result warning">
+                        <h3>📝 情報</h3>
+                        <p>${message}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // サイト管理関連関数
+        function showSiteManager() {
+            loadSitesList();
+            document.getElementById('siteManagerModal').style.display = 'block';
+        }
+
+        function closeSiteManager() {
+            document.getElementById('siteManagerModal').style.display = 'none';
+        }
+
+        async function loadSitesList() {
+            const sitesListDiv = document.getElementById('sitesList');
+            sitesListDiv.innerHTML = `
+                ${allSites.map(site => `
+                    <div style="padding: 10px; margin: 5px 0; background: ${site.enabled ? '#e8f5e8' : '#f5f5f5'}; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>${site.name}</strong> (${site.id})<br>
+                            <small>${site.baseUrl} - 最大${site.maxPages}ページ</small>
+                        </div>
+                        <div>
+                            <button class="button ${site.enabled ? 'warning' : 'success'}" onclick="toggleSite('${site.id}')">
+                                ${site.enabled ? '無効化' : '有効化'}
+                            </button>
+                            <button class="button secondary" onclick="deleteSite('${site.id}')">削除</button>
+                        </div>
+                    </div>
+                `).join('')}
+            `;
+        }
+
+        async function addNewSite() {
+            const siteId = document.getElementById('newSiteId').value;
+            const siteName = document.getElementById('newSiteName').value;
+            const siteUrl = document.getElementById('newSiteUrl').value;
+
+            if (!siteId || !siteUrl) {
+                alert('サイトIDとURLは必須です。');
+                return;
+            }
+
+            try {
+                const response = await fetch('/sites', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        siteId: siteId,
+                        name: siteName || siteId,
+                        baseUrl: siteUrl
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    await loadSites();
+                    loadSitesList();
+                    document.getElementById('newSiteId').value = '';
+                    document.getElementById('newSiteName').value = '';
+                    document.getElementById('newSiteUrl').value = '';
+                    alert('サイトを追加しました。');
+                } else {
+                    alert('エラー: ' + data.error);
+                }
+            } catch (error) {
+                alert('サイト追加エラー: ' + error.message);
+            }
+        }
+
+        async function toggleSite(siteId) {
+            try {
+                const site = allSites.find(s => s.id === siteId);
+                const response = await fetch(`/sites/${siteId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ enabled: !site.enabled })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    await loadSites();
+                    loadSitesList();
+                } else {
+                    alert('エラー: ' + data.error);
+                }
+            } catch (error) {
+                alert('サイト更新エラー: ' + error.message);
+            }
+        }
+
+        async function deleteSite(siteId) {
+            if (!confirm(`サイト ${siteId} を削除しますか？`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/sites/${siteId}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    await loadSites();
+                    loadSitesList();
+                    alert('サイトを削除しました。');
+                } else {
+                    alert('エラー: ' + data.error);
+                }
+            } catch (error) {
+                alert('サイト削除エラー: ' + error.message);
+            }
+        }
+
+        async function refreshSites() {
+            await loadSites();
+            alert('サイト一覧を更新しました。');
+        }
+
+        function showResults() {
+            // 結果表示機能は後で実装
+            alert('結果表示機能は開発中です。');
+        }
+
         // 初期値設定
-        document.getElementById('siteId').value = 'example-site';
-        document.getElementById('url').value = 'https://example.com';
+        updateExecuteButtonText();
     </script>
 </body>
 </html>
