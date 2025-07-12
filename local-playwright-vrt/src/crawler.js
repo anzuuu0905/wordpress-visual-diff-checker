@@ -7,7 +7,7 @@ const { URL } = require('url');
 
 class SiteCrawler {
   constructor(options = {}) {
-    this.maxPages = options.maxPages || 50;
+    this.maxPages = options.maxPages || 20;
     this.maxDepth = options.maxDepth || 3;
     this.timeout = options.timeout || 30000;
     this.excludePatterns = options.excludePatterns || [
@@ -24,11 +24,34 @@ class SiteCrawler {
   }
 
   /**
+   * URLを正規化して重複を防ぐ
+   */
+  normalizeUrl(url) {
+    try {
+      const urlObj = new URL(url);
+      
+      // 末尾スラッシュを統一（除去）
+      urlObj.pathname = urlObj.pathname.replace(/\/+$/, '') || '/';
+      
+      // クエリパラメータをソート
+      urlObj.searchParams.sort();
+      
+      // ハッシュフラグメントを除去
+      urlObj.hash = '';
+      
+      return urlObj.href.toLowerCase();
+    } catch {
+      return url.toLowerCase();
+    }
+  }
+
+  /**
    * サイトをクロールしてURL一覧を取得
    */
   async crawl(page, baseUrl) {
     const baseDomain = new URL(baseUrl).hostname;
     const visited = new Set();
+    const normalizedToOriginal = new Map(); // 正規化URL → 元URL
     const queue = [{ url: baseUrl, depth: 0 }];
     const urls = [];
     const urlMetadata = new Map();
@@ -37,9 +60,10 @@ class SiteCrawler {
 
     while (queue.length > 0 && urls.length < this.maxPages) {
       const { url, depth } = queue.shift();
+      const normalizedUrl = this.normalizeUrl(url);
       
-      // 既に訪問済みまたは深さ制限を超えた場合はスキップ
-      if (visited.has(url) || depth > this.maxDepth) {
+      // 正規化されたURLで重複チェック
+      if (visited.has(normalizedUrl) || depth > this.maxDepth) {
         continue;
       }
 
@@ -48,7 +72,8 @@ class SiteCrawler {
         continue;
       }
 
-      visited.add(url);
+      visited.add(normalizedUrl);
+      normalizedToOriginal.set(normalizedUrl, url);
       
       try {
         // ページ訪問
@@ -74,11 +99,14 @@ class SiteCrawler {
         if (depth < this.maxDepth) {
           const links = await this.extractLinks(page, baseDomain);
           const newLinks = links
-            .filter(link => !visited.has(link) && this.isSameDomain(link, baseDomain))
+            .filter(link => {
+              const normalizedLink = this.normalizeUrl(link);
+              return !visited.has(normalizedLink) && this.isSameDomain(link, baseDomain);
+            })
             .map(link => ({ url: link, depth: depth + 1 }));
           
           queue.push(...newLinks);
-          console.log(`🔗 ${newLinks.length}個の新しいリンクを発見`);
+          console.log(`🔗 ${newLinks.length}個の新しいリンクを発見 (重複除去済み)`);
         }
 
       } catch (error) {

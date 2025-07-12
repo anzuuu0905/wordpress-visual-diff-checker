@@ -57,7 +57,7 @@ function loadSitesFromJSON() {
             convertedSites[siteId] = {
               name: site.siteName,
               baseUrl: baseUrl,
-              maxPages: 30,
+              maxPages: 20,
               enabled: true,
               crawlSettings: {
                 maxDepth: 3,
@@ -142,7 +142,7 @@ class SitesManager {
     this.sites[siteId] = {
       name: config.name || siteId,
       baseUrl: config.baseUrl,
-      maxPages: config.maxPages || 30,
+      maxPages: config.maxPages || 20,
       enabled: config.enabled !== false,
       crawlSettings: config.crawlSettings || {
         maxDepth: 3,

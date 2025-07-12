@@ -43,12 +43,53 @@ const CONFIG = {
   MOBILE_VIEWPORT: { width: 375, height: 667 },
   DIFF_THRESHOLD: 0.1,
   TIMEOUT: 60000,
-  SCREENSHOT_QUALITY: 90
+  SCREENSHOT_QUALITY: 90,
+  MAX_CONCURRENT_SITES: 3, // 同時処理サイト数
+  MAX_CONCURRENT_PAGES: 5  // 同時処理ページ数
 };
 
 console.log('🚀 Local WordPress VRT Server Starting...');
 console.log(`📁 Screenshots: ${SCREENSHOTS_DIR}`);
 console.log(`📁 Diffs: ${DIFFS_DIR}`);
+
+/**
+ * 🚀 並列処理ヘルパー
+ */
+async function processConcurrent(items, processor, maxConcurrency) {
+  const results = [];
+  const errors = [];
+  
+  for (let i = 0; i < items.length; i += maxConcurrency) {
+    const batch = items.slice(i, i + maxConcurrency);
+    console.log(`⚡ 並列処理バッチ ${Math.floor(i/maxConcurrency) + 1}: ${batch.length}件処理`);
+    
+    const batchPromises = batch.map(async (item, index) => {
+      try {
+        const result = await processor(item, i + index);
+        return { success: true, result, item };
+      } catch (error) {
+        console.error(`❌ 並列処理エラー [${i + index}]:`, error.message);
+        return { success: false, error, item };
+      }
+    });
+    
+    const batchResults = await Promise.allSettled(batchPromises);
+    
+    batchResults.forEach(settled => {
+      if (settled.status === 'fulfilled') {
+        if (settled.value.success) {
+          results.push(settled.value.result);
+        } else {
+          errors.push(settled.value);
+        }
+      } else {
+        errors.push({ success: false, error: settled.reason, item: null });
+      }
+    });
+  }
+  
+  return { results, errors };
+}
 
 /**
  * 🎯 ヘルスチェック
@@ -326,8 +367,8 @@ app.post('/capture-baseline', async (req, res) => {
     
     const allResults = [];
     
-    // 各サイトを処理
-    for (const site of targetSites) {
+    // 各サイトを並列処理
+    const siteProcessor = async (site) => {
       console.log(`🎯 サイト処理中: ${site.id} (${site.name})`);
       
       let captureResults = [];
@@ -356,10 +397,11 @@ app.post('/capture-baseline', async (req, res) => {
       const sessionTimestamp = new Date().toISOString().replace(/[:.]/g, '-');
       
       if (targetPages) {
-        // 複数ページ撮影
+        // 複数ページ並列撮影
         console.log(`📸 Baseline複数ページ撮影 (${targetPages.length}ページ) - セッション: ${sessionTimestamp}`);
-        for (const page of targetPages) {
-          const result = await takeHighPrecisionScreenshot(
+        
+        const pageProcessor = async (page) => {
+          return await takeHighPrecisionScreenshot(
             page.url, 
             site.id, 
             'baseline', 
@@ -367,7 +409,18 @@ app.post('/capture-baseline', async (req, res) => {
             page,
             sessionTimestamp
           );
-          captureResults.push(result);
+        };
+        
+        const { results: pageResults, errors: pageErrors } = await processConcurrent(
+          targetPages, 
+          pageProcessor, 
+          CONFIG.MAX_CONCURRENT_PAGES
+        );
+        
+        captureResults.push(...pageResults);
+        
+        if (pageErrors.length > 0) {
+          console.log(`⚠️ ${pageErrors.length}ページでエラーが発生しました`);
         }
       } else {
         // 単一ページ撮影
@@ -383,8 +436,8 @@ app.post('/capture-baseline', async (req, res) => {
         captureResults.push(result);
       }
       
-      // サイト別結果
-      allResults.push({
+      // サイト別結果を返す
+      return {
         siteId: site.id,
         siteName: site.name,
         device,
@@ -395,7 +448,20 @@ app.post('/capture-baseline', async (req, res) => {
           timestamp: r.timestamp
         })),
         timestamp: new Date().toISOString()
-      });
+      };
+    };
+    
+    // サイトを並列処理
+    const { results: siteResults, errors: siteErrors } = await processConcurrent(
+      targetSites, 
+      siteProcessor, 
+      CONFIG.MAX_CONCURRENT_SITES
+    );
+    
+    allResults.push(...siteResults);
+    
+    if (siteErrors.length > 0) {
+      console.log(`⚠️ ${siteErrors.length}サイトでエラーが発生しました`);
     }
     
     // 全体的な統計
@@ -475,10 +541,11 @@ app.post('/capture-and-compare', async (req, res) => {
       const sessionTimestamp = new Date().toISOString().replace(/[:.]/g, '-');
       
       if (targetPages) {
-        // 複数ページ撮影
+        // 複数ページ並列撮影
         console.log(`📸 複数ページ撮影 (${targetPages.length}ページ) - セッション: ${sessionTimestamp}`);
-        for (const page of targetPages) {
-          const result = await takeHighPrecisionScreenshot(
+        
+        const pageProcessor = async (page) => {
+          return await takeHighPrecisionScreenshot(
             page.url, 
             site.id, 
             'after', 
@@ -486,7 +553,18 @@ app.post('/capture-and-compare', async (req, res) => {
             page,
             sessionTimestamp
           );
-          captureResults.push(result);
+        };
+        
+        const { results: pageResults, errors: pageErrors } = await processConcurrent(
+          targetPages, 
+          pageProcessor, 
+          CONFIG.MAX_CONCURRENT_PAGES
+        );
+        
+        captureResults.push(...pageResults);
+        
+        if (pageErrors.length > 0) {
+          console.log(`⚠️ ${pageErrors.length}ページでエラーが発生しました`);
         }
       } else {
         // 単一ページ撮影
