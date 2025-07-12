@@ -1435,6 +1435,9 @@
         function displaySessionImages(images, siteId, device) {
             const { baseline, after, comparisons } = images;
             
+            // グローバル変数にデータを保存（テキスト出力用）
+            currentSessionData = { baseline, after, comparisons, siteId, device };
+            
             document.getElementById('results').innerHTML = `
                 <div class="card">
                     <div class="result success">
@@ -1445,6 +1448,17 @@
                             new Date(baseline.sessionTimestamp.replace(/-/g, ':')).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }) : 
                             '不明'}</p>
                         <p><strong>ページ数:</strong> ${baseline.files.length}ページ</p>
+                        
+                        <div style="margin-top: 15px; padding: 15px; background: #e3f2fd; border-radius: 6px;">
+                            <h4>🔍 表示フィルター</h4>
+                            <div style="display: flex; gap: 20px; align-items: center; margin-top: 10px;">
+                                <label style="display: flex; align-items: center; cursor: pointer;">
+                                    <input type="checkbox" id="showDiffOnly" onchange="toggleDiffFilter()" style="margin-right: 8px; transform: scale(1.2);">
+                                    <span style="font-weight: 500;">差分があるページのみ表示</span>
+                                </label>
+                                <span id="filterStatus" style="color: #666; font-size: 0.9em;">全${baseline.files.length}ページを表示中</span>
+                            </div>
+                        </div>
                     </div>
                     
                     <div style="margin-top: 20px;">
@@ -1454,7 +1468,7 @@
                             const pageNumber = index + 1;
                             
                             return `
-                                <div class="diff-info" style="margin-bottom: 30px;">
+                                <div class="diff-info page-comparison ${comparison && comparison.status === 'NG' ? 'has-diff' : 'no-diff'}" style="margin-bottom: 30px;">
                                     <h4>📄 ページ ${pageNumber}: ${baselineFile.pageIdentifier || '不明'}</h4>
                                     
                                     ${comparison ? `
@@ -1498,6 +1512,25 @@
                                 </div>
                             `;
                         }).join('')}
+                    </div>
+                    
+                    <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                        <h4>📋 比較結果テキスト出力</h4>
+                        <div style="margin: 15px 0;">
+                            <label>
+                                <input type="checkbox" id="showDiffOnlyText" style="margin-right: 8px;">
+                                差分があるページのみ表示
+                            </label>
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                            <button class="button success" onclick="generateComparisonText(false)">📊 全ページ結果をテキスト出力</button>
+                            <button class="button warning" onclick="generateComparisonText(true)">⚠️ 差分ページのみテキスト出力</button>
+                            <button class="button secondary" onclick="downloadComparisonText()">💾 テキストファイルダウンロード</button>
+                        </div>
+                        <textarea id="comparisonTextOutput" 
+                                  style="width: 100%; height: 200px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: monospace; font-size: 12px;"
+                                  placeholder="比較結果がここに表示されます..."
+                                  readonly></textarea>
                     </div>
                     
                     <div style="margin-top: 20px;">
@@ -1658,6 +1691,153 @@
 
         async function loadDiffs() {
             displayInfo('旧関数です。サイト管理で確認してください。');
+        }
+
+        // グローバル変数に比較結果を保存
+        let currentSessionData = null;
+
+        // 比較結果テキスト生成関数
+        function generateComparisonText(diffOnlyMode = false) {
+            if (!currentSessionData) {
+                alert('比較結果がありません。先にセッション画像を表示してください。');
+                return;
+            }
+            
+            const { baseline, after, comparisons, siteId, device } = currentSessionData;
+            let output = '';
+            
+            // ヘッダー
+            output += `WordPress VRT 比較結果レポート\n`;
+            output += `==========================================\n`;
+            output += `サイト: ${siteId}\n`;
+            output += `デバイス: ${device}\n`;
+            output += `実行日時: ${new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })}\n`;
+            output += `ベースライン: ${baseline.sessionTimestamp}\n`;
+            output += `アフター: ${after.sessionTimestamp || '不明'}\n`;
+            output += `==========================================\n\n`;
+            
+            // サマリー
+            const totalPages = baseline.files.length;
+            const ngPages = comparisons.filter(c => c && c.status === 'NG').length;
+            const okPages = comparisons.filter(c => c && c.status === 'OK').length;
+            const errorPages = comparisons.filter(c => !c).length;
+            
+            output += `📊 結果サマリー\n`;
+            output += `総ページ数: ${totalPages}\n`;
+            output += `OK: ${okPages}ページ\n`;
+            output += `NG: ${ngPages}ページ\n`;
+            output += `エラー: ${errorPages}ページ\n\n`;
+            
+            // 詳細結果
+            output += `📋 詳細結果\n`;
+            output += `${'No.'.padEnd(4)} ${'ページID'.padEnd(25)} ${'判定'.padEnd(6)} ${'差分率'.padEnd(8)} ${'URL'}\n`;
+            output += `${''.padEnd(80, '-')}\n`;
+            
+            baseline.files.forEach((baselineFile, index) => {
+                const comparison = comparisons[index];
+                const pageNumber = (index + 1).toString().padStart(3, '0');
+                const pageId = (baselineFile.pageIdentifier || '不明').padEnd(25);
+                
+                if (comparison) {
+                    const status = comparison.status.padEnd(6);
+                    const diffPercentage = `${comparison.diffPercentage}%`.padEnd(8);
+                    const url = comparison.baselineUrl || baselineFile.path.replace('/screenshots/', '');
+                    
+                    // 差分のみモードの場合、NGのみ表示
+                    if (!diffOnlyMode || comparison.status === 'NG') {
+                        output += `${pageNumber} ${pageId} ${status} ${diffPercentage} ${url}\n`;
+                    }
+                } else {
+                    if (!diffOnlyMode) {
+                        output += `${pageNumber} ${pageId} ERROR  ${'N/A'.padEnd(8)} エラーが発生しました\n`;
+                    }
+                }
+            });
+            
+            // NGページの詳細
+            if (ngPages > 0) {
+                output += `\n⚠️ 差分検出ページ詳細\n`;
+                output += `${''.padEnd(50, '=')}\n`;
+                
+                baseline.files.forEach((baselineFile, index) => {
+                    const comparison = comparisons[index];
+                    if (comparison && comparison.status === 'NG') {
+                        const pageNumber = index + 1;
+                        output += `\n📄 ページ ${pageNumber}: ${baselineFile.pageIdentifier}\n`;
+                        output += `   差分率: ${comparison.diffPercentage}%\n`;
+                        output += `   閾値: ${comparison.threshold}%\n`;
+                        output += `   差分ピクセル数: ${comparison.diffPixels}\n`;
+                        if (comparison.diffPath) {
+                            output += `   差分画像: ${comparison.diffPath}\n`;
+                        }
+                    }
+                });
+            }
+            
+            output += `\n${''.padEnd(80, '=')}\n`;
+            output += `レポート生成完了: ${new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })}\n`;
+            
+            document.getElementById('comparisonTextOutput').value = output;
+        }
+        
+        // テキストファイルダウンロード関数
+        function downloadComparisonText() {
+            const textOutput = document.getElementById('comparisonTextOutput').value;
+            if (!textOutput) {
+                alert('テキスト出力がありません。先に結果を生成してください。');
+                return;
+            }
+            
+            const blob = new Blob([textOutput], { type: 'text/plain; charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `vrt-comparison-result-${new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-')}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // 差分フィルター切り替え関数
+        function toggleDiffFilter() {
+            const checkbox = document.getElementById('showDiffOnly');
+            const pageComparisons = document.querySelectorAll('.page-comparison');
+            const filterStatus = document.getElementById('filterStatus');
+            
+            if (!currentSessionData) return;
+            
+            let visibleCount = 0;
+            
+            pageComparisons.forEach(page => {
+                if (checkbox.checked) {
+                    // 差分があるページのみ表示
+                    if (page.classList.contains('has-diff')) {
+                        page.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        page.style.display = 'none';
+                    }
+                } else {
+                    // 全ページ表示
+                    page.style.display = 'block';
+                    visibleCount++;
+                }
+            });
+            
+            // ステータス更新
+            const totalPages = currentSessionData.baseline.files.length;
+            const diffPages = currentSessionData.comparisons.filter(c => c && c.status === 'NG').length;
+            
+            if (checkbox.checked) {
+                filterStatus.textContent = diffPages > 0 ? 
+                    `差分ページ ${diffPages}件を表示中 (全${totalPages}ページ中)` : 
+                    '差分ページはありません';
+                filterStatus.style.color = diffPages > 0 ? '#d63384' : '#28a745';
+            } else {
+                filterStatus.textContent = `全${totalPages}ページを表示中`;
+                filterStatus.style.color = '#666';
+            }
         }
     </script>
 </body>
