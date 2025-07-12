@@ -3,12 +3,15 @@
  * 最大30サイトまでの設定を管理
  */
 
-const SITES_CONFIG = {
-  // デモサイト例
+const fs = require('fs-extra');
+const path = require('path');
+
+// デフォルトのサイト設定
+const DEFAULT_SITES_CONFIG = {
   "demo-site-1": {
-    name: "デモサイト1",
-    baseUrl: "https://example.com",
-    maxPages: 30,
+    name: "テストサイト（更新確認用）",
+    baseUrl: "https://www.hiro-blogs.com/tool/clp/url-search-regular/",
+    maxPages: 10,
     enabled: true,
     crawlSettings: {
       maxDepth: 3,
@@ -18,39 +21,79 @@ const SITES_CONFIG = {
         /\?.*preview/
       ]
     }
-  },
+  }
+};
+
+/**
+ * 外部JSONファイルからサイト設定を読み込む
+ */
+function loadSitesFromJSON() {
+  const configPaths = [
+    path.join(__dirname, '..', 'config.json'),
+    path.join(__dirname, '..', 'sites.json'),
+    '/Users/kando/Documents/00_webcreate/00_Work/02_ツール制作/20250708_プラグインデータ収集のみ/config.json'
+  ];
   
-  "demo-site-2": {
-    name: "デモサイト2", 
-    baseUrl: "https://blog.example.com",
-    maxPages: 20,
-    enabled: true,
-    crawlSettings: {
-      maxDepth: 2,
-      excludePatterns: [
-        /\/tag\//,
-        /\/category\//
-      ]
-    }
-  },
-  
-  "demo-site-3": {
-    name: "デモサイト3",
-    baseUrl: "https://shop.example.com",
-    maxPages: 50,
-    enabled: false, // 無効化されたサイト
-    crawlSettings: {
-      maxDepth: 3,
-      excludePatterns: [
-        /\/cart/,
-        /\/checkout/,
-        /\/my-account/
-      ]
+  for (const configPath of configPaths) {
+    try {
+      if (fs.existsSync(configPath)) {
+        console.log(`📁 サイト設定を読み込み: ${configPath}`);
+        const jsonData = fs.readFileSync(configPath, 'utf8');
+        const sites = JSON.parse(jsonData);
+        
+        if (Array.isArray(sites)) {
+          const convertedSites = {};
+          console.log(`📊 処理開始: ${sites.length}サイトを変換します`);
+          sites.forEach((site, index) => {
+            // URLを正規化
+            let baseUrl = site.url;
+            if (!baseUrl.startsWith('http://') && !baseUrl.startsWith('https://')) {
+              baseUrl = 'https://' + baseUrl;
+            }
+            
+            // サイトIDを生成（日本語文字対応）
+            const siteId = `site-${index + 1}-${site.siteName.replace(/[^\w\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/g, '').replace(/\s+/g, '-').toLowerCase()}`;
+            
+            convertedSites[siteId] = {
+              name: site.siteName,
+              baseUrl: baseUrl,
+              maxPages: 30,
+              enabled: true,
+              crawlSettings: {
+                maxDepth: 3,
+                excludePatterns: [
+                  /\/wp-admin/,
+                  /\/admin/,
+                  /\/wp-login/,
+                  /\?.*preview/,
+                  /\?.*login/
+                ]
+              },
+              // 管理情報（VRT用途では使用しないが保持）
+              admin: {
+                loginUrl: site.urladmin,
+                username: site.username,
+                password: site.password
+              }
+            };
+            console.log(`✓ ${index + 1}. ${site.siteName} (${siteId})`);
+          });
+          
+          console.log(`✅ ${Object.keys(convertedSites).length}サイトを読み込みました`);
+          return convertedSites;
+        }
+      }
+    } catch (error) {
+      console.log(`⚠️ ${configPath} の読み込みに失敗: ${error.message}`);
     }
   }
   
-  // 実際の運用では最大30サイトまで追加可能
-};
+  console.log('📁 デフォルト設定を使用します');
+  return DEFAULT_SITES_CONFIG;
+}
+
+// サイト設定を読み込み
+const SITES_CONFIG = loadSitesFromJSON();
 
 /**
  * サイト設定管理クラス
@@ -160,13 +203,13 @@ class SitesManager {
     
     if (Array.isArray(siteIds)) {
       return siteIds
-        .map(id => ({ id, ...this.sites[id] }))
-        .filter(site => site.enabled);
+        .map(id => this.sites[id] ? ({ id, ...this.sites[id] }) : null)
+        .filter(site => site && site.enabled !== false);
     }
     
     // 単一サイトID
     const site = this.sites[siteIds];
-    return site && site.enabled ? [{ id: siteIds, ...site }] : [];
+    return site && site.enabled !== false ? [{ id: siteIds, ...site }] : [];
   }
 }
 

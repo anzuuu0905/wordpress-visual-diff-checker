@@ -360,22 +360,36 @@
                     <button type="button" class="button warning" onclick="refreshSites()">🔄 サイト一覧更新</button>
                 </div>
                 
+                <div style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px;">
+                    <h4 style="margin-bottom: 10px;">📁 設定ファイルから読み込み</h4>
+                    <p style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
+                        config.jsonファイルをプロジェクトルートに配置すると自動的に読み込まれます。
+                    </p>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="file" id="configFileInput" accept=".json" style="flex: 1;">
+                        <button type="button" class="button secondary" onclick="loadConfigFile()">📂 ファイル読み込み</button>
+                    </div>
+                </div>
+                
                 <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e1e5e9;">
-                    <h3 style="margin-bottom: 15px; color: #555;">🔄 プラグイン更新ワークフロー</h3>
+                    <h3 style="margin-bottom: 15px; color: #555;">🔄 プラグイン更新ワークフロー（旧機能）</h3>
                     <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                        <button type="button" class="button success" onclick="takeBeforeUpdate()">
-                            📸 Step 1: 更新前キャプチャ
+                        <button type="button" class="button secondary" onclick="takeBeforeUpdate()">
+                            📸 Step 1: 更新前キャプチャ（旧）
                         </button>
                         <div style="display: flex; align-items: center; padding: 10px 15px; background: #f8f9fa; border-radius: 6px; font-weight: 500;">
                             ↓ プラグイン更新実行 ↓
                         </div>
-                        <button type="button" class="button success" onclick="takeAfterUpdate()">
-                            📸 Step 2: 更新後キャプチャ
+                        <button type="button" class="button secondary" onclick="takeAfterUpdate()">
+                            📸 Step 2: 更新後キャプチャ（旧）
                         </button>
-                        <button type="button" class="button warning" onclick="compareUpdates()">
-                            🔍 Step 3: 差分チェック
+                        <button type="button" class="button secondary" onclick="compareUpdates()">
+                            🔍 Step 3: 差分チェック（旧）
                         </button>
                     </div>
+                    <p style="margin-top: 10px; color: #666; font-size: 0.9em;">
+                        ※ 上記は従来機能です。新しい複数サイト対応機能を上でご利用ください。
+                    </p>
                 </div>
             </form>
         </div>
@@ -407,10 +421,10 @@
         
         <div class="api-info">
             <h3>📚 API エンドポイント</h3>
+            <div class="api-endpoint">POST /capture-baseline - Step1 Baseline撮影</div>
             <div class="api-endpoint">POST /capture-and-compare - Step2+3統合実行</div>
             <div class="api-endpoint">POST /crawl - サイトクロール</div>
-            <div class="api-endpoint">POST /screenshot-multi - 複数ページ撮影</div>
-            <div class="api-endpoint">POST /compare-multi - 複数ページ比較</div>
+            <div class="api-endpoint">GET /results - 実行結果一覧</div>
             <div class="api-endpoint">GET /sites - サイト一覧</div>
         </div>
     </div>
@@ -561,7 +575,8 @@
 
         async function executeStep2And3(siteSelection, devices, threshold, crawlMode, maxPages, manualUrls) {
             const requestBody = {
-                threshold: threshold
+                threshold: threshold,
+                crawlMode: crawlMode
             };
 
             if (siteSelection.includes('all')) {
@@ -598,9 +613,45 @@
             displayStep2And3Results(results);
         }
 
-        // 他の実行モード関数は簡略化
+        // Step1のみ実行（Baseline撮影）
         async function executeStep1Only(siteSelection, devices, crawlMode, maxPages, manualUrls) {
-            displayInfo('⚙️ Step1のみの実行は開発中です。Step2+3をご利用ください。');
+            const requestBody = {
+                crawlMode: crawlMode,
+                maxPages: maxPages
+            };
+
+            if (siteSelection.includes('all')) {
+                requestBody.siteIds = 'all';
+            } else {
+                requestBody.siteIds = siteSelection;
+            }
+
+            // 手動URL指定の場合
+            if (crawlMode === 'manual' && manualUrls) {
+                const urls = manualUrls.split('\n').filter(url => url.trim());
+                requestBody.pages = urls.map((url, index) => ({
+                    url: url.trim(),
+                    pageId: String(index + 1).padStart(3, '0'),
+                    identifier: `manual-${index + 1}`,
+                    title: `Manual URL ${index + 1}`
+                }));
+            }
+
+            const results = [];
+            for (const device of devices) {
+                const response = await fetch('/capture-baseline', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ...requestBody, device })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    results.push({ device, ...data });
+                }
+            }
+            
+            displayStep1Results(results);
         }
 
         async function executeStep3Only(siteSelection, devices, threshold) {
@@ -608,14 +659,20 @@
         }
 
         async function executeFullWorkflow(siteSelection, devices, threshold, crawlMode, maxPages, manualUrls) {
-            displayInfo('⚙️ フルワークフローは開発中です。Step2+3をご利用ください。');
+            // Step1とStep2+3を順次実行
+            await executeStep1Only(siteSelection, devices, crawlMode, maxPages, manualUrls);
+            // 少し待機
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            await executeStep2And3(siteSelection, devices, threshold, crawlMode, maxPages, manualUrls);
         }
 
         function showLoading(show) {
+            const loading = document.getElementById('loading');
             loading.style.display = show ? 'block' : 'none';
         }
 
         function clearResults() {
+            const results = document.getElementById('results');
             results.innerHTML = '';
         }
 
@@ -772,7 +829,7 @@
                                              style="max-width: 200px; cursor: pointer;" 
                                              onclick="window.open('${screenshot.path}', '_blank')">
                                         <h4>${screenshot.type} - ${screenshot.device}</h4>
-                                        <p>${new Date(screenshot.timestamp).toLocaleString()}</p>
+                                        <p>${new Date(screenshot.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })}</p>
                                     </div>
                                 `).join('')}
                             </div>
@@ -815,7 +872,7 @@
                                              style="max-width: 200px; cursor: pointer;" 
                                              onclick="window.open('${diff.path}', '_blank')">
                                         <h4>差分 - ${diff.device}</h4>
-                                        <p>${new Date(diff.timestamp).toLocaleString()}</p>
+                                        <p>${new Date(diff.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })}</p>
                                         <p>サイズ: ${(diff.size / 1024).toFixed(1)} KB</p>
                                     </div>
                                 `).join('')}
@@ -874,7 +931,7 @@
                                 <div class="screenshot-item">
                                     <h4>📱 ${result.device}</h4>
                                     <p><strong>ファイル:</strong> ${result.filename}</p>
-                                    <p><strong>時刻:</strong> ${new Date(result.timestamp).toLocaleString()}</p>
+                                    <p><strong>時刻:</strong> ${new Date(result.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })}</p>
                                 </div>
                             `).join('')}
                         </div>
@@ -924,7 +981,7 @@
                                 <div class="screenshot-item">
                                     <h4>📱 ${result.device}</h4>
                                     <p><strong>ファイル:</strong> ${result.filename}</p>
-                                    <p><strong>時刻:</strong> ${new Date(result.timestamp).toLocaleString()}</p>
+                                    <p><strong>時刻:</strong> ${new Date(result.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })}</p>
                                 </div>
                             `).join('')}
                         </div>
@@ -1007,7 +1064,7 @@
         function displayCrawlResults(results) {
             const totalPages = results.reduce((sum, r) => sum + r.totalPages, 0);
             
-            results.innerHTML = `
+            document.getElementById('results').innerHTML = `
                 <div class="card">
                     <div class="result success">
                         <h3>🕷️ クロール完了</h3>
@@ -1034,6 +1091,48 @@
             `;
         }
 
+        function displayStep1Results(results) {
+            const allResults = results.flatMap(r => r.results || []);
+            const totalSites = allResults.length;
+            const totalPages = allResults.reduce((sum, r) => sum + r.captureCount, 0);
+            
+            document.getElementById('results').innerHTML = `
+                <div class="card">
+                    <div class="result success">
+                        <h3>✅ Step1: Baseline撮影完了</h3>
+                        <p><strong>実行サイト:</strong> ${totalSites}サイト</p>
+                        <p><strong>総ページ数:</strong> ${totalPages}ページ</p>
+                        <p style="margin-top: 15px; padding: 10px; background: #e3f2fd; border-radius: 6px;">
+                            📝 <strong>次のステップ:</strong><br>
+                            1. WordPressの管理画面でプラグイン更新を実行<br>
+                            2. 上記フォームで「Step2+3: 撮影→即座に比較」を選択して実行
+                        </p>
+                    </div>
+                    
+                    ${results.map(deviceResult => `
+                        <div class="diff-info">
+                            <h4>📱 ${deviceResult.device} 結果</h4>
+                            ${deviceResult.results.map(siteResult => `
+                                <div style="margin: 15px 0; padding: 15px; background: #f8f9fa; border-radius: 6px;">
+                                    <h5>🌐 ${siteResult.siteName}</h5>
+                                    <p><strong>撮影ページ:</strong> ${siteResult.captureCount}ページ</p>
+                                    <p><strong>保存場所:</strong> screenshots/${siteResult.siteId}/</p>
+                                    <details>
+                                        <summary>撮影ページ一覧を表示</summary>
+                                        <ul style="margin-top: 10px; max-height: 150px; overflow-y: auto; font-size: 0.9em;">
+                                            ${siteResult.pages ? siteResult.pages.map(page => 
+                                                `<li>${page.title || page.identifier}</li>`
+                                            ).join('') : ''}
+                                        </ul>
+                                    </details>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
         function displayStep2And3Results(results) {
             const allResults = results.flatMap(r => r.results || []);
             const totalSites = allResults.length;
@@ -1043,7 +1142,7 @@
                 r.compareResults.status === 'NG'
             ).length;
             
-            results.innerHTML = `
+            document.getElementById('results').innerHTML = `
                 <div class="card">
                     <div class="result ${ngSites > 0 ? 'warning' : 'success'}">
                         <h3>${ngSites > 0 ? '⚠️' : '✅'} Step2+3統合実行完了</h3>
@@ -1077,7 +1176,7 @@
         }
 
         function displayInfo(message) {
-            results.innerHTML = `
+            document.getElementById('results').innerHTML = `
                 <div class="card">
                     <div class="result warning">
                         <h3>📝 情報</h3>
@@ -1203,13 +1302,363 @@
             alert('サイト一覧を更新しました。');
         }
 
-        function showResults() {
-            // 結果表示機能は後で実装
-            alert('結果表示機能は開発中です。');
+        async function loadConfigFile() {
+            const fileInput = document.getElementById('configFileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('ファイルを選択してください。');
+                return;
+            }
+            
+            if (!file.name.endsWith('.json')) {
+                alert('JSONファイルを選択してください。');
+                return;
+            }
+            
+            try {
+                const text = await file.text();
+                const sites = JSON.parse(text);
+                
+                if (!Array.isArray(sites)) {
+                    alert('ファイル形式が正しくありません。サイトの配列が必要です。');
+                    return;
+                }
+                
+                // ファイルをサーバーに送信
+                const response = await fetch('/upload-config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sites })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    await loadSites();
+                    alert(`${data.count}サイトの設定を読み込みました。サーバーを再起動すると永続化されます。`);
+                    fileInput.value = '';
+                } else {
+                    alert('設定の読み込みに失敗しました: ' + data.error);
+                }
+                
+            } catch (error) {
+                alert('ファイルの読み込みでエラーが発生しました: ' + error.message);
+            }
+        }
+
+        async function compareImages(siteId, device) {
+            showLoading(true);
+            try {
+                const response = await fetch('/compare', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ siteId, device, threshold: 2.0 })
+                });
+                
+                const data = await response.json();
+                if (data.success && data.result) {
+                    displayComparisonResult(data.result, siteId, device);
+                } else {
+                    displayError('比較処理でエラーが発生しました: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                displayError('比較処理でエラーが発生しました: ' + error.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function displayComparisonResult(result, siteId, device) {
+            const isNG = result.status === 'NG';
+            
+            document.getElementById('results').innerHTML = `
+                <div class="card">
+                    <div class="result ${isNG ? 'warning' : 'success'}">
+                        <h3>🔍 画像比較結果</h3>
+                        <p><strong>サイト:</strong> ${siteId}</p>
+                        <p><strong>デバイス:</strong> ${device}</p>
+                        <p><strong>判定:</strong> ${isNG ? '⚠️ NG（差分検出）' : '✅ OK（差分なし）'}</p>
+                    </div>
+                    
+                    <div class="diff-info">
+                        <div class="diff-stats">
+                            <div class="diff-stat">
+                                <div class="value" style="color: ${isNG ? '#dc3545' : '#28a745'}">${result.status}</div>
+                                <div class="label">判定</div>
+                            </div>
+                            <div class="diff-stat">
+                                <div class="value">${result.diffPercentage}%</div>
+                                <div class="label">差分率</div>
+                            </div>
+                            <div class="diff-stat">
+                                <div class="value">${result.diffPixels}</div>
+                                <div class="label">差分ピクセル</div>
+                            </div>
+                        </div>
+                        
+                        ${result.diffPath ? `
+                            <div style="margin-top: 20px;">
+                                <h4>差分画像:</h4>
+                                <a href="${result.diffPath}" target="_blank">
+                                    <img src="${result.diffPath}" alt="差分画像" style="max-width: 100%; border: 1px solid #ddd; border-radius: 8px; margin-top: 10px;">
+                                </a>
+                                <p style="margin-top: 10px; color: #666; font-size: 0.9em;">クリックで拡大表示</p>
+                            </div>
+                        ` : ''}
+                        
+                        <div style="margin-top: 20px;">
+                            <button class="button secondary" onclick="showResults()">🔙 結果一覧に戻る</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function viewLatestSession(siteId, device) {
+            showLoading(true);
+            try {
+                const response = await fetch(`/session-images/${siteId}/${device}`);
+                const data = await response.json();
+                
+                if (data.success && data.images) {
+                    displaySessionImages(data.images, siteId, device);
+                } else {
+                    displayError('セッション画像の取得に失敗しました: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                displayError('セッション画像の取得に失敗しました: ' + error.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function displaySessionImages(images, siteId, device) {
+            const { baseline, after, comparisons } = images;
+            
+            document.getElementById('results').innerHTML = `
+                <div class="card">
+                    <div class="result success">
+                        <h3>📸 最新セッション画像一覧</h3>
+                        <p><strong>サイト:</strong> ${siteId}</p>
+                        <p><strong>デバイス:</strong> ${device}</p>
+                        <p><strong>セッション日時:</strong> ${baseline.sessionTimestamp ? 
+                            new Date(baseline.sessionTimestamp.replace(/-/g, ':')).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }) : 
+                            '不明'}</p>
+                        <p><strong>ページ数:</strong> ${baseline.files.length}ページ</p>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        ${baseline.files.map((baselineFile, index) => {
+                            const afterFile = after.files[index];
+                            const comparison = comparisons[index];
+                            const pageNumber = index + 1;
+                            
+                            return `
+                                <div class="diff-info" style="margin-bottom: 30px;">
+                                    <h4>📄 ページ ${pageNumber}: ${baselineFile.pageIdentifier || '不明'}</h4>
+                                    
+                                    ${comparison ? `
+                                        <div style="margin: 15px 0; padding: 15px; background: ${comparison.status === 'NG' ? '#ffe6e6' : '#e6ffe6'}; border-radius: 6px;">
+                                            <strong>比較結果:</strong> ${comparison.status} (差分率: ${comparison.diffPercentage}%)
+                                            ${comparison.diffPath ? `
+                                                <a href="${comparison.diffPath}" target="_blank" style="margin-left: 15px;">🔍 差分画像を見る</a>
+                                            ` : ''}
+                                        </div>
+                                    ` : ''}
+                                    
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 15px;">
+                                        <div style="text-align: center;">
+                                            <h5>🟢 更新前 (Baseline)</h5>
+                                            <a href="${baselineFile.path}" target="_blank">
+                                                <img src="${baselineFile.path}" alt="更新前" style="width: 100%; max-width: 500px; border: 2px solid #28a745; border-radius: 8px;">
+                                            </a>
+                                            <p style="margin-top: 5px; font-size: 0.9em; color: #666;">${baselineFile.filename}</p>
+                                        </div>
+                                        
+                                        ${afterFile ? `
+                                            <div style="text-align: center;">
+                                                <h5>🔵 更新後 (After)</h5>
+                                                <a href="${afterFile.path}" target="_blank">
+                                                    <img src="${afterFile.path}" alt="更新後" style="width: 100%; max-width: 500px; border: 2px solid #007bff; border-radius: 8px;">
+                                                </a>
+                                                <p style="margin-top: 5px; font-size: 0.9em; color: #666;">${afterFile.filename}</p>
+                                            </div>
+                                        ` : ''}
+                                        
+                                        ${comparison && comparison.diffPath ? `
+                                            <div style="text-align: center;">
+                                                <h5>🔴 差分画像</h5>
+                                                <a href="${comparison.diffPath}" target="_blank">
+                                                    <img src="${comparison.diffPath}" alt="差分" style="width: 100%; max-width: 500px; border: 2px solid #dc3545; border-radius: 8px;">
+                                                </a>
+                                                <p style="margin-top: 5px; font-size: 0.9em; color: #666;">差分: ${comparison.diffPercentage}%</p>
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <button class="button secondary" onclick="showResults()">🔙 結果一覧に戻る</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function showResults() {
+            try {
+                const response = await fetch('/results');
+                const data = await response.json();
+                
+                if (data.success && data.results.length > 0) {
+                    displayAllResults(data.results);
+                } else {
+                    displayInfo('📊 保存された結果はありません。');
+                }
+            } catch (error) {
+                displayError('結果の取得に失敗しました: ' + error.message);
+            }
+        }
+
+        function displayAllResults(results) {
+            const totalSites = results.length;
+            
+            document.getElementById('results').innerHTML = `
+                <div class="card">
+                    <div class="result success">
+                        <h3>📊 保存された実行結果</h3>
+                        <p><strong>対象サイト:</strong> ${totalSites}サイト</p>
+                    </div>
+                    
+                    ${results.map(site => `
+                        <div class="diff-info">
+                            <h4>🌐 ${site.siteName}</h4>
+                            <p><strong>URL:</strong> ${site.baseUrl}</p>
+                            
+                            ${site.devices.map(device => `
+                                <div style="margin: 15px 0; padding: 15px; background: #f8f9fa; border-radius: 6px;">
+                                    <h5>📱 ${device.device}</h5>
+                                    
+                                    ${device.baseline.latest ? `
+                                        <div style="margin: 10px 0;">
+                                            <strong>🟢 Baseline (更新前):</strong>
+                                            <ul style="margin: 5px 0; padding-left: 20px;">
+                                                <li>最新: ${new Date(device.baseline.latest.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })}</li>
+                                                <li>総ファイル数: ${device.baseline.count}枚</li>
+                                                ${device.baseline.sessions && device.baseline.sessions.length > 0 ? `
+                                                    <li>セッション数: ${device.baseline.sessions.length}回
+                                                        <details style="margin-top: 5px;">
+                                                            <summary style="cursor: pointer; color: #667eea;">セッション詳細を表示</summary>
+                                                            <ul style="margin-top: 5px; font-size: 0.9em;">
+                                                                ${device.baseline.sessions.slice(0, 5).map(session => `
+                                                                    <li>${new Date(session.sessionTimestamp.replace(/-/g, ':')).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })} - ${session.fileCount}枚</li>
+                                                                `).join('')}
+                                                                ${device.baseline.sessions.length > 5 ? '<li>...</li>' : ''}
+                                                            </ul>
+                                                        </details>
+                                                    </li>
+                                                ` : ''}
+                                                <li><a href="${device.baseline.latest.path}" target="_blank" style="color: #667eea;">📸 最新画像を表示</a></li>
+                                            </ul>
+                                        </div>
+                                    ` : '<p style="color: #666;">⚪ Baseline未撮影</p>'}
+                                    
+                                    ${device.after.latest ? `
+                                        <div style="margin: 10px 0;">
+                                            <strong>🔵 After (更新後):</strong>
+                                            <ul style="margin: 5px 0; padding-left: 20px;">
+                                                <li>最新: ${new Date(device.after.latest.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })}</li>
+                                                <li>総ファイル数: ${device.after.count}枚</li>
+                                                ${device.after.sessions && device.after.sessions.length > 0 ? `
+                                                    <li>セッション数: ${device.after.sessions.length}回
+                                                        <details style="margin-top: 5px;">
+                                                            <summary style="cursor: pointer; color: #667eea;">セッション詳細を表示</summary>
+                                                            <ul style="margin-top: 5px; font-size: 0.9em;">
+                                                                ${device.after.sessions.slice(0, 5).map(session => `
+                                                                    <li>${new Date(session.sessionTimestamp.replace(/-/g, ':')).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })} - ${session.fileCount}枚</li>
+                                                                `).join('')}
+                                                                ${device.after.sessions.length > 5 ? '<li>...</li>' : ''}
+                                                            </ul>
+                                                        </details>
+                                                    </li>
+                                                ` : ''}
+                                                <li><a href="${device.after.latest.path}" target="_blank" style="color: #667eea;">📸 最新画像を表示</a></li>
+                                            </ul>
+                                        </div>
+                                    ` : '<p style="color: #666;">⚪ After未撮影</p>'}
+                                    
+                                    ${device.hasBaseline && device.hasAfter ? `
+                                        <p style="margin-top: 10px; color: #28a745;">✅ 比較可能</p>
+                                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                            <button class="button secondary" onclick="compareImages('${site.siteId}', '${device.device}')" style="flex: 1;">
+                                                🔍 画像を比較
+                                            </button>
+                                            <button class="button secondary" onclick="viewLatestSession('${site.siteId}', '${device.device}')" style="flex: 1;">
+                                                📸 最新セッション表示
+                                            </button>
+                                        </div>
+                                    ` : `
+                                        <p style="margin-top: 10px; color: #dc3545;">❌ 比較不可（両方の撮影が必要）</p>
+                                    `}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
         }
 
         // 初期値設定
         updateExecuteButtonText();
+
+        // 既存の旧関数保持（下位互換性）
+        async function takeBeforeUpdate() {
+            displayInfo('⚙️ 旧ワークフロー関数です。新しいUIでStep2+3をご利用ください。');
+        }
+        
+        async function takeAfterUpdate() {
+            displayInfo('⚙️ 旧ワークフロー関数です。新しいUIでStep2+3をご利用ください。');
+        }
+        
+        async function compareUpdates() {
+            displayInfo('⚙️ 旧ワークフロー関数です。新しいUIでStep2+3をご利用ください。');
+        }
+
+        function displayFullVRTResults(data) {
+            // 旧関数保持
+            displayInfo('旧結果表示関数です。');
+        }
+
+        function displayComparisonResults(results) {
+            // 旧関数保持
+            displayInfo('旧結果表示関数です。');
+        }
+
+        function displayScreenshotResults(results, action) {
+            // 旧関数保持
+            displayInfo('旧結果表示関数です。');
+        }
+
+        function displayError(error) {
+            document.getElementById('results').innerHTML = `
+                <div class="card">
+                    <div class="result error">
+                        <h3>❌ エラーが発生しました</h3>
+                        <p>${error}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function loadScreenshots() {
+            displayInfo('旧関数です。サイト管理で確認してください。');
+        }
+
+        async function loadDiffs() {
+            displayInfo('旧関数です。サイト管理で確認してください。');
+        }
     </script>
 </body>
 </html>

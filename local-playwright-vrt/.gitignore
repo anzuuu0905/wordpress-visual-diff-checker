@@ -1,0 +1,33 @@
+# 環境変数・認証情報
+.env*
+service-account-key.json
+
+# サイト設定ファイル（管理者情報含む）
+config.json
+sites.json
+
+# スクリーンショット画像（大容量）
+screenshots/
+diffs/
+
+# 生成ファイル
+setup/generated.env
+
+# ログファイル
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Node modules
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
