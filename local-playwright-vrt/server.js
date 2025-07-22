@@ -1146,7 +1146,7 @@ app.get('/session-images/:siteId/:device', async (req, res) => {
       }
     }
     
-    // 各ページの比較結果を生成
+    // 各ページの比較結果を生成（既存の差分ファイルがあれば利用、なければ新規作成）
     const comparisons = [];
     for (const baselineFile of baselineSessionFiles) {
       const afterFile = afterFiles.find(f => 
@@ -1155,16 +1155,35 @@ app.get('/session-images/:siteId/:device', async (req, res) => {
       
       if (afterFile) {
         try {
-          // 比較実行
-          const comparison = await compareSpecificFiles(
-            baselineFile.fullPath,
-            afterFile.fullPath,
-            siteId,
-            device,
-            2.0
-          );
-          comparisons.push(comparison);
+          // 既存の差分ファイルをチェック
+          const existingDiff = await findExistingDiffFile(siteId, device, baselineFile.pageIdentifier);
+          
+          if (existingDiff) {
+            // 既存の差分ファイルを利用
+            comparisons.push({
+              pageIdentifier: baselineFile.pageIdentifier,
+              diffPath: existingDiff.relativePath,
+              status: existingDiff.status,
+              diffPercentage: existingDiff.diffPercentage || 0,
+              isExistingResult: true
+            });
+            console.log(`♻️ 既存差分ファイルを利用: ${baselineFile.pageIdentifier}`);
+          } else {
+            // 新規比較実行
+            const comparison = await compareSpecificFiles(
+              baselineFile.fullPath,
+              afterFile.fullPath,
+              siteId,
+              device,
+              2.0
+            );
+            // pageIdentifierを確実に設定
+            comparison.pageIdentifier = comparison.pageIdentifier || baselineFile.pageIdentifier;
+            comparisons.push(comparison);
+            console.log(`🆕 新規比較実行: ${baselineFile.pageIdentifier}`);
+          }
         } catch (error) {
+          console.error(`❌ ${baselineFile.pageIdentifier}の比較エラー:`, error);
           comparisons.push(null);
         }
       } else {
@@ -1180,7 +1199,7 @@ app.get('/session-images/:siteId/:device', async (req, res) => {
           files: baselineSessionFiles
         },
         after: {
-          sessionTimestamp: latestSession,
+          sessionTimestamp: afterFiles.length > 0 ? afterFiles[0].sessionTimestamp : latestSession,
           files: afterFiles
         },
         comparisons
@@ -1250,9 +1269,21 @@ async function compareSpecificFiles(baselinePath, afterPath, siteId, device, thr
   const totalPixels = maxWidth * maxHeight;
   const diffPercentage = (diffPixels / totalPixels) * 100;
   
+  // baselineのファイル名からpageInfoを抽出
+  const baselineFilename = path.basename(baselinePath);
+  const pageMatch = baselineFilename.match(/page-(\d{3})_([^_]+)_/);
+  
   // 差分画像を保存
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-  const diffFilename = `${path.basename(baselinePath, '.png')}_diff_${timestamp}.png`;
+  let diffFilename;
+  if (pageMatch) {
+    const pageId = pageMatch[1];
+    const pageIdentifier = pageMatch[2];
+    diffFilename = `page-${pageId}_${pageIdentifier}_${timestamp}_diff.png`;
+  } else {
+    // フォールバック：旧形式
+    diffFilename = `${path.basename(baselinePath, '.png')}_diff_${timestamp}.png`;
+  }
   const diffDir = path.join(DIFFS_DIR, siteId, device, `threshold-${threshold}`);
   
   fs.ensureDirSync(diffDir);
@@ -1266,7 +1297,8 @@ async function compareSpecificFiles(baselinePath, afterPath, siteId, device, thr
     diffPercentage: Math.round(diffPercentage * 1000) / 1000,
     diffPixels,
     diffPath: `/diffs/${siteId}/${device}/threshold-${threshold}/${diffFilename}`,
-    threshold
+    threshold,
+    pageIdentifier: pageMatch ? pageMatch[2] : null
   };
 }
 
@@ -1621,7 +1653,7 @@ async function compareHighPrecisionScreenshots(siteId, device, threshold = 2.0) 
     throw new Error('Baseline または After スクリーンショットが見つかりません');
   }
   
-  // 最新のファイルを取得
+  // ページペアでファイルを取得
   const baselineFiles = fs.readdirSync(baselineDir).filter(f => f.endsWith('.png'));
   const afterFiles = fs.readdirSync(afterDir).filter(f => f.endsWith('.png'));
   
@@ -1629,8 +1661,33 @@ async function compareHighPrecisionScreenshots(siteId, device, threshold = 2.0) 
     throw new Error('比較対象のスクリーンショットファイルが見つかりません');
   }
   
-  const baselineFile = baselineFiles.sort().pop();
-  const afterFile = afterFiles.sort().pop();
+  // 同じページIDのファイルペアを見つける
+  let baselineFile = null;
+  let afterFile = null;
+  
+  for (const bFile of baselineFiles) {
+    const pageMatch = bFile.match(/page-(\d{3})_([^_]+)_/);
+    if (!pageMatch) continue;
+    
+    const pageId = pageMatch[1];
+    const pageIdentifier = pageMatch[2];
+    
+    // 対応するafterファイルを検索
+    const matchingAfterFile = afterFiles.find(f => 
+      f.includes(`page-${pageId}_${pageIdentifier}_`)
+    );
+    
+    if (matchingAfterFile) {
+      baselineFile = bFile;
+      afterFile = matchingAfterFile;
+      console.log(`🔍 比較対象: ${pageId}_${pageIdentifier}`);
+      break; // 最初に見つかったペアを使用
+    }
+  }
+  
+  if (!baselineFile || !afterFile) {
+    throw new Error('対応するページペアが見つかりません');
+  }
   
   const baselinePath = path.join(baselineDir, baselineFile);
   const afterPath = path.join(afterDir, afterFile);
@@ -1814,52 +1871,80 @@ async function compareMultiPageScreenshots(siteId, device, threshold = 2.0) {
   const results = [];
   const processedPairs = new Map();
   
-  // ページIDでペアリング
-  for (const baselineFile of baselineFiles) {
-    const pageMatch = baselineFile.match(/page-(\d{3})_([^_]+)_/);
-    if (!pageMatch) continue;
+  // 最新セッション同士でページIDペアリング
+  const baselineSessionMap = new Map();
+  const afterSessionMap = new Map();
+  
+  // baselineファイルをページごとに分類し、最新のものを取得
+  baselineFiles.forEach(f => {
+    const pageMatch = f.match(/page-(\d{3})_([^_]+)_(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z)/);
+    if (pageMatch) {
+      const pageKey = `${pageMatch[1]}_${pageMatch[2]}`;
+      const timestamp = pageMatch[3];
+      
+      if (!baselineSessionMap.has(pageKey) || timestamp > baselineSessionMap.get(pageKey).timestamp) {
+        baselineSessionMap.set(pageKey, { file: f, timestamp, pageId: pageMatch[1], pageIdentifier: pageMatch[2] });
+      }
+    }
+  });
+  
+  // afterファイルをページごとに分類し、最新のものを取得
+  afterFiles.forEach(f => {
+    const pageMatch = f.match(/page-(\d{3})_([^_]+)_(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z)/);
+    if (pageMatch) {
+      const pageKey = `${pageMatch[1]}_${pageMatch[2]}`;
+      const timestamp = pageMatch[3];
+      
+      if (!afterSessionMap.has(pageKey) || timestamp > afterSessionMap.get(pageKey).timestamp) {
+        afterSessionMap.set(pageKey, { file: f, timestamp, pageId: pageMatch[1], pageIdentifier: pageMatch[2] });
+      }
+    }
+  });
+  
+  console.log(`🔄 最新ペアリング: baseline ${baselineSessionMap.size}ページ, after ${afterSessionMap.size}ページ`);
+  
+  // 最新セッション同士でペアを作成
+  for (const [pageKey, baselineInfo] of baselineSessionMap) {
+    const afterInfo = afterSessionMap.get(pageKey);
     
-    const pageId = pageMatch[1];
-    const pageIdentifier = pageMatch[2];
-    
-    // 対応するafterファイルを検索
-    const matchingAfterFile = afterFiles.find(f => 
-      f.includes(`page-${pageId}_${pageIdentifier}_`)
-    );
-    
-    if (matchingAfterFile) {
-      console.log(`📊 ページ${pageId} (${pageIdentifier}) を比較中...`);
+    if (afterInfo) {
+      console.log(`📊 ページ${baselineInfo.pageId} (${baselineInfo.pageIdentifier}) を比較中...`);
       
       try {
+        // 重複差分ファイルを削除
+        await cleanupOldDiffFiles(siteId, device, baselineInfo.pageId, baselineInfo.pageIdentifier);
+        
         const result = await compareFiles(
-          path.join(baselineDir, baselineFile),
-          path.join(afterDir, matchingAfterFile),
+          path.join(baselineDir, baselineInfo.file),
+          path.join(afterDir, afterInfo.file),
           siteId,
           device,
           threshold,
-          { pageId, pageIdentifier }
+          { pageId: baselineInfo.pageId, pageIdentifier: baselineInfo.pageIdentifier }
         );
         
         results.push({
-          pageId,
-          pageIdentifier,
-          baselineFile,
-          afterFile: matchingAfterFile,
+          pageId: baselineInfo.pageId,
+          pageIdentifier: baselineInfo.pageIdentifier,
+          baselineFile: baselineInfo.file,
+          afterFile: afterInfo.file,
+          baselineTimestamp: baselineInfo.timestamp,
+          afterTimestamp: afterInfo.timestamp,
           ...result
         });
         
-        processedPairs.set(pageId, true);
+        processedPairs.set(baselineInfo.pageId, true);
       } catch (error) {
-        console.error(`❌ ページ${pageId} の比較エラー:`, error.message);
+        console.error(`❌ ページ${baselineInfo.pageId} の比較エラー:`, error.message);
         results.push({
-          pageId,
-          pageIdentifier,
+          pageId: baselineInfo.pageId,
+          pageIdentifier: baselineInfo.pageIdentifier,
           error: error.message,
           status: 'ERROR'
         });
       }
     } else {
-      console.log(`⚠️ ページ${pageId} (${pageIdentifier}) のafterファイルが見つかりません`);
+      console.log(`⚠️ ページ${baselineInfo.pageId} (${baselineInfo.pageIdentifier}) のafterファイルが見つかりません`);
     }
   }
   
@@ -1880,6 +1965,79 @@ async function compareMultiPageScreenshots(siteId, device, threshold = 2.0) {
     summary,
     results: results.sort((a, b) => a.pageId.localeCompare(b.pageId))
   };
+}
+
+/**
+ * 古い差分ファイルをクリーンアップ
+ */
+async function cleanupOldDiffFiles(siteId, device, pageId, pageIdentifier) {
+  const diffDir = path.join(DIFFS_DIR, siteId, device);
+  
+  if (!fs.existsSync(diffDir)) {
+    return;
+  }
+  
+  try {
+    const files = fs.readdirSync(diffDir, { recursive: true });
+    const targetFiles = files.filter(file => 
+      file.includes(`page-${pageId}_${pageIdentifier}_`) && 
+      file.endsWith('_diff.png')
+    );
+    
+    for (const file of targetFiles) {
+      const filePath = path.join(diffDir, file);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+        console.log(`🗑️ 古い差分ファイルを削除: ${file}`);
+      }
+    }
+    
+    console.log(`✅ ページ${pageId}_${pageIdentifier}の古い差分ファイルをクリーンアップ完了`);
+  } catch (error) {
+    console.error('❌ 差分ファイルクリーンアップエラー:', error);
+  }
+}
+
+/**
+ * 既存の差分ファイルを検索
+ */
+async function findExistingDiffFile(siteId, device, pageIdentifier) {
+  const diffDir = path.join(DIFFS_DIR, siteId, device);
+  
+  if (!fs.existsSync(diffDir)) {
+    return null;
+  }
+  
+  try {
+    const files = fs.readdirSync(diffDir, { recursive: true });
+    
+    // より厳密なパターンマッチング：page-XXX_pageIdentifier_*_diff.png
+    const diffFiles = files.filter(file => {
+      const pageMatch = file.match(/page-\d{3}_([^_]+)_.*_diff\.png$/);
+      return pageMatch && pageMatch[1] === pageIdentifier;
+    }).sort().reverse(); // 最新ファイルを優先
+    
+    if (diffFiles.length > 0) {
+      const latestDiffFile = diffFiles[0];
+      const fullPath = path.join(diffDir, latestDiffFile);
+      
+      // 相対パス作成（WebUIで表示可能にする）
+      const relativePath = `/diffs/${siteId}/${device}/${latestDiffFile}`;
+      
+      return {
+        fullPath,
+        relativePath,
+        fileName: latestDiffFile,
+        status: 'OK', // 簡易判定（実際は差分率から判定すべき）
+        diffPercentage: 0 // 実際の値は不明だが、既存ファイルなので0とする
+      };
+    }
+    
+    return null;
+  } catch (error) {
+    console.error('❌ 既存差分ファイル検索エラー:', error);
+    return null;
+  }
 }
 
 /**

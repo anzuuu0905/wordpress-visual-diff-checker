@@ -283,12 +283,21 @@
                 <div class="grid">
                     <div>
                         <div class="form-group">
-                            <label for="siteSelection">🌐 対象サイト</label>
-                            <select id="siteSelection" name="siteSelection" multiple style="height: 150px;">
-                                <option value="all" selected>全サイト</option>
-                            </select>
+                            <label>🌐 対象サイト選択</label>
+                            <div style="margin: 10px 0;">
+                                <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 10px;">
+                                    <label style="display: flex; align-items: center; cursor: pointer;">
+                                        <input type="checkbox" id="selectAllSites" onchange="toggleAllSites()" style="margin-right: 8px; transform: scale(1.2);">
+                                        <span style="font-weight: 600; color: #667eea;">全サイト選択</span>
+                                    </label>
+                                    <span id="selectedSitesCount" style="color: #666; font-size: 0.9em;">0サイト選択中</span>
+                                </div>
+                            </div>
+                            <div id="siteCheckboxList" style="max-height: 200px; overflow-y: auto; border: 1px solid #e1e5e9; border-radius: 6px; padding: 10px; background: #f8f9fa;">
+                                <!-- サイトのチェックボックスがここに動的に追加される -->
+                            </div>
                             <small style="color: #666; display: block; margin-top: 5px;">
-                                Ctrl/Cmdキーを押しながら複数選択可能
+                                チェックボックスで複数サイトを選択できます
                             </small>
                         </div>
                         
@@ -382,9 +391,6 @@
                         </div>
                         <button type="button" class="button secondary" onclick="takeAfterUpdate()">
                             📸 Step 2: 更新後キャプチャ（旧）
-                        </button>
-                        <button type="button" class="button secondary" onclick="compareUpdates()">
-                            🔍 Step 3: 差分チェック（旧）
                         </button>
                     </div>
                     <p style="margin-top: 10px; color: #666; font-size: 0.9em;">
@@ -489,20 +495,38 @@
         }
 
         function updateSiteSelection() {
-            const select = document.getElementById('siteSelection');
+            const checkboxList = document.getElementById('siteCheckboxList');
             const enabledSites = allSites.filter(site => site.enabled);
             
-            select.innerHTML = `
-                <option value="all">全サイト (${enabledSites.length})</option>
-                ${enabledSites.map(site => 
-                    `<option value="${site.id}">${site.name} (${site.baseUrl})</option>`
-                ).join('')}
-            `;
+            checkboxList.innerHTML = enabledSites.map(site => {
+                const lastExecution = getLastExecutionDate(site.id);
+                const lastExecutionText = lastExecution ? 
+                    `最終実行: ${new Date(lastExecution).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })}` :
+                    '未実行';
+                    
+                return `
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px; margin: 5px 0; background: white; border-radius: 4px; border: 1px solid #e1e5e9;">
+                        <label style="display: flex; align-items: center; cursor: pointer; flex: 1;">
+                            <input type="checkbox" name="siteSelection" value="${site.id}" onchange="updateSelectedCount()" style="margin-right: 10px; transform: scale(1.1);">
+                            <div style="flex: 1;">
+                                <div style="font-weight: 500; color: #333;">${site.name}</div>
+                                <div style="font-size: 0.8em; color: #666; margin-top: 2px;">${site.baseUrl}</div>
+                                <div style="font-size: 0.75em; color: ${lastExecution ? '#28a745' : '#6c757d'}; margin-top: 2px;">
+                                    ${lastExecutionText}
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                `;
+            }).join('');
+            
+            updateSelectedCount();
         }
 
         async function executeVRT() {
             const formData = new FormData(form);
-            const siteSelection = Array.from(document.getElementById('siteSelection').selectedOptions).map(opt => opt.value);
+            const selectedSiteCheckboxes = document.querySelectorAll('input[name="siteSelection"]:checked');
+            const siteSelection = Array.from(selectedSiteCheckboxes).map(checkbox => checkbox.value);
             const executionMode = formData.get('executionMode');
             const crawlMode = formData.get('crawlMode');
             const devices = formData.getAll('devices');
@@ -611,6 +635,18 @@
             }
             
             displayStep2And3Results(results);
+            
+            // 成功したサイトの最終実行日を保存
+            siteSelection.forEach(siteId => {
+                if (siteId !== 'all') {
+                    saveLastExecutionDate(siteId);
+                }
+            });
+            if (siteSelection.includes('all')) {
+                allSites.filter(s => s.enabled).forEach(site => {
+                    saveLastExecutionDate(site.id);
+                });
+            }
         }
 
         // Step1のみ実行（Baseline撮影）
@@ -652,6 +688,18 @@
             }
             
             displayStep1Results(results);
+            
+            // 成功したサイトの最終実行日を保存
+            siteSelection.forEach(siteId => {
+                if (siteId !== 'all') {
+                    saveLastExecutionDate(siteId);
+                }
+            });
+            if (siteSelection.includes('all')) {
+                allSites.filter(s => s.enabled).forEach(site => {
+                    saveLastExecutionDate(site.id);
+                });
+            }
         }
 
         async function executeStep3Only(siteSelection, devices, threshold) {
@@ -995,71 +1043,6 @@
             }
         }
         
-        async function compareUpdates() {
-            const siteId = document.getElementById('siteId').value;
-            const devices = Array.from(document.querySelectorAll('input[name="devices"]:checked')).map(cb => cb.value);
-            
-            if (!siteId || devices.length === 0) {
-                alert('サイトIDとデバイスを設定してください。');
-                return;
-            }
-            
-            showLoading(true);
-            clearResults();
-            
-            try {
-                const results = [];
-                for (const device of devices) {
-                    const res = await fetch('/compare', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ siteId, device })
-                    });
-                    const data = await res.json();
-                    results.push({ device, ...data.result });
-                }
-                
-                const hasNG = results.some(r => r.status === 'NG');
-                const resultClass = hasNG ? 'warning' : 'success';
-                
-                results.innerHTML = `
-                    <div class="card">
-                        <div class="result ${resultClass}">
-                            <h3>${hasNG ? '⚠️ Step 3: 差分を検出しました' : '✅ Step 3: 差分なし - 正常'}</h3>
-                            <p><strong>判定:</strong> ${hasNG ? 'プラグイン更新により見た目の変化があります' : 'プラグイン更新による見た目の変化はありません'}</p>
-                        </div>
-                        
-                        ${results.map(result => `
-                            <div class="diff-info">
-                                <h4>📱 ${result.device} 比較結果</h4>
-                                <div class="diff-stats">
-                                    <div class="diff-stat">
-                                        <div class="value" style="color: ${result.status === 'NG' ? '#dc3545' : '#28a745'}">${result.status}</div>
-                                        <div class="label">判定</div>
-                                    </div>
-                                    <div class="diff-stat">
-                                        <div class="value">${result.diffPercentage}%</div>
-                                        <div class="label">差分率</div>
-                                    </div>
-                                    <div class="diff-stat">
-                                        <div class="value">${result.diffPixels}</div>
-                                        <div class="label">差分ピクセル</div>
-                                    </div>
-                                </div>
-                                ${result.diffPath ? `
-                                <p><strong>差分画像:</strong> <a href="${result.diffPath}" target="_blank" style="color: #667eea; text-decoration: none;">📸 差分を確認</a></p>
-                                ` : ''}
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-                
-            } catch (error) {
-                displayError('差分チェックでエラーが発生しました: ' + error.message);
-            } finally {
-                showLoading(false);
-            }
-        }
 
         function displayCrawlResults(results) {
             const totalPages = results.reduce((sum, r) => sum + r.totalPages, 0);
@@ -1346,73 +1329,7 @@
             }
         }
 
-        async function compareImages(siteId, device) {
-            showLoading(true);
-            try {
-                const response = await fetch('/compare', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ siteId, device, threshold: 2.0 })
-                });
-                
-                const data = await response.json();
-                if (data.success && data.result) {
-                    displayComparisonResult(data.result, siteId, device);
-                } else {
-                    displayError('比較処理でエラーが発生しました: ' + (data.error || 'Unknown error'));
-                }
-            } catch (error) {
-                displayError('比較処理でエラーが発生しました: ' + error.message);
-            } finally {
-                showLoading(false);
-            }
-        }
 
-        function displayComparisonResult(result, siteId, device) {
-            const isNG = result.status === 'NG';
-            
-            document.getElementById('results').innerHTML = `
-                <div class="card">
-                    <div class="result ${isNG ? 'warning' : 'success'}">
-                        <h3>🔍 画像比較結果</h3>
-                        <p><strong>サイト:</strong> ${siteId}</p>
-                        <p><strong>デバイス:</strong> ${device}</p>
-                        <p><strong>判定:</strong> ${isNG ? '⚠️ NG（差分検出）' : '✅ OK（差分なし）'}</p>
-                    </div>
-                    
-                    <div class="diff-info">
-                        <div class="diff-stats">
-                            <div class="diff-stat">
-                                <div class="value" style="color: ${isNG ? '#dc3545' : '#28a745'}">${result.status}</div>
-                                <div class="label">判定</div>
-                            </div>
-                            <div class="diff-stat">
-                                <div class="value">${result.diffPercentage}%</div>
-                                <div class="label">差分率</div>
-                            </div>
-                            <div class="diff-stat">
-                                <div class="value">${result.diffPixels}</div>
-                                <div class="label">差分ピクセル</div>
-                            </div>
-                        </div>
-                        
-                        ${result.diffPath ? `
-                            <div style="margin-top: 20px;">
-                                <h4>差分画像:</h4>
-                                <a href="${result.diffPath}" target="_blank">
-                                    <img src="${result.diffPath}" alt="差分画像" style="max-width: 100%; border: 1px solid #ddd; border-radius: 8px; margin-top: 10px;">
-                                </a>
-                                <p style="margin-top: 10px; color: #666; font-size: 0.9em;">クリックで拡大表示</p>
-                            </div>
-                        ` : ''}
-                        
-                        <div style="margin-top: 20px;">
-                            <button class="button secondary" onclick="showResults()">🔙 結果一覧に戻る</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
 
         async function viewLatestSession(siteId, device) {
             showLoading(true);
@@ -1451,11 +1368,21 @@
                         
                         <div style="margin-top: 15px; padding: 15px; background: #e3f2fd; border-radius: 6px;">
                             <h4>🔍 表示フィルター</h4>
-                            <div style="display: flex; gap: 20px; align-items: center; margin-top: 10px;">
-                                <label style="display: flex; align-items: center; cursor: pointer;">
-                                    <input type="checkbox" id="showDiffOnly" onchange="toggleDiffFilter()" style="margin-right: 8px; transform: scale(1.2);">
-                                    <span style="font-weight: 500;">差分があるページのみ表示</span>
-                                </label>
+                            <div style="margin-top: 10px;">
+                                <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 10px;">
+                                    <label style="display: flex; align-items: center; cursor: pointer;">
+                                        <input type="radio" name="diffFilter" value="all" onchange="applyDiffFilter()" checked style="margin-right: 8px; transform: scale(1.2);">
+                                        <span style="font-weight: 500;">全ページ表示</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; cursor: pointer;">
+                                        <input type="radio" name="diffFilter" value="ng-only" onchange="applyDiffFilter()" style="margin-right: 8px; transform: scale(1.2);">
+                                        <span style="font-weight: 500; color: #dc3545;">NGページのみ</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; cursor: pointer;">
+                                        <input type="radio" name="diffFilter" value="has-diff" onchange="applyDiffFilter()" style="margin-right: 8px; transform: scale(1.2);">
+                                        <span style="font-weight: 500; color: #fd7e14;">差分があるページ（NG+OK軽微差分）</span>
+                                    </label>
+                                </div>
                                 <span id="filterStatus" style="color: #666; font-size: 0.9em;">全${baseline.files.length}ページを表示中</span>
                             </div>
                         </div>
@@ -1468,7 +1395,7 @@
                             const pageNumber = index + 1;
                             
                             return `
-                                <div class="diff-info page-comparison ${comparison && comparison.status === 'NG' ? 'has-diff' : 'no-diff'}" style="margin-bottom: 30px;">
+                                <div class="diff-info page-comparison ${comparison && comparison.status === 'NG' ? 'has-diff ng-page' : (comparison && comparison.diffPercentage > 0 ? 'has-diff ok-page' : 'no-diff')}" style="margin-bottom: 30px;">
                                     <h4>📄 ページ ${pageNumber}: ${baselineFile.pageIdentifier || '不明'}</h4>
                                     
                                     ${comparison ? `
@@ -1517,14 +1444,21 @@
                     <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
                         <h4>📋 比較結果テキスト出力</h4>
                         <div style="margin: 15px 0;">
+                            <label style="margin-right: 20px;">
+                                <input type="radio" name="textFilter" value="all" checked style="margin-right: 8px;">
+                                全ページ
+                            </label>
+                            <label style="margin-right: 20px;">
+                                <input type="radio" name="textFilter" value="ng-only" style="margin-right: 8px;">
+                                NGページのみ
+                            </label>
                             <label>
-                                <input type="checkbox" id="showDiffOnlyText" style="margin-right: 8px;">
-                                差分があるページのみ表示
+                                <input type="radio" name="textFilter" value="has-diff" style="margin-right: 8px;">
+                                差分ありページ（NG+OK軽微差分）
                             </label>
                         </div>
                         <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                            <button class="button success" onclick="generateComparisonText(false)">📊 全ページ結果をテキスト出力</button>
-                            <button class="button warning" onclick="generateComparisonText(true)">⚠️ 差分ページのみテキスト出力</button>
+                            <button class="button success" onclick="generateComparisonTextAdvanced()">📊 選択した結果をテキスト出力</button>
                             <button class="button secondary" onclick="downloadComparisonText()">💾 テキストファイルダウンロード</button>
                         </div>
                         <textarea id="comparisonTextOutput" 
@@ -1625,9 +1559,6 @@
                                     ${device.hasBaseline && device.hasAfter ? `
                                         <p style="margin-top: 10px; color: #28a745;">✅ 比較可能</p>
                                         <div style="display: flex; gap: 10px; margin-top: 10px;">
-                                            <button class="button secondary" onclick="compareImages('${site.siteId}', '${device.device}')" style="flex: 1;">
-                                                🔍 画像を比較
-                                            </button>
                                             <button class="button secondary" onclick="viewLatestSession('${site.siteId}', '${device.device}')" style="flex: 1;">
                                                 📸 最新セッション表示
                                             </button>
@@ -1655,9 +1586,6 @@
             displayInfo('⚙️ 旧ワークフロー関数です。新しいUIでStep2+3をご利用ください。');
         }
         
-        async function compareUpdates() {
-            displayInfo('⚙️ 旧ワークフロー関数です。新しいUIでStep2+3をご利用ください。');
-        }
 
         function displayFullVRTResults(data) {
             // 旧関数保持
@@ -1696,12 +1624,15 @@
         // グローバル変数に比較結果を保存
         let currentSessionData = null;
 
-        // 比較結果テキスト生成関数
-        function generateComparisonText(diffOnlyMode = false) {
+        // 新しい差分フィルター対応テキスト生成関数
+        function generateComparisonTextAdvanced() {
             if (!currentSessionData) {
                 alert('比較結果がありません。先にセッション画像を表示してください。');
                 return;
             }
+            
+            // 選択されたフィルターオプション取得
+            const selectedFilter = document.querySelector('input[name="diffTextFilter"]:checked').value;
             
             const { baseline, after, comparisons, siteId, device } = currentSessionData;
             let output = '';
@@ -1714,25 +1645,36 @@
             output += `実行日時: ${new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })}\n`;
             output += `ベースライン: ${baseline.sessionTimestamp}\n`;
             output += `アフター: ${after.sessionTimestamp || '不明'}\n`;
+            
+            // フィルター情報
+            const filterNames = {
+                'all': '全ページ表示',
+                'ng-only': 'NGページのみ',
+                'has-diff': '差分があるページ（NG+OK軽微差分）'
+            };
+            output += `出力フィルター: ${filterNames[selectedFilter]}\n`;
             output += `==========================================\n\n`;
             
-            // サマリー
+            // サマリー計算
             const totalPages = baseline.files.length;
             const ngPages = comparisons.filter(c => c && c.status === 'NG').length;
             const okPages = comparisons.filter(c => c && c.status === 'OK').length;
             const errorPages = comparisons.filter(c => !c).length;
+            const hasDiffPages = comparisons.filter(c => c && parseFloat(c.diffPercentage) > 0).length;
             
             output += `📊 結果サマリー\n`;
             output += `総ページ数: ${totalPages}\n`;
             output += `OK: ${okPages}ページ\n`;
             output += `NG: ${ngPages}ページ\n`;
-            output += `エラー: ${errorPages}ページ\n\n`;
+            output += `エラー: ${errorPages}ページ\n`;
+            output += `差分あり: ${hasDiffPages}ページ\n\n`;
             
-            // 詳細結果
-            output += `📋 詳細結果\n`;
+            // 詳細結果（フィルター適用）
+            output += `📋 詳細結果 (${filterNames[selectedFilter]})\n`;
             output += `${'No.'.padEnd(4)} ${'ページID'.padEnd(25)} ${'判定'.padEnd(6)} ${'差分率'.padEnd(8)} ${'URL'}\n`;
             output += `${''.padEnd(80, '-')}\n`;
             
+            let outputCount = 0;
             baseline.files.forEach((baselineFile, index) => {
                 const comparison = comparisons[index];
                 const pageNumber = (index + 1).toString().padStart(3, '0');
@@ -1742,33 +1684,67 @@
                     const status = comparison.status.padEnd(6);
                     const diffPercentage = `${comparison.diffPercentage}%`.padEnd(8);
                     const url = comparison.baselineUrl || baselineFile.path.replace('/screenshots/', '');
+                    const hasDiff = parseFloat(comparison.diffPercentage) > 0;
                     
-                    // 差分のみモードの場合、NGのみ表示
-                    if (!diffOnlyMode || comparison.status === 'NG') {
+                    // フィルター条件適用
+                    let shouldInclude = false;
+                    switch (selectedFilter) {
+                        case 'all':
+                            shouldInclude = true;
+                            break;
+                        case 'ng-only':
+                            shouldInclude = comparison.status === 'NG';
+                            break;
+                        case 'has-diff':
+                            shouldInclude = hasDiff;
+                            break;
+                    }
+                    
+                    if (shouldInclude) {
                         output += `${pageNumber} ${pageId} ${status} ${diffPercentage} ${url}\n`;
+                        outputCount++;
                     }
                 } else {
-                    if (!diffOnlyMode) {
+                    // エラーは全ページ表示時のみ出力
+                    if (selectedFilter === 'all') {
                         output += `${pageNumber} ${pageId} ERROR  ${'N/A'.padEnd(8)} エラーが発生しました\n`;
+                        outputCount++;
                     }
                 }
             });
             
-            // NGページの詳細
-            if (ngPages > 0) {
-                output += `\n⚠️ 差分検出ページ詳細\n`;
+            output += `\n表示件数: ${outputCount}件\n`;
+            
+            // NG/差分ページの詳細
+            const showDetailPages = selectedFilter === 'ng-only' ? 
+                comparisons.filter(c => c && c.status === 'NG') :
+                selectedFilter === 'has-diff' ?
+                comparisons.filter(c => c && parseFloat(c.diffPercentage) > 0) :
+                comparisons.filter(c => c && c.status === 'NG');
+            
+            if (showDetailPages.length > 0) {
+                output += `\n⚠️ 詳細情報\n`;
                 output += `${''.padEnd(50, '=')}\n`;
                 
                 baseline.files.forEach((baselineFile, index) => {
                     const comparison = comparisons[index];
-                    if (comparison && comparison.status === 'NG') {
-                        const pageNumber = index + 1;
-                        output += `\n📄 ページ ${pageNumber}: ${baselineFile.pageIdentifier}\n`;
-                        output += `   差分率: ${comparison.diffPercentage}%\n`;
-                        output += `   閾値: ${comparison.threshold}%\n`;
-                        output += `   差分ピクセル数: ${comparison.diffPixels}\n`;
-                        if (comparison.diffPath) {
-                            output += `   差分画像: ${comparison.diffPath}\n`;
+                    if (comparison) {
+                        const shouldShow = selectedFilter === 'ng-only' ? 
+                            comparison.status === 'NG' :
+                            selectedFilter === 'has-diff' ?
+                            parseFloat(comparison.diffPercentage) > 0 :
+                            comparison.status === 'NG';
+                        
+                        if (shouldShow) {
+                            const pageNumber = index + 1;
+                            output += `\n📄 ページ ${pageNumber}: ${baselineFile.pageIdentifier}\n`;
+                            output += `   判定: ${comparison.status}\n`;
+                            output += `   差分率: ${comparison.diffPercentage}%\n`;
+                            output += `   閾値: ${comparison.threshold}%\n`;
+                            output += `   差分ピクセル数: ${comparison.diffPixels}\n`;
+                            if (comparison.diffPath) {
+                                output += `   差分画像: ${comparison.diffPath}\n`;
+                            }
                         }
                     }
                 });
@@ -1778,6 +1754,17 @@
             output += `レポート生成完了: ${new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })}\n`;
             
             document.getElementById('comparisonTextOutput').value = output;
+        }
+        
+        // 旧関数の互換性維持
+        function generateComparisonText(diffOnlyMode = false) {
+            // 旧関数は新関数に転送し、フィルターを適用
+            if (diffOnlyMode) {
+                document.querySelector('input[name="diffTextFilter"][value="ng-only"]').checked = true;
+            } else {
+                document.querySelector('input[name="diffTextFilter"][value="all"]').checked = true;
+            }
+            generateComparisonTextAdvanced();
         }
         
         // テキストファイルダウンロード関数
@@ -1799,45 +1786,110 @@
             URL.revokeObjectURL(url);
         }
 
-        // 差分フィルター切り替え関数
-        function toggleDiffFilter() {
-            const checkbox = document.getElementById('showDiffOnly');
+        // サイト選択関連の関数
+        function toggleAllSites() {
+            const selectAllCheckbox = document.getElementById('selectAllSites');
+            const siteCheckboxes = document.querySelectorAll('input[name="siteSelection"]');
+            
+            siteCheckboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+            
+            updateSelectedCount();
+        }
+
+        function updateSelectedCount() {
+            const siteCheckboxes = document.querySelectorAll('input[name="siteSelection"]:checked');
+            const selectedCount = siteCheckboxes.length;
+            const totalCount = document.querySelectorAll('input[name="siteSelection"]').length;
+            
+            document.getElementById('selectedSitesCount').textContent = `${selectedCount}/${totalCount}サイト選択中`;
+            
+            // 全選択チェックボックスの状態を更新
+            const selectAllCheckbox = document.getElementById('selectAllSites');
+            selectAllCheckbox.checked = selectedCount === totalCount;
+            selectAllCheckbox.indeterminate = selectedCount > 0 && selectedCount < totalCount;
+        }
+
+        // 最終実行日を取得する関数（ローカルストレージから）
+        function getLastExecutionDate(siteId) {
+            const key = `vrt_last_execution_${siteId}`;
+            return localStorage.getItem(key);
+        }
+
+        // 最終実行日を保存する関数
+        function saveLastExecutionDate(siteId) {
+            const key = `vrt_last_execution_${siteId}`;
+            const now = new Date().toISOString();
+            localStorage.setItem(key, now);
+        }
+
+        // 新しい差分フィルター適用関数
+        function applyDiffFilter() {
+            const selectedFilter = document.querySelector('input[name="diffFilter"]:checked').value;
             const pageComparisons = document.querySelectorAll('.page-comparison');
             const filterStatus = document.getElementById('filterStatus');
             
             if (!currentSessionData) return;
             
             let visibleCount = 0;
+            let ngCount = 0;
+            let hasDiffCount = 0;
             
             pageComparisons.forEach(page => {
-                if (checkbox.checked) {
-                    // 差分があるページのみ表示
-                    if (page.classList.contains('has-diff')) {
-                        page.style.display = 'block';
-                        visibleCount++;
-                    } else {
-                        page.style.display = 'none';
-                    }
-                } else {
-                    // 全ページ表示
+                const isNG = page.classList.contains('ng-page');
+                const hasDiff = page.classList.contains('has-diff');
+                let shouldShow = false;
+                
+                if (isNG) ngCount++;
+                if (hasDiff) hasDiffCount++;
+                
+                switch (selectedFilter) {
+                    case 'all':
+                        shouldShow = true;
+                        break;
+                    case 'ng-only':
+                        shouldShow = isNG;
+                        break;
+                    case 'has-diff':
+                        shouldShow = hasDiff;
+                        break;
+                }
+                
+                if (shouldShow) {
                     page.style.display = 'block';
                     visibleCount++;
+                } else {
+                    page.style.display = 'none';
                 }
             });
             
             // ステータス更新
             const totalPages = currentSessionData.baseline.files.length;
-            const diffPages = currentSessionData.comparisons.filter(c => c && c.status === 'NG').length;
             
-            if (checkbox.checked) {
-                filterStatus.textContent = diffPages > 0 ? 
-                    `差分ページ ${diffPages}件を表示中 (全${totalPages}ページ中)` : 
-                    '差分ページはありません';
-                filterStatus.style.color = diffPages > 0 ? '#d63384' : '#28a745';
-            } else {
-                filterStatus.textContent = `全${totalPages}ページを表示中`;
-                filterStatus.style.color = '#666';
+            switch (selectedFilter) {
+                case 'all':
+                    filterStatus.textContent = `全${totalPages}ページを表示中`;
+                    filterStatus.style.color = '#666';
+                    break;
+                case 'ng-only':
+                    filterStatus.textContent = ngCount > 0 ? 
+                        `NG判定 ${ngCount}件を表示中 (全${totalPages}ページ中)` : 
+                        'NG判定のページはありません';
+                    filterStatus.style.color = ngCount > 0 ? '#dc3545' : '#28a745';
+                    break;
+                case 'has-diff':
+                    filterStatus.textContent = hasDiffCount > 0 ? 
+                        `差分あり ${hasDiffCount}件を表示中 (全${totalPages}ページ中)` : 
+                        '差分があるページはありません';
+                    filterStatus.style.color = hasDiffCount > 0 ? '#fd7e14' : '#28a745';
+                    break;
             }
+        }
+        
+        // 旧関数の互換性維持
+        function toggleDiffFilter() {
+            applyDiffFilter();
         }
     </script>
 </body>
