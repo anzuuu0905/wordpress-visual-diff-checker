@@ -93,9 +93,9 @@ async function compareSiteScreenshots(siteId, date) {
           width,
           height,
           {
-            threshold: 0.1,
+            threshold: 0.01, // より敏感に差分を検出 (0.1から0.01に変更)
             alpha: 0.5,
-            includeAA: true,
+            includeAA: false, // アンチエイリアシングの差分を無視してより正確に
             diffColor: [255, 0, 0], // Red for differences
             aaColor: [255, 255, 0], // Yellow for anti-aliasing differences
             diffColorAlt: [0, 255, 0] // Green alternative
@@ -225,7 +225,11 @@ async function compareImages(baselinePath, afterPath, options = {}) {
       diff.data,
       width,
       height,
-      { threshold, alpha }
+      { 
+        threshold: threshold || 0.01, // デフォルトを0.01に変更
+        alpha,
+        includeAA: false
+      }
     );
     
     const totalPixels = width * height;
@@ -292,8 +296,24 @@ async function generateDiffReport(siteId, date) {
   }
 }
 
+/**
+ * Compare all screenshots for a site (wrapper for batch processor)
+ * @param {string} siteId - Site identifier
+ * @returns {Array} Array of comparison results
+ */
+async function compareAllScreenshots(siteId) {
+  // Get today's date in YYYYMMDD format
+  const today = new Date();
+  const date = `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
+  
+  console.log(`Running compareAllScreenshots for site ${siteId} on ${date}`);
+  
+  return await compareSiteScreenshots(siteId, date);
+}
+
 module.exports = {
   compareSiteScreenshots,
   compareImages,
-  generateDiffReport
+  generateDiffReport,
+  compareAllScreenshots
 };

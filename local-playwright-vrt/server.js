@@ -41,7 +41,9 @@ app.use('/diffs', express.static(DIFFS_DIR));
 const CONFIG = {
   VIEWPORT: { width: 1920, height: 1080 },
   MOBILE_VIEWPORT: { width: 375, height: 667 },
-  DIFF_THRESHOLD: 0.1,
+  DIFF_THRESHOLD: 0.1,                    // 旧設定（間違って使用されていた）
+  PIXELMATCH_THRESHOLD: 0.02,             // pixelmatch用色差許容度（正しい値）
+  DIFF_JUDGMENT_THRESHOLD: 2.0,           // 差分率判定用閾値（2%超でNG）
   TIMEOUT: 60000,
   SCREENSHOT_QUALITY: 90,
   MAX_CONCURRENT_SITES: 3, // 同時処理サイト数
@@ -58,11 +60,11 @@ console.log(`📁 Diffs: ${DIFFS_DIR}`);
 async function processConcurrent(items, processor, maxConcurrency) {
   const results = [];
   const errors = [];
-  
+
   for (let i = 0; i < items.length; i += maxConcurrency) {
     const batch = items.slice(i, i + maxConcurrency);
     console.log(`⚡ 並列処理バッチ ${Math.floor(i/maxConcurrency) + 1}: ${batch.length}件処理`);
-    
+
     const batchPromises = batch.map(async (item, index) => {
       try {
         const result = await processor(item, i + index);
@@ -72,9 +74,9 @@ async function processConcurrent(items, processor, maxConcurrency) {
         return { success: false, error, item };
       }
     });
-    
+
     const batchResults = await Promise.allSettled(batchPromises);
-    
+
     batchResults.forEach(settled => {
       if (settled.status === 'fulfilled') {
         if (settled.value.success) {
@@ -87,7 +89,7 @@ async function processConcurrent(items, processor, maxConcurrency) {
       }
     });
   }
-  
+
   return { results, errors };
 }
 
@@ -95,8 +97,8 @@ async function processConcurrent(items, processor, maxConcurrency) {
  * 🎯 ヘルスチェック
  */
 app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'healthy', 
+  res.json({
+    status: 'healthy',
     timestamp: new Date().toISOString(),
     playwright: 'ready'
   });
@@ -108,25 +110,25 @@ app.get('/health', (req, res) => {
 app.post('/screenshot', async (req, res) => {
   try {
     const { url, siteId, type, device = 'desktop' } = req.body;
-    
+
     if (!url || !siteId || !type) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'url, siteId, type are required' 
+      return res.status(400).json({
+        success: false,
+        error: 'url, siteId, type are required'
       });
     }
-    
+
     console.log(`📸 スクリーンショット撮影開始: ${url} (${device}, ${type})`);
-    
+
     const result = await takeHighPrecisionScreenshot(url, siteId, type, device);
-    
+
     res.json({ success: true, result });
-    
+
   } catch (error) {
     console.error('❌ スクリーンショットエラー:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      error: error.message
     });
   }
 });
@@ -137,25 +139,25 @@ app.post('/screenshot', async (req, res) => {
 app.post('/compare', async (req, res) => {
   try {
     const { siteId, device = 'desktop', threshold = 2.0 } = req.body;
-    
+
     if (!siteId) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'siteId is required' 
+      return res.status(400).json({
+        success: false,
+        error: 'siteId is required'
       });
     }
-    
+
     console.log(`🔍 画像比較開始: ${siteId} (${device})`);
-    
+
     const result = await compareHighPrecisionScreenshots(siteId, device, threshold);
-    
+
     res.json({ success: true, result });
-    
+
   } catch (error) {
     console.error('❌ 画像比較エラー:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      error: error.message
     });
   }
 });
@@ -166,25 +168,25 @@ app.post('/compare', async (req, res) => {
 app.post('/compare-multi', async (req, res) => {
   try {
     const { siteId, device = 'desktop', threshold = 2.0 } = req.body;
-    
+
     if (!siteId) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'siteId is required' 
+      return res.status(400).json({
+        success: false,
+        error: 'siteId is required'
       });
     }
-    
+
     console.log(`🔍 複数ページ画像比較開始: ${siteId} (${device})`);
-    
+
     const results = await compareMultiPageScreenshots(siteId, device, threshold);
-    
+
     res.json({ success: true, results });
-    
+
   } catch (error) {
     console.error('❌ 複数ページ比較エラー:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      error: error.message
     });
   }
 });
@@ -195,25 +197,25 @@ app.post('/compare-multi', async (req, res) => {
 app.post('/full-vrt', async (req, res) => {
   try {
     const { url, siteId, devices = ['desktop'] } = req.body;
-    
+
     if (!url || !siteId) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'url and siteId are required' 
+      return res.status(400).json({
+        success: false,
+        error: 'url and siteId are required'
       });
     }
-    
+
     console.log(`🎯 フルVRTチェック開始: ${siteId}`);
-    
+
     const result = await runFullVRTCheck(url, siteId, devices);
-    
+
     res.json({ success: true, result });
-    
+
   } catch (error) {
     console.error('❌ フルVRTエラー:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      error: error.message
     });
   }
 });
@@ -224,54 +226,54 @@ app.post('/full-vrt', async (req, res) => {
 app.post('/crawl', async (req, res) => {
   try {
     const { url, siteId, siteIds, maxPages = 30 } = req.body;
-    
+
     if (!url && !siteId && !siteIds) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'url or siteId or siteIds are required' 
+      return res.status(400).json({
+        success: false,
+        error: 'url or siteId or siteIds are required'
       });
     }
-    
+
     console.log(`🕷️ サイトクロール開始`);
-    
+
     let targetSites = [];
-    
+
     if (url) {
       // 単一URLクロール
       targetSites = [{ id: 'manual', name: 'Manual URL', baseUrl: url, maxPages }];
     } else {
       // 登録済みサイトクロール
-      targetSites = siteIds ? sitesManager.getBatchProcessingSites(siteIds) : 
+      targetSites = siteIds ? sitesManager.getBatchProcessingSites(siteIds) :
                     siteId ? [{ id: siteId, ...sitesManager.getSite(siteId) }] : [];
     }
-    
+
     if (targetSites.length === 0) {
-      return res.status(400).json({ 
-        success: false, 
-        error: '有効なサイトが見つかりません' 
+      return res.status(400).json({
+        success: false,
+        error: '有効なサイトが見つかりません'
       });
     }
-    
+
     const allResults = [];
-    
+
     for (const site of targetSites) {
       console.log(`🕷️ ${site.id} をクロール中...`);
-      
+
       const browser = await getBrowser();
       const context = await browser.newContext();
       const page = await context.newPage();
-      
-      const crawler = new SiteCrawler({ 
+
+      const crawler = new SiteCrawler({
         maxPages: site.maxPages || maxPages,
-        ...site.crawlSettings 
+        ...site.crawlSettings
       });
       const result = await crawler.crawl(page, site.baseUrl);
-      
+
       await context.close();
-      
+
       // ページ識別子を生成
       const pages = SiteCrawler.generatePageIdentifiers(result.urls, result.metadata);
-      
+
       allResults.push({
         siteId: site.id,
         siteName: site.name,
@@ -281,20 +283,20 @@ app.post('/crawl', async (req, res) => {
         timestamp: new Date().toISOString()
       });
     }
-    
+
     const summary = {
       totalSites: allResults.length,
       totalPages: allResults.reduce((sum, r) => sum + r.totalPages, 0)
     };
-    
+
     console.log(`✅ クロール完了: ${summary.totalSites}サイト, ${summary.totalPages}ページ`);
     res.json({ success: true, summary, results: allResults });
-    
+
   } catch (error) {
     console.error('❌ クロールエラー:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      error: error.message
     });
   }
 });
@@ -305,35 +307,35 @@ app.post('/crawl', async (req, res) => {
 app.post('/screenshot-multi', async (req, res) => {
   try {
     const { pages, siteId, type, device = 'desktop' } = req.body;
-    
+
     if (!pages || !siteId || !type) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'pages, siteId, type are required' 
+      return res.status(400).json({
+        success: false,
+        error: 'pages, siteId, type are required'
       });
     }
-    
+
     console.log(`📸 複数ページスクリーンショット開始: ${siteId} (${pages.length}ページ)`);
-    
+
     const results = [];
     for (const page of pages) {
       const result = await takeHighPrecisionScreenshot(
-        page.url, 
-        siteId, 
-        type, 
+        page.url,
+        siteId,
+        type,
         device,
         page // ページ情報を渡す
       );
       results.push(result);
     }
-    
+
     res.json({ success: true, results });
-    
+
   } catch (error) {
     console.error('❌ 複数ページスクリーンショットエラー:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      error: error.message
     });
   }
 });
@@ -344,81 +346,81 @@ app.post('/screenshot-multi', async (req, res) => {
 app.post('/capture-baseline', async (req, res) => {
   try {
     const { url, pages, siteId, siteIds, device = 'desktop', crawlMode = 'auto', maxPages = 30 } = req.body;
-    
+
     if (!siteId && !siteIds) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'siteId or siteIds are required' 
+      return res.status(400).json({
+        success: false,
+        error: 'siteId or siteIds are required'
       });
     }
-    
+
     // 複数サイト対応
-    const targetSites = siteIds ? sitesManager.getBatchProcessingSites(siteIds) : 
+    const targetSites = siteIds ? sitesManager.getBatchProcessingSites(siteIds) :
                        siteId ? [{ id: siteId, ...sitesManager.getSite(siteId) }] : [];
-    
+
     if (targetSites.length === 0) {
-      return res.status(400).json({ 
-        success: false, 
-        error: '有効なサイトが見つかりません' 
+      return res.status(400).json({
+        success: false,
+        error: '有効なサイトが見つかりません'
       });
     }
-    
+
     console.log(`📸 Step1: Baseline撮影開始: ${targetSites.map(s => s.id).join(', ')}`);
-    
+
     const allResults = [];
-    
+
     // 各サイトを並列処理
     const siteProcessor = async (site) => {
       console.log(`🎯 サイト処理中: ${site.id} (${site.name})`);
-      
+
       let captureResults = [];
       let targetPages = pages;
-      
+
       // ページが指定されていない場合はクロール (クロールモードが auto の場合)
       if (!targetPages && !url && crawlMode !== 'single') {
         console.log(`🕷️ ${site.id} のクロールを実行`);
         const browser = await getBrowser();
         const context = await browser.newContext();
         const page = await context.newPage();
-        
-        const crawler = new SiteCrawler({ 
+
+        const crawler = new SiteCrawler({
           maxPages: maxPages || site.maxPages,
-          ...site.crawlSettings 
+          ...site.crawlSettings
         });
         const crawlResult = await crawler.crawl(page, site.baseUrl);
         await context.close();
-        
+
         targetPages = SiteCrawler.generatePageIdentifiers(crawlResult.urls, crawlResult.metadata);
         console.log(`🔍 ${targetPages.length}ページを発見`);
       }
-      
+
       // Baseline撮影
       // セッションタイムスタンプを生成（サイト×デバイスごと）
       const sessionTimestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      
+
       if (targetPages) {
         // 複数ページ並列撮影
         console.log(`📸 Baseline複数ページ撮影 (${targetPages.length}ページ) - セッション: ${sessionTimestamp}`);
-        
+
         const pageProcessor = async (page) => {
           return await takeHighPrecisionScreenshot(
-            page.url, 
-            site.id, 
-            'baseline', 
+            page.url,
+            site.id,
+            'baseline',
             device,
             page,
             sessionTimestamp
           );
         };
-        
+
         const { results: pageResults, errors: pageErrors } = await processConcurrent(
-          targetPages, 
-          pageProcessor, 
+          targetPages,
+          pageProcessor,
           CONFIG.MAX_CONCURRENT_PAGES
         );
-        
+
         captureResults.push(...pageResults);
-        
+
         if (pageErrors.length > 0) {
           console.log(`⚠️ ${pageErrors.length}ページでエラーが発生しました`);
         }
@@ -426,16 +428,16 @@ app.post('/capture-baseline', async (req, res) => {
         // 単一ページ撮影
         console.log(`📸 Baseline単一ページ撮影: ${url || site.baseUrl} - セッション: ${sessionTimestamp}`);
         const result = await takeHighPrecisionScreenshot(
-          url || site.baseUrl, 
-          site.id, 
-          'baseline', 
+          url || site.baseUrl,
+          site.id,
+          'baseline',
           device,
           undefined,
           sessionTimestamp
         );
         captureResults.push(result);
       }
-      
+
       // サイト別結果を返す
       return {
         siteId: site.id,
@@ -450,34 +452,34 @@ app.post('/capture-baseline', async (req, res) => {
         timestamp: new Date().toISOString()
       };
     };
-    
+
     // サイトを並列処理
     const { results: siteResults, errors: siteErrors } = await processConcurrent(
-      targetSites, 
-      siteProcessor, 
+      targetSites,
+      siteProcessor,
       CONFIG.MAX_CONCURRENT_SITES
     );
-    
+
     allResults.push(...siteResults);
-    
+
     if (siteErrors.length > 0) {
       console.log(`⚠️ ${siteErrors.length}サイトでエラーが発生しました`);
     }
-    
+
     // 全体的な統計
     const summary = {
       totalSites: allResults.length,
       totalPages: allResults.reduce((sum, r) => sum + r.captureCount, 0)
     };
-    
+
     console.log(`✅ Step1: Baseline撮影完了: ${summary.totalSites}サイト, ${summary.totalPages}ページ`);
     res.json({ success: true, summary, results: allResults });
-    
+
   } catch (error) {
     console.error('❌ Step1: Baseline撮影エラー:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      error: error.message
     });
   }
 });
@@ -488,81 +490,81 @@ app.post('/capture-baseline', async (req, res) => {
 app.post('/capture-and-compare', async (req, res) => {
   try {
     const { url, pages, siteId, siteIds, device = 'desktop', threshold = 2.0, crawlMode = 'auto' } = req.body;
-    
+
     if (!siteId && !siteIds) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'siteId or siteIds are required' 
+      return res.status(400).json({
+        success: false,
+        error: 'siteId or siteIds are required'
       });
     }
-    
+
     // 複数サイト対応
-    const targetSites = siteIds ? sitesManager.getBatchProcessingSites(siteIds) : 
+    const targetSites = siteIds ? sitesManager.getBatchProcessingSites(siteIds) :
                        siteId ? [{ id: siteId, ...sitesManager.getSite(siteId) }] : [];
-    
+
     if (targetSites.length === 0) {
-      return res.status(400).json({ 
-        success: false, 
-        error: '有効なサイトが見つかりません' 
+      return res.status(400).json({
+        success: false,
+        error: '有効なサイトが見つかりません'
       });
     }
-    
+
     console.log(`🚀 Step2+3統合実行開始: ${targetSites.map(s => s.id).join(', ')}`);
-    
+
     const allResults = [];
-    
+
     // 各サイトを処理
     for (const site of targetSites) {
       console.log(`🎯 サイト処理中: ${site.id} (${site.name})`);
-      
+
       let captureResults = [];
       let targetPages = pages;
-      
+
       // ページが指定されていない場合はクロール (クロールモードが auto の場合)
       if (!targetPages && !url && crawlMode !== 'single') {
         console.log(`🕷️ ${site.id} のクロールを実行`);
         const browser = await getBrowser();
         const context = await browser.newContext();
         const page = await context.newPage();
-        
-        const crawler = new SiteCrawler({ 
+
+        const crawler = new SiteCrawler({
           maxPages: site.maxPages,
-          ...site.crawlSettings 
+          ...site.crawlSettings
         });
         const crawlResult = await crawler.crawl(page, site.baseUrl);
         await context.close();
-        
+
         targetPages = SiteCrawler.generatePageIdentifiers(crawlResult.urls, crawlResult.metadata);
         console.log(`🔍 ${targetPages.length}ページを発見`);
       }
-      
+
       // Step2: 撮影
       // セッションタイムスタンプを生成（サイト×デバイスごと）
       const sessionTimestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      
+
       if (targetPages) {
         // 複数ページ並列撮影
         console.log(`📸 複数ページ撮影 (${targetPages.length}ページ) - セッション: ${sessionTimestamp}`);
-        
+
         const pageProcessor = async (page) => {
           return await takeHighPrecisionScreenshot(
-            page.url, 
-            site.id, 
-            'after', 
+            page.url,
+            site.id,
+            'after',
             device,
             page,
             sessionTimestamp
           );
         };
-        
+
         const { results: pageResults, errors: pageErrors } = await processConcurrent(
-          targetPages, 
-          pageProcessor, 
+          targetPages,
+          pageProcessor,
           CONFIG.MAX_CONCURRENT_PAGES
         );
-        
+
         captureResults.push(...pageResults);
-        
+
         if (pageErrors.length > 0) {
           console.log(`⚠️ ${pageErrors.length}ページでエラーが発生しました`);
         }
@@ -570,20 +572,20 @@ app.post('/capture-and-compare', async (req, res) => {
         // 単一ページ撮影
         console.log(`📸 単一ページ撮影: ${url || site.baseUrl} - セッション: ${sessionTimestamp}`);
         const result = await takeHighPrecisionScreenshot(
-          url || site.baseUrl, 
-          site.id, 
-          'after', 
+          url || site.baseUrl,
+          site.id,
+          'after',
           device,
           undefined,
           sessionTimestamp
         );
         captureResults.push(result);
       }
-      
+
       // Step3: 比較（Baselineが存在する場合のみ）
       console.log(`🔍 比較処理開始 (閾値: ${threshold}%)`);
       let compareResults;
-      
+
       try {
         if (targetPages && targetPages.length > 1) {
           // 複数ページ比較
@@ -600,7 +602,7 @@ app.post('/capture-and-compare', async (req, res) => {
           error: error.message
         };
       }
-      
+
       // サイト別結果
       allResults.push({
         siteId: site.id,
@@ -617,25 +619,25 @@ app.post('/capture-and-compare', async (req, res) => {
         timestamp: new Date().toISOString()
       });
     }
-    
+
     // 全体的な統計
     const summary = {
       totalSites: allResults.length,
       totalPages: allResults.reduce((sum, r) => sum + r.captureCount, 0),
-      ngSites: allResults.filter(r => 
-        r.compareResults.summary ? r.compareResults.summary.ng > 0 : 
+      ngSites: allResults.filter(r =>
+        r.compareResults.summary ? r.compareResults.summary.ng > 0 :
         r.compareResults.status === 'NG'
       ).length
     };
-    
+
     console.log(`✅ Step2+3統合実行完了: ${summary.totalSites}サイト, ${summary.totalPages}ページ`);
     res.json({ success: true, summary, results: allResults });
-    
+
   } catch (error) {
     console.error('❌ Step2+3統合実行エラー:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      error: error.message
     });
   }
 });
@@ -646,26 +648,26 @@ app.post('/capture-and-compare', async (req, res) => {
 app.get('/results', (req, res) => {
   try {
     const results = [];
-    const siteDirs = fs.readdirSync(SCREENSHOTS_DIR).filter(dir => 
+    const siteDirs = fs.readdirSync(SCREENSHOTS_DIR).filter(dir =>
       fs.statSync(path.join(SCREENSHOTS_DIR, dir)).isDirectory()
     );
-    
+
     siteDirs.forEach(siteId => {
       const siteDir = path.join(SCREENSHOTS_DIR, siteId);
       const site = sitesManager.getSite(siteId) || { name: siteId, baseUrl: 'Unknown' };
-      
+
       const siteResult = {
         siteId,
         siteName: site.name,
         baseUrl: site.baseUrl,
         devices: []
       };
-      
+
       const devices = ['desktop', 'mobile'];
       devices.forEach(device => {
         const baselineDir = path.join(siteDir, 'baseline', device);
         const afterDir = path.join(siteDir, 'after', device);
-        
+
         const deviceResult = {
           device,
           baseline: { count: 0, latest: null },
@@ -673,7 +675,7 @@ app.get('/results', (req, res) => {
           hasBaseline: fs.existsSync(baselineDir),
           hasAfter: fs.existsSync(afterDir)
         };
-        
+
         if (deviceResult.hasBaseline) {
           const baselineFiles = fs.readdirSync(baselineDir).filter(f => f.endsWith('.png'));
           deviceResult.baseline.count = baselineFiles.length;
@@ -687,7 +689,7 @@ app.get('/results', (req, res) => {
             };
           }
         }
-        
+
         if (deviceResult.hasAfter) {
           const afterFiles = fs.readdirSync(afterDir).filter(f => f.endsWith('.png'));
           deviceResult.after.count = afterFiles.length;
@@ -701,20 +703,20 @@ app.get('/results', (req, res) => {
             };
           }
         }
-        
+
         siteResult.devices.push(deviceResult);
       });
-      
+
       results.push(siteResult);
     });
-    
+
     res.json({ success: true, results });
-    
+
   } catch (error) {
     console.error('❌ 結果一覧取得エラー:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      error: error.message
     });
   }
 });
@@ -726,15 +728,15 @@ app.get('/screenshots/:siteId', (req, res) => {
   try {
     const { siteId } = req.params;
     const siteDir = path.join(SCREENSHOTS_DIR, siteId);
-    
+
     if (!fs.existsSync(siteDir)) {
       return res.json({ screenshots: [] });
     }
-    
+
     const screenshots = [];
     const types = ['baseline', 'after'];
     const devices = ['desktop', 'mobile'];
-    
+
     types.forEach(type => {
       devices.forEach(device => {
         const deviceDir = path.join(siteDir, type, device);
@@ -752,16 +754,16 @@ app.get('/screenshots/:siteId', (req, res) => {
         }
       });
     });
-    
+
     screenshots.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-    
+
     res.json({ screenshots });
-    
+
   } catch (error) {
     console.error('❌ スクリーンショット一覧取得エラー:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      error: error.message
     });
   }
 });
@@ -773,14 +775,14 @@ app.get('/diffs/:siteId', (req, res) => {
   try {
     const { siteId } = req.params;
     const siteDir = path.join(DIFFS_DIR, siteId);
-    
+
     if (!fs.existsSync(siteDir)) {
       return res.json({ diffs: [] });
     }
-    
+
     const diffs = [];
     const devices = ['desktop', 'mobile'];
-    
+
     devices.forEach(device => {
       const deviceDir = path.join(siteDir, device);
       if (fs.existsSync(deviceDir)) {
@@ -800,16 +802,16 @@ app.get('/diffs/:siteId', (req, res) => {
         diffs.push(...files);
       }
     });
-    
+
     diffs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-    
+
     res.json({ diffs });
-    
+
   } catch (error) {
     console.error('❌ 差分画像一覧取得エラー:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      error: error.message
     });
   }
 });
@@ -827,17 +829,17 @@ app.get('/', (req, res) => {
 app.get('/sites', (req, res) => {
   try {
     const sites = sitesManager.getAllSites();
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       sites: sites,
       total: sites.length,
       enabled: sites.filter(s => s.enabled).length
     });
   } catch (error) {
     console.error('❌ サイト一覧取得エラー:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      error: error.message
     });
   }
 });
@@ -848,22 +850,22 @@ app.get('/sites', (req, res) => {
 app.post('/sites', (req, res) => {
   try {
     const { siteId, name, baseUrl, maxPages } = req.body;
-    
+
     if (!siteId || !baseUrl) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'siteId and baseUrl are required' 
+      return res.status(400).json({
+        success: false,
+        error: 'siteId and baseUrl are required'
       });
     }
-    
+
     const site = sitesManager.addSite(siteId, { name, baseUrl, maxPages });
     res.json({ success: true, site });
-    
+
   } catch (error) {
     console.error('❌ サイト追加エラー:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      error: error.message
     });
   }
 });
@@ -876,12 +878,12 @@ app.put('/sites/:siteId', (req, res) => {
     const { siteId } = req.params;
     const site = sitesManager.updateSite(siteId, req.body);
     res.json({ success: true, site });
-    
+
   } catch (error) {
     console.error('❌ サイト更新エラー:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      error: error.message
     });
   }
 });
@@ -892,22 +894,22 @@ app.put('/sites/:siteId', (req, res) => {
 app.get('/results', (req, res) => {
   try {
     const results = [];
-    
+
     // screenshots ディレクトリが存在しない場合は空の結果を返す
     if (!fs.existsSync(SCREENSHOTS_DIR)) {
-      return res.json({ 
-        success: true, 
+      return res.json({
+        success: true,
         results: [],
         message: 'まだ実行結果がありません'
       });
     }
-    
+
     // サイトごとの結果を構築
     const siteDirs = fs.readdirSync(SCREENSHOTS_DIR).filter(dir => {
       const dirPath = path.join(SCREENSHOTS_DIR, dir);
       return fs.existsSync(dirPath) && fs.statSync(dirPath).isDirectory();
     });
-    
+
     siteDirs.forEach(siteId => {
       const siteInfo = sitesManager.getSite(siteId) || { name: siteId, baseUrl: 'Unknown' };
       const siteResults = {
@@ -916,16 +918,16 @@ app.get('/results', (req, res) => {
         baseUrl: siteInfo.baseUrl,
         devices: []
       };
-      
+
       // baseline と after ディレクトリをチェック
       ['baseline', 'after'].forEach(type => {
         const typeDir = path.join(SCREENSHOTS_DIR, siteId, type);
         if (fs.existsSync(typeDir)) {
           // デバイスごとのディレクトリをチェック
-          const deviceDirs = fs.readdirSync(typeDir).filter(dir => 
+          const deviceDirs = fs.readdirSync(typeDir).filter(dir =>
             fs.statSync(path.join(typeDir, dir)).isDirectory()
           );
-          
+
           deviceDirs.forEach(device => {
             const deviceDir = path.join(typeDir, device);
             const files = fs.readdirSync(deviceDir)
@@ -933,11 +935,11 @@ app.get('/results', (req, res) => {
               .map(file => {
                 const filePath = path.join(deviceDir, file);
                 const stats = fs.statSync(filePath);
-                
+
                 // ファイル名からセッションタイムスタンプを抽出
                 const timestampMatch = file.match(/(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z)/);
                 const sessionTimestamp = timestampMatch ? timestampMatch[1] : null;
-                
+
                 return {
                   filename: file,
                   timestamp: stats.mtime,
@@ -946,12 +948,12 @@ app.get('/results', (req, res) => {
                 };
               })
               .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-            
+
             // デバイス結果を追加または更新
             let deviceResult = siteResults.devices.find(d => d.device === device);
             if (!deviceResult) {
-              deviceResult = { 
-                device, 
+              deviceResult = {
+                device,
                 baseline: { count: 0, latest: null },
                 after: { count: 0, latest: null },
                 hasBaseline: false,
@@ -959,7 +961,7 @@ app.get('/results', (req, res) => {
               };
               siteResults.devices.push(deviceResult);
             }
-            
+
             // セッションごとにグループ化
             const sessions = {};
             files.forEach(file => {
@@ -969,7 +971,7 @@ app.get('/results', (req, res) => {
               }
               sessions[sessionKey].push(file);
             });
-            
+
             deviceResult[type] = {
               count: files.length,
               latest: files[0] || null,
@@ -987,12 +989,12 @@ app.get('/results', (req, res) => {
           });
         }
       });
-      
+
       if (siteResults.devices.length > 0) {
         results.push(siteResults);
       }
     });
-    
+
     // 最新の更新日時でソート
     results.sort((a, b) => {
       const getLatestTime = (site) => {
@@ -1009,17 +1011,17 @@ app.get('/results', (req, res) => {
       };
       return getLatestTime(b) - getLatestTime(a);
     });
-    
-    res.json({ 
-      success: true, 
+
+    res.json({
+      success: true,
       results: results
     });
-    
+
   } catch (error) {
     console.error('❌ 実行結果取得エラー:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      error: error.message
     });
   }
 });
@@ -1030,18 +1032,18 @@ app.get('/results', (req, res) => {
 app.get('/session-images/:siteId/:device', async (req, res) => {
   try {
     const { siteId, device } = req.params;
-    
+
     // Baselineの最新セッションを取得
     const baselineDir = path.join(SCREENSHOTS_DIR, siteId, 'baseline', device);
     const afterDir = path.join(SCREENSHOTS_DIR, siteId, 'after', device);
-    
+
     if (!fs.existsSync(baselineDir)) {
-      return res.status(404).json({ 
-        success: false, 
-        error: 'Baselineスクリーンショットが見つかりません' 
+      return res.status(404).json({
+        success: false,
+        error: 'Baselineスクリーンショットが見つかりません'
       });
     }
-    
+
     // ファイル一覧を取得してセッションでグループ化
     const baselineFiles = fs.readdirSync(baselineDir)
       .filter(file => file.endsWith('.png'))
@@ -1050,16 +1052,41 @@ app.get('/session-images/:siteId/:device', async (req, res) => {
         const sessionTimestamp = timestampMatch ? timestampMatch[1] : null;
         const pageIdentifierMatch = file.match(/page-\d+_([^_]+)_/);
         const pageIdentifier = pageIdentifierMatch ? pageIdentifierMatch[1] : null;
-        
+
+        // ページ識別子からURLを復元
+        let pageUrl = null;
+        if (pageIdentifier) {
+          // 保存された設定からサイト情報を取得
+          try {
+            const configPath = path.join(__dirname, 'data', 'sites.json');
+            if (fs.existsSync(configPath)) {
+              const sites = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+              const site = sites.find(s => s.id === siteId);
+              if (site && site.baseUrl) {
+                if (pageIdentifier === 'top') {
+                  pageUrl = site.baseUrl;
+                } else {
+                  // 識別子をパスに変換
+                  const path = pageIdentifier.replace(/-/g, '/');
+                  pageUrl = `${site.baseUrl.replace(/\/$/, '')}/${path}`;
+                }
+              }
+            }
+          } catch (error) {
+            console.warn(`サイト設定の読み込みエラー: ${error.message}`);
+          }
+        }
+
         return {
           filename: file,
           sessionTimestamp,
           pageIdentifier,
+          pageUrl,
           path: `/screenshots/${siteId}/baseline/${device}/${file}`,
           fullPath: path.join(baselineDir, file)
         };
       });
-    
+
     // セッションごとにグループ化
     const sessions = {};
     baselineFiles.forEach(file => {
@@ -1067,24 +1094,24 @@ app.get('/session-images/:siteId/:device', async (req, res) => {
       if (!sessions[key]) sessions[key] = [];
       sessions[key].push(file);
     });
-    
+
     // 最新セッションを取得
     const latestSession = Object.keys(sessions)
       .filter(key => key !== 'unknown')
       .sort()
       .pop();
-    
+
     if (!latestSession) {
-      return res.status(404).json({ 
-        success: false, 
-        error: '有効なセッションが見つかりません' 
+      return res.status(404).json({
+        success: false,
+        error: '有効なセッションが見つかりません'
       });
     }
-    
-    const baselineSessionFiles = sessions[latestSession].sort((a, b) => 
+
+    const baselineSessionFiles = sessions[latestSession].sort((a, b) =>
       a.filename.localeCompare(b.filename)
     );
-    
+
     // Afterファイルを探す（同じセッション優先、なければ最新のセッション）
     let afterFiles = [];
     if (fs.existsSync(afterDir)) {
@@ -1094,21 +1121,44 @@ app.get('/session-images/:siteId/:device', async (req, res) => {
         .map(file => {
           const pageIdentifierMatch = file.match(/page-\d+_([^_]+)_/);
           const pageIdentifier = pageIdentifierMatch ? pageIdentifierMatch[1] : null;
-          
+
+          // ページ識別子からURLを復元
+          let pageUrl = null;
+          if (pageIdentifier) {
+            try {
+              const configPath = path.join(__dirname, 'data', 'sites.json');
+              if (fs.existsSync(configPath)) {
+                const sites = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+                const site = sites.find(s => s.id === siteId);
+                if (site && site.baseUrl) {
+                  if (pageIdentifier === 'top') {
+                    pageUrl = site.baseUrl;
+                  } else {
+                    const path = pageIdentifier.replace(/-/g, '/');
+                    pageUrl = `${site.baseUrl.replace(/\/$/, '')}/${path}`;
+                  }
+                }
+              }
+            } catch (error) {
+              console.warn(`サイト設定の読み込みエラー: ${error.message}`);
+            }
+          }
+
           return {
             filename: file,
             sessionTimestamp: latestSession,
             pageIdentifier,
+            pageUrl,
             path: `/screenshots/${siteId}/after/${device}/${file}`,
             fullPath: path.join(afterDir, file)
           };
         })
         .sort((a, b) => a.filename.localeCompare(b.filename));
-      
+
       // 2. 同じセッションが見つからない場合、最新のAfterファイルセッションを使用
       if (afterFiles.length === 0) {
         console.log(`⚠️ 同じセッション(${latestSession})のAfterファイルが見つかりません。最新のAfterファイルを使用します。`);
-        
+
         const allAfterFiles = fs.readdirSync(afterDir)
           .filter(file => file.endsWith('.png'))
           .map(file => {
@@ -1116,16 +1166,39 @@ app.get('/session-images/:siteId/:device', async (req, res) => {
             const sessionTimestamp = timestampMatch ? timestampMatch[1] : null;
             const pageIdentifierMatch = file.match(/page-\d+_([^_]+)_/);
             const pageIdentifier = pageIdentifierMatch ? pageIdentifierMatch[1] : null;
-            
+
+            // ページ識別子からURLを復元
+            let pageUrl = null;
+            if (pageIdentifier) {
+              try {
+                const configPath = path.join(__dirname, 'data', 'sites.json');
+                if (fs.existsSync(configPath)) {
+                  const sites = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+                  const site = sites.find(s => s.id === siteId);
+                  if (site && site.baseUrl) {
+                    if (pageIdentifier === 'top') {
+                      pageUrl = site.baseUrl;
+                    } else {
+                      const path = pageIdentifier.replace(/-/g, '/');
+                      pageUrl = `${site.baseUrl.replace(/\/$/, '')}/${path}`;
+                    }
+                  }
+                }
+              } catch (error) {
+                console.warn(`サイト設定の読み込みエラー: ${error.message}`);
+              }
+            }
+
             return {
               filename: file,
               sessionTimestamp,
               pageIdentifier,
+              pageUrl,
               path: `/screenshots/${siteId}/after/${device}/${file}`,
               fullPath: path.join(afterDir, file)
             };
           });
-        
+
         // 最新セッションを取得
         const afterSessions = {};
         allAfterFiles.forEach(file => {
@@ -1133,31 +1206,31 @@ app.get('/session-images/:siteId/:device', async (req, res) => {
           if (!afterSessions[key]) afterSessions[key] = [];
           afterSessions[key].push(file);
         });
-        
+
         const latestAfterSession = Object.keys(afterSessions)
           .filter(key => key !== 'unknown')
           .sort()
           .pop();
-        
+
         if (latestAfterSession) {
           console.log(`📸 最新のAfterセッション ${latestAfterSession} を使用します`);
           afterFiles = afterSessions[latestAfterSession].sort((a, b) => a.filename.localeCompare(b.filename));
         }
       }
     }
-    
+
     // 各ページの比較結果を生成（既存の差分ファイルがあれば利用、なければ新規作成）
     const comparisons = [];
     for (const baselineFile of baselineSessionFiles) {
-      const afterFile = afterFiles.find(f => 
+      const afterFile = afterFiles.find(f =>
         f.pageIdentifier === baselineFile.pageIdentifier
       );
-      
+
       if (afterFile) {
         try {
           // 既存の差分ファイルをチェック
           const existingDiff = await findExistingDiffFile(siteId, device, baselineFile.pageIdentifier);
-          
+
           if (existingDiff) {
             // 既存の差分ファイルを利用
             comparisons.push({
@@ -1190,7 +1263,7 @@ app.get('/session-images/:siteId/:device', async (req, res) => {
         comparisons.push(null);
       }
     }
-    
+
     res.json({
       success: true,
       images: {
@@ -1205,12 +1278,12 @@ app.get('/session-images/:siteId/:device', async (req, res) => {
         comparisons
       }
     });
-    
+
   } catch (error) {
     console.error('❌ セッション画像取得エラー:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      error: error.message
     });
   }
 });
@@ -1221,17 +1294,17 @@ app.get('/session-images/:siteId/:device', async (req, res) => {
 async function compareSpecificFiles(baselinePath, afterPath, siteId, device, threshold) {
   const baselineBuffer = fs.readFileSync(baselinePath);
   const afterBuffer = fs.readFileSync(afterPath);
-  
+
   const baselinePng = PNG.sync.read(baselineBuffer);
   const afterPng = PNG.sync.read(afterBuffer);
-  
+
   // サイズ調整
   const maxWidth = Math.max(baselinePng.width, afterPng.width);
   const maxHeight = Math.max(baselinePng.height, afterPng.height);
-  
+
   let resizedBaseline = baselinePng;
   let resizedAfter = afterPng;
-  
+
   if (baselinePng.width !== maxWidth || baselinePng.height !== maxHeight) {
     const resizedBuffer = await sharp(baselineBuffer)
       .resize(maxWidth, maxHeight, { fit: 'contain', background: { r: 255, g: 255, b: 255, alpha: 1 } })
@@ -1239,7 +1312,7 @@ async function compareSpecificFiles(baselinePath, afterPath, siteId, device, thr
       .toBuffer();
     resizedBaseline = PNG.sync.read(resizedBuffer);
   }
-  
+
   if (afterPng.width !== maxWidth || afterPng.height !== maxHeight) {
     const resizedBuffer = await sharp(afterBuffer)
       .resize(maxWidth, maxHeight, { fit: 'contain', background: { r: 255, g: 255, b: 255, alpha: 1 } })
@@ -1247,10 +1320,10 @@ async function compareSpecificFiles(baselinePath, afterPath, siteId, device, thr
       .toBuffer();
     resizedAfter = PNG.sync.read(resizedBuffer);
   }
-  
+
   // 差分計算
   const diffPng = new PNG({ width: maxWidth, height: maxHeight });
-  
+
   const diffPixels = pixelmatch(
     resizedBaseline.data,
     resizedAfter.data,
@@ -1258,43 +1331,49 @@ async function compareSpecificFiles(baselinePath, afterPath, siteId, device, thr
     maxWidth,
     maxHeight,
     {
-      threshold: CONFIG.DIFF_THRESHOLD,
+      threshold: CONFIG.PIXELMATCH_THRESHOLD,  // 正しい色差許容度を使用 (0.02)
       alpha: 0.1,
-      antialiasing: true,
+      antialiasing: false,                     // より正確な差分検出のため無効化
       diffColor: [255, 0, 0],
       diffColorAlt: [255, 255, 0]
     }
   );
-  
+
   const totalPixels = maxWidth * maxHeight;
   const diffPercentage = (diffPixels / totalPixels) * 100;
   
+  // 高精度な差分率（小数点6桁まで保持）
+  const preciseDiffPercentage = Math.round(diffPercentage * 1000000) / 1000000;
+  
+  // ファイル名用の丸め（小数点4桁）
+  const roundedForFilename = Math.round(diffPercentage * 10000) / 10000;
+
   // baselineのファイル名からpageInfoを抽出
   const baselineFilename = path.basename(baselinePath);
   const pageMatch = baselineFilename.match(/page-(\d{3})_([^_]+)_/);
-  
+
   // 差分画像を保存
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
   let diffFilename;
   if (pageMatch) {
     const pageId = pageMatch[1];
     const pageIdentifier = pageMatch[2];
-    diffFilename = `page-${pageId}_${pageIdentifier}_${timestamp}_diff.png`;
+    diffFilename = `page-${pageId}_${pageIdentifier}_${timestamp}_diff-${roundedForFilename}%.png`;
   } else {
     // フォールバック：旧形式
-    diffFilename = `${path.basename(baselinePath, '.png')}_diff_${timestamp}.png`;
+    diffFilename = `${path.basename(baselinePath, '.png')}_diff-${roundedForFilename}%_${timestamp}.png`;
   }
   const diffDir = path.join(DIFFS_DIR, siteId, device, `threshold-${threshold}`);
-  
+
   fs.ensureDirSync(diffDir);
   const diffPath = path.join(diffDir, diffFilename);
-  
+
   const diffBuffer = PNG.sync.write(diffPng);
   fs.writeFileSync(diffPath, diffBuffer);
-  
+
   return {
-    status: diffPercentage > threshold ? 'NG' : 'OK',
-    diffPercentage: Math.round(diffPercentage * 1000) / 1000,
+    status: preciseDiffPercentage > threshold ? 'NG' : 'OK',
+    diffPercentage: preciseDiffPercentage,  // 高精度値を返す
     diffPixels,
     diffPath: `/diffs/${siteId}/${device}/threshold-${threshold}/${diffFilename}`,
     threshold,
@@ -1308,14 +1387,14 @@ async function compareSpecificFiles(baselinePath, afterPath, siteId, device, thr
 app.post('/upload-config', (req, res) => {
   try {
     const { sites } = req.body;
-    
+
     if (!Array.isArray(sites)) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'sites must be an array' 
+      return res.status(400).json({
+        success: false,
+        error: 'sites must be an array'
       });
     }
-    
+
     // サイト設定を変換して追加
     let addedCount = 0;
     sites.forEach((site, index) => {
@@ -1325,10 +1404,10 @@ app.post('/upload-config', (req, res) => {
         if (!baseUrl.startsWith('http://') && !baseUrl.startsWith('https://')) {
           baseUrl = 'https://' + baseUrl;
         }
-        
+
         // サイトIDを生成
         const siteId = site.siteName.replace(/[^\w\s]/g, '').replace(/\s+/g, '-').toLowerCase();
-        
+
         // 既存のサイトかチェック
         if (!sitesManager.getSite(siteId)) {
           sitesManager.addSite(siteId, {
@@ -1343,18 +1422,18 @@ app.post('/upload-config', (req, res) => {
         console.log(`⚠️ サイト ${site.siteName} の追加をスキップ: ${error.message}`);
       }
     });
-    
-    res.json({ 
-      success: true, 
+
+    res.json({
+      success: true,
       count: addedCount,
       message: `${addedCount}サイトを追加しました`
     });
-    
+
   } catch (error) {
     console.error('❌ 設定ファイルアップロードエラー:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      error: error.message
     });
   }
 });
@@ -1367,12 +1446,12 @@ app.delete('/sites/:siteId', (req, res) => {
     const { siteId } = req.params;
     sitesManager.deleteSite(siteId);
     res.json({ success: true, message: `サイト ${siteId} を削除しました` });
-    
+
   } catch (error) {
     console.error('❌ サイト削除エラー:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      error: error.message
     });
   }
 });
@@ -1422,14 +1501,14 @@ async function takeHighPrecisionScreenshot(url, siteId, type, device, pageInfo =
       // キャッシュとCookieを保持
       storageState: undefined // 同じサイトでは状態を保持
     };
-    
+
     const context = await browser.newContext(contextOptions);
 
     const page = await context.newPage();
-    
+
     // WordPress最適化設定
     await setupWordPressOptimization(page);
-    
+
     // ページ読み込み
     try {
       await page.goto(url, {
@@ -1443,22 +1522,22 @@ async function takeHighPrecisionScreenshot(url, siteId, type, device, pageInfo =
         timeout: CONFIG.TIMEOUT
       });
     }
-    
+
     // WordPress特化の待機処理
     await waitForWordPressReady(page);
-    
+
     // スクリーンショット撮影
     const screenshot = await page.screenshot({
       fullPage: true,
       animations: 'disabled',
       type: 'png'
     });
-    
+
     // ローカルファイルに保存
     // セッションタイムスタンプが指定されていれば使用、そうでなければ新規作成
     const timestamp = sessionTimestamp || new Date().toISOString().replace(/[:.]/g, '-');
     let filename;
-    
+
     if (pageInfo) {
       // ページ識別子付きファイル名
       filename = `page-${pageInfo.pageId}_${pageInfo.identifier}_${timestamp}.png`;
@@ -1466,15 +1545,15 @@ async function takeHighPrecisionScreenshot(url, siteId, type, device, pageInfo =
       // 従来のファイル名
       filename = `${timestamp}.png`;
     }
-    
+
     const dir = path.join(SCREENSHOTS_DIR, siteId, type, device);
-    
+
     fs.ensureDirSync(dir);
     const filepath = path.join(dir, filename);
     fs.writeFileSync(filepath, screenshot);
-    
+
     console.log(`✅ スクリーンショット保存: ${filepath}`);
-    
+
     return {
       filename,
       filepath,
@@ -1485,7 +1564,7 @@ async function takeHighPrecisionScreenshot(url, siteId, type, device, pageInfo =
       size: screenshot.length,
       timestamp: new Date().toISOString()
     };
-    
+
   } finally {
     // コンテキストのみクローズ（ブラウザは再利用）
     try {
@@ -1512,11 +1591,11 @@ async function setupWordPressOptimization(page) {
       .wp-block-cover__video-background { display: none !important; }
     `;
     document.head.appendChild(style);
-    
+
     document.documentElement.style.setProperty('--animation-duration', '0s');
     document.documentElement.style.setProperty('--transition-duration', '0s');
   });
-  
+
   await page.setExtraHTTPHeaders({
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
   });
@@ -1527,22 +1606,22 @@ async function setupWordPressOptimization(page) {
  */
 async function waitForWordPressReady(page) {
   await page.waitForLoadState('networkidle');
-  
+
   // 追加の待機時間（画像読み込み対応）
   await page.waitForTimeout(3000);
-  
+
   // スクロールして遅延読み込み画像を表示
   await autoScroll(page);
-  
+
   // 初期ローディング完了待機
   try {
     await page.waitForFunction(() => {
       // jQuery チェック（存在しない場合はスキップ）
       if (window.jQuery && window.jQuery.active > 0) return false;
-      
+
       // フォント読み込みチェック（サポートされていない場合はスキップ）
       if (document.fonts && !document.fonts.ready) return false;
-      
+
       // 画像読み込みチェック（重要な画像のみ）
       const images = Array.from(document.images);
       let pendingImages = 0;
@@ -1551,14 +1630,14 @@ async function waitForWordPressReady(page) {
           pendingImages++;
         }
       }
-      
+
       // 基本的な読み込み完了チェック
       return document.readyState === 'complete' && pendingImages < 3;
     }, {}, { timeout: 15000 });
   } catch (error) {
     console.log('⚠️ WordPress読み込み完了待機でタイムアウト - 処理を続行します');
   }
-  
+
   // ローダー・スピナーの消失を待機
   try {
     await page.waitForFunction(() => {
@@ -1567,9 +1646,9 @@ async function waitForWordPressReady(page) {
         '[class*="load"]', '[class*="spin"]', '[id*="load"]',
         '.elementor-loading', '.wp-block-loading'
       ].join(','));
-      
-      return Array.from(loaders).every(loader => 
-        loader.style.display === 'none' || 
+
+      return Array.from(loaders).every(loader =>
+        loader.style.display === 'none' ||
         loader.style.visibility === 'hidden' ||
         loader.style.opacity === '0' ||
         !document.body.contains(loader)
@@ -1578,13 +1657,13 @@ async function waitForWordPressReady(page) {
   } catch (error) {
     console.log('⚠️ ローダー要素の確認でタイムアウト - 処理を続行します');
   }
-  
+
   // フェードイン効果の完了を待機
   await page.waitForTimeout(2000);
-  
+
   // ページを最後までスクロール（遅延読み込み対応）
   await autoScrollToBottom(page);
-  
+
   // スクロール後の追加読み込み待機
   await page.waitForTimeout(1000);
 }
@@ -1594,15 +1673,15 @@ async function waitForWordPressReady(page) {
  */
 async function autoScrollToBottom(page) {
   console.log('📜 ページを最後までスクロール中...');
-  
+
   let previousHeight = 0;
   let currentHeight = await page.evaluate(() => document.body.scrollHeight);
   let scrollAttempts = 0;
   const maxScrollAttempts = 10;
-  
+
   while (previousHeight !== currentHeight && scrollAttempts < maxScrollAttempts) {
     previousHeight = currentHeight;
-    
+
     // スムーズスクロール実行
     await page.evaluate(() => {
       window.scrollTo({
@@ -1610,15 +1689,15 @@ async function autoScrollToBottom(page) {
         behavior: 'smooth'
       });
     });
-    
+
     // スクロール完了まで待機
     await page.waitForTimeout(1500);
-    
+
     // 遅延読み込み要素の読み込み待機
     try {
       await page.waitForFunction(() => {
         const lazyImages = document.querySelectorAll('img[loading="lazy"], img[data-src], .lazy');
-        const loadingImages = Array.from(lazyImages).filter(img => 
+        const loadingImages = Array.from(lazyImages).filter(img =>
           !img.complete || !img.src || img.src.includes('data:')
         );
         return loadingImages.length < 3;
@@ -1626,18 +1705,18 @@ async function autoScrollToBottom(page) {
     } catch (error) {
       console.log('⚠️ 遅延読み込み画像の確認でタイムアウト');
     }
-    
+
     currentHeight = await page.evaluate(() => document.body.scrollHeight);
     scrollAttempts++;
-    
+
     console.log(`📏 スクロール ${scrollAttempts}: ${previousHeight} → ${currentHeight}`);
   }
-  
+
   // 最終的にトップに戻る
   await page.evaluate(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
-  
+
   await page.waitForTimeout(1000);
   console.log('✅ スクロール完了');
 }
@@ -1648,35 +1727,35 @@ async function autoScrollToBottom(page) {
 async function compareHighPrecisionScreenshots(siteId, device, threshold = 2.0) {
   const baselineDir = path.join(SCREENSHOTS_DIR, siteId, 'baseline', device);
   const afterDir = path.join(SCREENSHOTS_DIR, siteId, 'after', device);
-  
+
   if (!fs.existsSync(baselineDir) || !fs.existsSync(afterDir)) {
     throw new Error('Baseline または After スクリーンショットが見つかりません');
   }
-  
+
   // ページペアでファイルを取得
   const baselineFiles = fs.readdirSync(baselineDir).filter(f => f.endsWith('.png'));
   const afterFiles = fs.readdirSync(afterDir).filter(f => f.endsWith('.png'));
-  
+
   if (baselineFiles.length === 0 || afterFiles.length === 0) {
     throw new Error('比較対象のスクリーンショットファイルが見つかりません');
   }
-  
+
   // 同じページIDのファイルペアを見つける
   let baselineFile = null;
   let afterFile = null;
-  
+
   for (const bFile of baselineFiles) {
     const pageMatch = bFile.match(/page-(\d{3})_([^_]+)_/);
     if (!pageMatch) continue;
-    
+
     const pageId = pageMatch[1];
     const pageIdentifier = pageMatch[2];
-    
+
     // 対応するafterファイルを検索
-    const matchingAfterFile = afterFiles.find(f => 
+    const matchingAfterFile = afterFiles.find(f =>
       f.includes(`page-${pageId}_${pageIdentifier}_`)
     );
-    
+
     if (matchingAfterFile) {
       baselineFile = bFile;
       afterFile = matchingAfterFile;
@@ -1684,28 +1763,28 @@ async function compareHighPrecisionScreenshots(siteId, device, threshold = 2.0) 
       break; // 最初に見つかったペアを使用
     }
   }
-  
+
   if (!baselineFile || !afterFile) {
     throw new Error('対応するページペアが見つかりません');
   }
-  
+
   const baselinePath = path.join(baselineDir, baselineFile);
   const afterPath = path.join(afterDir, afterFile);
-  
+
   // 画像読み込み
   const baselineBuffer = fs.readFileSync(baselinePath);
   const afterBuffer = fs.readFileSync(afterPath);
-  
+
   const baselinePng = PNG.sync.read(baselineBuffer);
   const afterPng = PNG.sync.read(afterBuffer);
-  
+
   // サイズ調整
   const maxWidth = Math.max(baselinePng.width, afterPng.width);
   const maxHeight = Math.max(baselinePng.height, afterPng.height);
-  
+
   let resizedBaseline = baselinePng;
   let resizedAfter = afterPng;
-  
+
   if (baselinePng.width !== maxWidth || baselinePng.height !== maxHeight) {
     const resizedBuffer = await sharp(baselineBuffer)
       .resize(maxWidth, maxHeight, { fit: 'contain', background: { r: 255, g: 255, b: 255, alpha: 1 } })
@@ -1713,7 +1792,7 @@ async function compareHighPrecisionScreenshots(siteId, device, threshold = 2.0) 
       .toBuffer();
     resizedBaseline = PNG.sync.read(resizedBuffer);
   }
-  
+
   if (afterPng.width !== maxWidth || afterPng.height !== maxHeight) {
     const resizedBuffer = await sharp(afterBuffer)
       .resize(maxWidth, maxHeight, { fit: 'contain', background: { r: 255, g: 255, b: 255, alpha: 1 } })
@@ -1721,10 +1800,10 @@ async function compareHighPrecisionScreenshots(siteId, device, threshold = 2.0) 
       .toBuffer();
     resizedAfter = PNG.sync.read(resizedBuffer);
   }
-  
+
   // 差分画像作成
   const diffPng = new PNG({ width: maxWidth, height: maxHeight });
-  
+
   const diffPixels = pixelmatch(
     resizedBaseline.data,
     resizedAfter.data,
@@ -1732,34 +1811,37 @@ async function compareHighPrecisionScreenshots(siteId, device, threshold = 2.0) 
     maxWidth,
     maxHeight,
     {
-      threshold: CONFIG.DIFF_THRESHOLD,
+      threshold: CONFIG.PIXELMATCH_THRESHOLD,  // 正しい色差許容度を使用 (0.02)
       alpha: 0.1,
-      antialiasing: true,
+      antialiasing: false,                     // より正確な差分検出のため無効化
       diffColor: [255, 0, 0],
       diffColorAlt: [255, 255, 0]
     }
   );
-  
-  // 差分率計算
+
+  // 差分率計算（高精度）
   const totalPixels = maxWidth * maxHeight;
   const diffPercentage = (diffPixels / totalPixels) * 100;
   
+  // 高精度な差分率（小数点6桁まで保持）
+  const preciseDiffPercentage = Math.round(diffPercentage * 1000000) / 1000000;
+
   // 差分画像保存（闾値別ディレクトリ）
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
   const diffFilename = `${timestamp}_diff.png`;
   const diffDir = path.join(DIFFS_DIR, siteId, device, `threshold-${threshold}`);
-  
+
   fs.ensureDirSync(diffDir);
   const diffPath = path.join(diffDir, diffFilename);
-  
+
   const diffBuffer = PNG.sync.write(diffPng);
   fs.writeFileSync(diffPath, diffBuffer);
-  
-  // 結果判定
-  const status = diffPercentage > threshold ? 'NG' : 'OK';
-  
-  console.log(`${status === 'NG' ? '⚠️' : '✅'} 比較結果: ${diffPercentage.toFixed(3)}% (${diffPixels}px) [闾値: ${threshold}%]`);
-  
+
+  // 結果判定（高精度値で判定）
+  const status = preciseDiffPercentage > threshold ? 'NG' : 'OK';
+
+  console.log(`${status === 'NG' ? '⚠️' : '✅'} 比較結果: ${preciseDiffPercentage.toFixed(6)}% (${diffPixels}px) [闾値: ${threshold}%]`);
+
   return {
     siteId,
     device,
@@ -1768,7 +1850,7 @@ async function compareHighPrecisionScreenshots(siteId, device, threshold = 2.0) 
     diffFile: diffFilename,
     diffPath: `/diffs/${siteId}/${device}/threshold-${threshold}/${diffFilename}`,
     diffPixels,
-    diffPercentage: Math.round(diffPercentage * 1000) / 1000,
+    diffPercentage: preciseDiffPercentage,  // 高精度値を返す
     status,
     threshold,
     timestamp: new Date().toISOString(),
@@ -1781,19 +1863,19 @@ async function compareHighPrecisionScreenshots(siteId, device, threshold = 2.0) 
  */
 async function runFullVRTCheck(url, siteId, devices) {
   const results = [];
-  
+
   for (const device of devices) {
     console.log(`📱 ${device} での処理開始`);
-    
+
     // Baseline撮影
     const baselineResult = await takeHighPrecisionScreenshot(url, siteId, 'baseline', device);
-    
+
     // After撮影（即座に撮影 - 実際の運用では手動更新後）
     const afterResult = await takeHighPrecisionScreenshot(url, siteId, 'after', device);
-    
+
     // 比較実行
     const compareResult = await compareHighPrecisionScreenshots(siteId, device);
-    
+
     results.push({
       device,
       baseline: baselineResult,
@@ -1801,7 +1883,7 @@ async function runFullVRTCheck(url, siteId, devices) {
       comparison: compareResult
     });
   }
-  
+
   return {
     siteId,
     url,
@@ -1828,7 +1910,7 @@ async function autoScroll(page) {
         const scrollHeight = document.body.scrollHeight;
         window.scrollBy(0, distance);
         totalHeight += distance;
-        
+
         if(totalHeight >= scrollHeight){
           clearInterval(timer);
           // 最上部に戻る
@@ -1838,7 +1920,7 @@ async function autoScroll(page) {
       }, 100);
     });
   });
-  
+
   // スクロール後の追加待機
   await page.waitForTimeout(2000);
 }
@@ -1858,62 +1940,64 @@ app.listen(PORT, () => {
 async function compareMultiPageScreenshots(siteId, device, threshold = 2.0) {
   const baselineDir = path.join(SCREENSHOTS_DIR, siteId, 'baseline', device);
   const afterDir = path.join(SCREENSHOTS_DIR, siteId, 'after', device);
-  
+
   if (!fs.existsSync(baselineDir) || !fs.existsSync(afterDir)) {
     throw new Error('Baseline または After スクリーンショットが見つかりません');
   }
-  
+
   const baselineFiles = fs.readdirSync(baselineDir).filter(f => f.endsWith('.png'));
   const afterFiles = fs.readdirSync(afterDir).filter(f => f.endsWith('.png'));
-  
+
   console.log(`🔍 複数ページ比較: baseline ${baselineFiles.length}ファイル, after ${afterFiles.length}ファイル`);
-  
+
   const results = [];
   const processedPairs = new Map();
-  
+
   // 最新セッション同士でページIDペアリング
   const baselineSessionMap = new Map();
   const afterSessionMap = new Map();
-  
+
   // baselineファイルをページごとに分類し、最新のものを取得
+  // ページ識別子のみでペアリング（pageIdは無視）
   baselineFiles.forEach(f => {
     const pageMatch = f.match(/page-(\d{3})_([^_]+)_(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z)/);
     if (pageMatch) {
-      const pageKey = `${pageMatch[1]}_${pageMatch[2]}`;
+      const pageKey = pageMatch[2]; // 識別子のみを使用
       const timestamp = pageMatch[3];
-      
+
       if (!baselineSessionMap.has(pageKey) || timestamp > baselineSessionMap.get(pageKey).timestamp) {
         baselineSessionMap.set(pageKey, { file: f, timestamp, pageId: pageMatch[1], pageIdentifier: pageMatch[2] });
       }
     }
   });
-  
+
   // afterファイルをページごとに分類し、最新のものを取得
+  // ページ識別子のみでペアリング（pageIdは無視）
   afterFiles.forEach(f => {
     const pageMatch = f.match(/page-(\d{3})_([^_]+)_(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z)/);
     if (pageMatch) {
-      const pageKey = `${pageMatch[1]}_${pageMatch[2]}`;
+      const pageKey = pageMatch[2]; // 識別子のみを使用
       const timestamp = pageMatch[3];
-      
+
       if (!afterSessionMap.has(pageKey) || timestamp > afterSessionMap.get(pageKey).timestamp) {
         afterSessionMap.set(pageKey, { file: f, timestamp, pageId: pageMatch[1], pageIdentifier: pageMatch[2] });
       }
     }
   });
-  
+
   console.log(`🔄 最新ペアリング: baseline ${baselineSessionMap.size}ページ, after ${afterSessionMap.size}ページ`);
-  
+
   // 最新セッション同士でペアを作成
   for (const [pageKey, baselineInfo] of baselineSessionMap) {
     const afterInfo = afterSessionMap.get(pageKey);
-    
+
     if (afterInfo) {
       console.log(`📊 ページ${baselineInfo.pageId} (${baselineInfo.pageIdentifier}) を比較中...`);
-      
+
       try {
         // 重複差分ファイルを削除
         await cleanupOldDiffFiles(siteId, device, baselineInfo.pageId, baselineInfo.pageIdentifier);
-        
+
         const result = await compareFiles(
           path.join(baselineDir, baselineInfo.file),
           path.join(afterDir, afterInfo.file),
@@ -1922,7 +2006,7 @@ async function compareMultiPageScreenshots(siteId, device, threshold = 2.0) {
           threshold,
           { pageId: baselineInfo.pageId, pageIdentifier: baselineInfo.pageIdentifier }
         );
-        
+
         results.push({
           pageId: baselineInfo.pageId,
           pageIdentifier: baselineInfo.pageIdentifier,
@@ -1932,7 +2016,7 @@ async function compareMultiPageScreenshots(siteId, device, threshold = 2.0) {
           afterTimestamp: afterInfo.timestamp,
           ...result
         });
-        
+
         processedPairs.set(baselineInfo.pageId, true);
       } catch (error) {
         console.error(`❌ ページ${baselineInfo.pageId} の比較エラー:`, error.message);
@@ -1947,7 +2031,7 @@ async function compareMultiPageScreenshots(siteId, device, threshold = 2.0) {
       console.log(`⚠️ ページ${baselineInfo.pageId} (${baselineInfo.pageIdentifier}) のafterファイルが見つかりません`);
     }
   }
-  
+
   // 統計情報
   const summary = {
     totalPages: results.length,
@@ -1956,9 +2040,9 @@ async function compareMultiPageScreenshots(siteId, device, threshold = 2.0) {
     error: results.filter(r => r.status === 'ERROR').length,
     threshold: threshold
   };
-  
+
   console.log(`✅ 複数ページ比較完了: ${summary.totalPages}ページ (OK: ${summary.ok}, NG: ${summary.ng})`);
-  
+
   return {
     siteId,
     device,
@@ -1972,18 +2056,18 @@ async function compareMultiPageScreenshots(siteId, device, threshold = 2.0) {
  */
 async function cleanupOldDiffFiles(siteId, device, pageId, pageIdentifier) {
   const diffDir = path.join(DIFFS_DIR, siteId, device);
-  
+
   if (!fs.existsSync(diffDir)) {
     return;
   }
-  
+
   try {
     const files = fs.readdirSync(diffDir, { recursive: true });
-    const targetFiles = files.filter(file => 
-      file.includes(`page-${pageId}_${pageIdentifier}_`) && 
+    const targetFiles = files.filter(file =>
+      file.includes(`page-${pageId}_${pageIdentifier}_`) &&
       file.endsWith('_diff.png')
     );
-    
+
     for (const file of targetFiles) {
       const filePath = path.join(diffDir, file);
       if (fs.existsSync(filePath)) {
@@ -1991,7 +2075,7 @@ async function cleanupOldDiffFiles(siteId, device, pageId, pageIdentifier) {
         console.log(`🗑️ 古い差分ファイルを削除: ${file}`);
       }
     }
-    
+
     console.log(`✅ ページ${pageId}_${pageIdentifier}の古い差分ファイルをクリーンアップ完了`);
   } catch (error) {
     console.error('❌ 差分ファイルクリーンアップエラー:', error);
@@ -2003,36 +2087,65 @@ async function cleanupOldDiffFiles(siteId, device, pageId, pageIdentifier) {
  */
 async function findExistingDiffFile(siteId, device, pageIdentifier) {
   const diffDir = path.join(DIFFS_DIR, siteId, device);
-  
+
   if (!fs.existsSync(diffDir)) {
     return null;
   }
-  
+
   try {
     const files = fs.readdirSync(diffDir, { recursive: true });
-    
+
     // より厳密なパターンマッチング：page-XXX_pageIdentifier_*_diff.png
     const diffFiles = files.filter(file => {
       const pageMatch = file.match(/page-\d{3}_([^_]+)_.*_diff\.png$/);
       return pageMatch && pageMatch[1] === pageIdentifier;
     }).sort().reverse(); // 最新ファイルを優先
-    
+
     if (diffFiles.length > 0) {
       const latestDiffFile = diffFiles[0];
       const fullPath = path.join(diffDir, latestDiffFile);
-      
+
       // 相対パス作成（WebUIで表示可能にする）
       const relativePath = `/diffs/${siteId}/${device}/${latestDiffFile}`;
+
+      // 差分ファイル名から差分率を抽出（ファイル名に含まれている場合）
+      let diffPercentage = 0;
+      let status = 'OK';
+
+      // 差分ファイル名から差分率を抽出する試行（より包括的なパターンマッチング）
+      let diffRateMatch = latestDiffFile.match(/diff-(\d+(?:\.\d+)?)%/);
       
+      // 代替パターン: 小数点が任意の位置にある場合も対応
+      if (!diffRateMatch) {
+        diffRateMatch = latestDiffFile.match(/diff[_-](\d+(?:\.\d+)?)%/);
+      }
+      
+      // さらに代替パターン: アンダースコアやハイフンの組み合わせ
+      if (!diffRateMatch) {
+        diffRateMatch = latestDiffFile.match(/(\d+(?:\.\d+)?)%/);
+      }
+      
+      if (diffRateMatch) {
+        diffPercentage = parseFloat(diffRateMatch[1]);
+        status = diffPercentage > 2.0 ? 'NG' : 'OK';
+        console.log(`✅ 既存差分ファイルから差分率抽出成功: ${diffPercentage}% (${latestDiffFile})`);
+      } else {
+        // ファイル名から抽出できない場合は、デフォルト値を設定（古いファイル形式対応）
+        console.log(`⚠️ ファイル名から差分率を抽出できません: ${latestDiffFile}`)
+        console.log(`🔄 古いファイル形式として処理します (差分率: 不明)`);
+        diffPercentage = -1; // 不明を示す値
+        status = 'Unknown'; // 不明ステータス
+      }
+
       return {
         fullPath,
         relativePath,
         fileName: latestDiffFile,
-        status: 'OK', // 簡易判定（実際は差分率から判定すべき）
-        diffPercentage: 0 // 実際の値は不明だが、既存ファイルなので0とする
+        status,
+        diffPercentage
       };
     }
-    
+
     return null;
   } catch (error) {
     console.error('❌ 既存差分ファイル検索エラー:', error);
@@ -2047,17 +2160,17 @@ async function compareFiles(baselinePath, afterPath, siteId, device, threshold, 
   // 画像読み込み
   const baselineBuffer = fs.readFileSync(baselinePath);
   const afterBuffer = fs.readFileSync(afterPath);
-  
+
   const baselinePng = PNG.sync.read(baselineBuffer);
   const afterPng = PNG.sync.read(afterBuffer);
-  
+
   // サイズ調整
   const maxWidth = Math.max(baselinePng.width, afterPng.width);
   const maxHeight = Math.max(baselinePng.height, afterPng.height);
-  
+
   let resizedBaseline = baselinePng;
   let resizedAfter = afterPng;
-  
+
   if (baselinePng.width !== maxWidth || baselinePng.height !== maxHeight) {
     const resizedBuffer = await sharp(baselineBuffer)
       .resize(maxWidth, maxHeight, { fit: 'contain', background: { r: 255, g: 255, b: 255, alpha: 1 } })
@@ -2065,7 +2178,7 @@ async function compareFiles(baselinePath, afterPath, siteId, device, threshold, 
       .toBuffer();
     resizedBaseline = PNG.sync.read(resizedBuffer);
   }
-  
+
   if (afterPng.width !== maxWidth || afterPng.height !== maxHeight) {
     const resizedBuffer = await sharp(afterBuffer)
       .resize(maxWidth, maxHeight, { fit: 'contain', background: { r: 255, g: 255, b: 255, alpha: 1 } })
@@ -2073,10 +2186,10 @@ async function compareFiles(baselinePath, afterPath, siteId, device, threshold, 
       .toBuffer();
     resizedAfter = PNG.sync.read(resizedBuffer);
   }
-  
+
   // 差分画像作成
   const diffPng = new PNG({ width: maxWidth, height: maxHeight });
-  
+
   const diffPixels = pixelmatch(
     resizedBaseline.data,
     resizedAfter.data,
@@ -2084,38 +2197,44 @@ async function compareFiles(baselinePath, afterPath, siteId, device, threshold, 
     maxWidth,
     maxHeight,
     {
-      threshold: CONFIG.DIFF_THRESHOLD,
+      threshold: CONFIG.PIXELMATCH_THRESHOLD,  // 正しい色差許容度を使用 (0.02)
       alpha: 0.1,
-      antialiasing: true,
+      antialiasing: false,                     // より正確な差分検出のため無効化
       diffColor: [255, 0, 0],
       diffColorAlt: [255, 255, 0]
     }
   );
-  
-  // 差分率計算
+
+  // 差分率計算（高精度）
   const totalPixels = maxWidth * maxHeight;
   const diffPercentage = (diffPixels / totalPixels) * 100;
   
+  // 高精度な差分率（小数点6桁まで保持）
+  const preciseDiffPercentage = Math.round(diffPercentage * 1000000) / 1000000;
+  
+  // ファイル名用の丸め（小数点4桁）
+  const roundedForFilename = Math.round(diffPercentage * 10000) / 10000;
+
   // 差分画像保存
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-  const diffFilename = pageInfo 
-    ? `page-${pageInfo.pageId}_${pageInfo.pageIdentifier}_${timestamp}_diff.png`
-    : `${timestamp}_diff.png`;
+  const diffFilename = pageInfo
+    ? `page-${pageInfo.pageId}_${pageInfo.pageIdentifier}_${timestamp}_diff-${roundedForFilename}%.png`
+    : `${timestamp}_diff-${roundedForFilename}%.png`;
   const diffDir = path.join(DIFFS_DIR, siteId, device, `threshold-${threshold}`);
-  
+
   fs.ensureDirSync(diffDir);
   const diffPath = path.join(diffDir, diffFilename);
-  
+
   const diffBuffer = PNG.sync.write(diffPng);
   fs.writeFileSync(diffPath, diffBuffer);
-  
-  // 結果判定
-  const status = diffPercentage > threshold ? 'NG' : 'OK';
-  
+
+  // 結果判定（高精度値で判定）
+  const status = preciseDiffPercentage > threshold ? 'NG' : 'OK';
+
   return {
     diffPath: diffPath.replace(__dirname, ''),
     diffPixels,
-    diffPercentage: Math.round(diffPercentage * 1000) / 1000,
+    diffPercentage: preciseDiffPercentage,  // 高精度値を返す
     status,
     threshold,
     dimensions: { width: maxWidth, height: maxHeight }
