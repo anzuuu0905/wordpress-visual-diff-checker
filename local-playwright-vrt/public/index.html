@@ -484,7 +484,7 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    allSites = data.sites;
+                    allSites = data.managed || data.sites || [];
                     updateSiteSelection();
                 } else {
                     console.error('サイト一覧の取得に失敗:', data.error);

@@ -5,6 +5,7 @@
 
 const fs = require('fs-extra');
 const path = require('path');
+const { getSecureCredentials } = require('../../src/security');
 
 // デフォルトのサイト設定
 const DEFAULT_SITES_CONFIG = {
@@ -125,6 +126,22 @@ class SitesManager {
    */
   getSite(siteId) {
     return this.sites[siteId];
+  }
+  
+  /**
+   * 安全な認証情報を取得（暗号化対応）
+   */
+  getSecureSite(siteId) {
+    const site = this.sites[siteId];
+    if (!site) return null;
+    
+    // 認証情報を復号化
+    const secureCredentials = getSecureCredentials(site);
+    
+    return {
+      ...site,
+      admin: secureCredentials
+    };
   }
   
   /**

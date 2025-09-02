@@ -13,12 +13,27 @@ const { PNG } = require('pngjs');
 const sharp = require('sharp');
 const SiteCrawler = require('./src/crawler');
 const { sitesManager } = require('./src/sites-config');
+const { ErrorHandler, VRTError } = require('../src/error-handler');
+const { getDatabase } = require('../src/database');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // グローバルブラウザインスタンス（再利用）
 let globalBrowser = null;
+
+// エラーハンドラー初期化
+const errorHandler = new ErrorHandler({
+  logDir: path.join(__dirname, 'logs'),
+  maxRetries: 3,
+  retryDelay: 1000
+});
+
+// データベース初期化
+const database = getDatabase({
+  mode: 'local',
+  dataDir: path.join(__dirname, 'data')
+});
 
 // スクリーンショット保存ディレクトリ
 const SCREENSHOTS_DIR = path.join(__dirname, 'screenshots');
@@ -96,12 +111,161 @@ async function processConcurrent(items, processor, maxConcurrency) {
 /**
  * 🎯 ヘルスチェック
  */
-app.get('/health', (req, res) => {
-  res.json({
-    status: 'healthy',
-    timestamp: new Date().toISOString(),
-    playwright: 'ready'
-  });
+app.get('/health', async (req, res) => {
+  try {
+    const dbStats = await database.getStats();
+    res.json({
+      status: 'healthy',
+      timestamp: new Date().toISOString(),
+      playwright: 'ready',
+      database: dbStats
+    });
+  } catch (error) {
+    res.json({
+      status: 'healthy',
+      timestamp: new Date().toISOString(),
+      playwright: 'ready',
+      database: { error: error.message }
+    });
+  }
+});
+
+/**
+ * 📊 データベース統計情報
+ */
+app.get('/stats', async (req, res) => {
+  try {
+    const stats = await database.getStats();
+    res.json({ success: true, stats });
+  } catch (error) {
+    console.error('❌ 統計情報取得エラー:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+/**
+ * 📈 サイト別統計情報
+ */
+app.get('/stats/:siteId', async (req, res) => {
+  try {
+    const { siteId } = req.params;
+    const { days = 30 } = req.query;
+    
+    const stats = await database.getComparisonStats(siteId, parseInt(days));
+    const history = await database.getSiteVRTHistory(siteId, 10);
+    
+    res.json({ 
+      success: true, 
+      siteId,
+      stats,
+      recentHistory: history
+    });
+  } catch (error) {
+    console.error('❌ サイト統計取得エラー:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+/**
+ * 🧹 データベースクリーンアップ
+ */
+app.post('/cleanup', async (req, res) => {
+  try {
+    const { days = 90 } = req.body;
+    const result = await database.cleanup(parseInt(days));
+    
+    res.json({ 
+      success: true, 
+      message: `${days}日より古いデータを削除しました`,
+      result
+    });
+  } catch (error) {
+    console.error('❌ クリーンアップエラー:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+/**
+ * 🔧 サイト管理API
+ */
+app.get('/sites', async (req, res) => {
+  try {
+    const sites = await database.getAllSiteConfigs();
+    const managedSites = sitesManager.getAllSites();
+    
+    res.json({
+      success: true,
+      database: sites,
+      managed: managedSites,
+      total: managedSites.length
+    });
+  } catch (error) {
+    console.error('❌ サイト一覧取得エラー:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.post('/sites', async (req, res) => {
+  try {
+    const { siteId, config } = req.body;
+    if (!siteId || !config) {
+      return res.status(400).json({
+        success: false,
+        error: 'siteId and config are required'
+      });
+    }
+
+    // データベースに保存
+    const savedConfig = await database.saveSiteConfig(siteId, config);
+    
+    res.json({
+      success: true,
+      site: savedConfig
+    });
+  } catch (error) {
+    console.error('❌ サイト保存エラー:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.get('/sites/:siteId', async (req, res) => {
+  try {
+    const { siteId } = req.params;
+    const site = await database.getSiteConfig(siteId);
+    
+    if (!site) {
+      return res.status(404).json({
+        success: false,
+        error: 'Site not found'
+      });
+    }
+    
+    res.json({
+      success: true,
+      site
+    });
+  } catch (error) {
+    console.error('❌ サイト取得エラー:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
 });
 
 /**
@@ -1486,93 +1650,107 @@ async function getBrowser() {
  */
 async function takeHighPrecisionScreenshot(url, siteId, type, device, pageInfo = null, sessionTimestamp = null) {
   const browser = await getBrowser();
-
-  try {
-    // サイトごとのコンテキスト（キャッシュ・Cookie共有）
-    const contextOptions = {
-      viewport: device === 'mobile' ? CONFIG.MOBILE_VIEWPORT : CONFIG.VIEWPORT,
-      deviceScaleFactor: 1,
-      hasTouch: device === 'mobile',
-      isMobile: device === 'mobile',
-      ignoreHTTPSErrors: true,
-      reducedMotion: 'reduce',
-      forcedColors: 'none',
-      colorScheme: 'light',
-      // キャッシュとCookieを保持
-      storageState: undefined // 同じサイトでは状態を保持
-    };
-
-    const context = await browser.newContext(contextOptions);
-
-    const page = await context.newPage();
-
-    // WordPress最適化設定
-    await setupWordPressOptimization(page);
-
-    // ページ読み込み
+  let context = null;
+  let attempt = 1;
+  
+  return await errorHandler.executeWithRetry(async () => {
     try {
-      await page.goto(url, {
-        waitUntil: 'networkidle',
-        timeout: CONFIG.TIMEOUT
+      // サイトごとのコンテキスト（キャッシュ・Cookie共有）
+      const contextOptions = {
+        viewport: device === 'mobile' ? CONFIG.MOBILE_VIEWPORT : CONFIG.VIEWPORT,
+        deviceScaleFactor: 1,
+        hasTouch: device === 'mobile',
+        isMobile: device === 'mobile',
+        ignoreHTTPSErrors: true,
+        reducedMotion: 'reduce',
+        forcedColors: 'none',
+        colorScheme: 'light',
+        // キャッシュとCookieを保持
+        storageState: undefined // 同じサイトでは状態を保持
+      };
+
+      context = await browser.newContext(contextOptions);
+      const page = await context.newPage();
+
+      // WordPress最適化設定
+      await setupWordPressOptimization(page);
+
+      // ページ読み込み（エラーハンドリング強化）
+      try {
+        await page.goto(url, {
+          waitUntil: 'networkidle',
+          timeout: CONFIG.TIMEOUT
+        });
+      } catch (error) {
+        const action = await errorHandler.handleScreenshotError(error, url, siteId, attempt);
+        if (action === 'retry_with_fallback') {
+          await page.goto(url, {
+            waitUntil: 'domcontentloaded',
+            timeout: CONFIG.TIMEOUT
+          });
+        } else if (action === 'skip') {
+          throw new VRTError(`ページアクセス不可: ${url}`, 'NAVIGATION_ERROR');
+        } else if (action === 'fail') {
+          throw error;
+        } else if (action === 'retry') {
+          throw error; // リトライ実行
+        }
+        attempt++;
+      }
+
+      // WordPress特化の待機処理
+      await waitForWordPressReady(page);
+
+      // スクリーンショット撮影
+      const screenshot = await page.screenshot({
+        fullPage: true,
+        animations: 'disabled',
+        type: 'png'
       });
-    } catch (error) {
-      console.log('⚠️ ページ読み込みでタイムアウト - DOMContentLoadedで再試行');
-      await page.goto(url, {
-        waitUntil: 'domcontentloaded',
-        timeout: CONFIG.TIMEOUT
-      });
+
+      // ローカルファイルに保存
+      // セッションタイムスタンプが指定されていれば使用、そうでなければ新規作成
+      const timestamp = sessionTimestamp || new Date().toISOString().replace(/[:.]/g, '-');
+      let filename;
+
+      if (pageInfo) {
+        // ページ識別子付きファイル名
+        filename = `page-${pageInfo.pageId}_${pageInfo.identifier}_${timestamp}.png`;
+      } else {
+        // 従来のファイル名
+        filename = `${timestamp}.png`;
+      }
+
+      const dir = path.join(SCREENSHOTS_DIR, siteId, type, device);
+
+      fs.ensureDirSync(dir);
+      const filepath = path.join(dir, filename);
+      fs.writeFileSync(filepath, screenshot);
+
+      console.log(`✅ スクリーンショット保存: ${filepath}`);
+
+      return {
+        filename,
+        filepath,
+        url,
+        siteId,
+        type,
+        device,
+        size: screenshot.length,
+        timestamp: new Date().toISOString()
+      };
+
+    } finally {
+      // コンテキストのみクローズ（ブラウザは再利用）
+      if (context) {
+        try {
+          await context.close();
+        } catch (error) {
+          console.log('⚠️ コンテキストクローズエラー:', error.message);
+        }
+      }
     }
-
-    // WordPress特化の待機処理
-    await waitForWordPressReady(page);
-
-    // スクリーンショット撮影
-    const screenshot = await page.screenshot({
-      fullPage: true,
-      animations: 'disabled',
-      type: 'png'
-    });
-
-    // ローカルファイルに保存
-    // セッションタイムスタンプが指定されていれば使用、そうでなければ新規作成
-    const timestamp = sessionTimestamp || new Date().toISOString().replace(/[:.]/g, '-');
-    let filename;
-
-    if (pageInfo) {
-      // ページ識別子付きファイル名
-      filename = `page-${pageInfo.pageId}_${pageInfo.identifier}_${timestamp}.png`;
-    } else {
-      // 従来のファイル名
-      filename = `${timestamp}.png`;
-    }
-
-    const dir = path.join(SCREENSHOTS_DIR, siteId, type, device);
-
-    fs.ensureDirSync(dir);
-    const filepath = path.join(dir, filename);
-    fs.writeFileSync(filepath, screenshot);
-
-    console.log(`✅ スクリーンショット保存: ${filepath}`);
-
-    return {
-      filename,
-      filepath,
-      url,
-      siteId,
-      type,
-      device,
-      size: screenshot.length,
-      timestamp: new Date().toISOString()
-    };
-
-  } finally {
-    // コンテキストのみクローズ（ブラウザは再利用）
-    try {
-      await context.close();
-    } catch (error) {
-      console.log('⚠️ コンテキストクローズエラー:', error.message);
-    }
-  }
+  }, `スクリーンショット撮影: ${url}`, 3);
 }
 
 /**
@@ -1725,20 +1903,21 @@ async function autoScrollToBottom(page) {
  * 高精度画像比較
  */
 async function compareHighPrecisionScreenshots(siteId, device, threshold = 2.0) {
-  const baselineDir = path.join(SCREENSHOTS_DIR, siteId, 'baseline', device);
-  const afterDir = path.join(SCREENSHOTS_DIR, siteId, 'after', device);
+  return await errorHandler.executeWithRetry(async () => {
+    const baselineDir = path.join(SCREENSHOTS_DIR, siteId, 'baseline', device);
+    const afterDir = path.join(SCREENSHOTS_DIR, siteId, 'after', device);
 
-  if (!fs.existsSync(baselineDir) || !fs.existsSync(afterDir)) {
-    throw new Error('Baseline または After スクリーンショットが見つかりません');
-  }
+    if (!fs.existsSync(baselineDir) || !fs.existsSync(afterDir)) {
+      throw new VRTError('Baseline または After スクリーンショットが見つかりません', 'MISSING_BASELINE');
+    }
 
-  // ページペアでファイルを取得
-  const baselineFiles = fs.readdirSync(baselineDir).filter(f => f.endsWith('.png'));
-  const afterFiles = fs.readdirSync(afterDir).filter(f => f.endsWith('.png'));
+    // ページペアでファイルを取得
+    const baselineFiles = fs.readdirSync(baselineDir).filter(f => f.endsWith('.png'));
+    const afterFiles = fs.readdirSync(afterDir).filter(f => f.endsWith('.png'));
 
-  if (baselineFiles.length === 0 || afterFiles.length === 0) {
-    throw new Error('比較対象のスクリーンショットファイルが見つかりません');
-  }
+    if (baselineFiles.length === 0 || afterFiles.length === 0) {
+      throw new VRTError('比較対象のスクリーンショットファイルが見つかりません', 'MISSING_BASELINE');
+    }
 
   // 同じページIDのファイルペアを見つける
   let baselineFile = null;
@@ -1764,19 +1943,33 @@ async function compareHighPrecisionScreenshots(siteId, device, threshold = 2.0) 
     }
   }
 
-  if (!baselineFile || !afterFile) {
-    throw new Error('対応するページペアが見つかりません');
-  }
+    if (!baselineFile || !afterFile) {
+      throw new VRTError('対応するページペアが見つかりません', 'MISSING_BASELINE');
+    }
 
-  const baselinePath = path.join(baselineDir, baselineFile);
-  const afterPath = path.join(afterDir, afterFile);
+    const baselinePath = path.join(baselineDir, baselineFile);
+    const afterPath = path.join(afterDir, afterFile);
 
-  // 画像読み込み
-  const baselineBuffer = fs.readFileSync(baselinePath);
-  const afterBuffer = fs.readFileSync(afterPath);
+    // 画像読み込み（エラーハンドリング強化）
+    let baselineBuffer, afterBuffer;
+    try {
+      baselineBuffer = fs.readFileSync(baselinePath);
+      afterBuffer = fs.readFileSync(afterPath);
+    } catch (error) {
+      const errorResult = await errorHandler.handleComparisonError(error, siteId, device);
+      if (errorResult.status === 'ERROR') {
+        throw new VRTError(errorResult.message, 'CORRUPTED_IMAGE');
+      }
+      throw error;
+    }
 
-  const baselinePng = PNG.sync.read(baselineBuffer);
-  const afterPng = PNG.sync.read(afterBuffer);
+    let baselinePng, afterPng;
+    try {
+      baselinePng = PNG.sync.read(baselineBuffer);
+      afterPng = PNG.sync.read(afterBuffer);
+    } catch (error) {
+      throw new VRTError(`画像形式が不正です: ${error.message}`, 'CORRUPTED_IMAGE');
+    }
 
   // サイズ調整
   const maxWidth = Math.max(baselinePng.width, afterPng.width);
@@ -1842,20 +2035,43 @@ async function compareHighPrecisionScreenshots(siteId, device, threshold = 2.0) 
 
   console.log(`${status === 'NG' ? '⚠️' : '✅'} 比較結果: ${preciseDiffPercentage.toFixed(6)}% (${diffPixels}px) [闾値: ${threshold}%]`);
 
-  return {
-    siteId,
-    device,
-    baselineFile,
-    afterFile,
-    diffFile: diffFilename,
-    diffPath: `/diffs/${siteId}/${device}/threshold-${threshold}/${diffFilename}`,
-    diffPixels,
-    diffPercentage: preciseDiffPercentage,  // 高精度値を返す
-    status,
-    threshold,
-    timestamp: new Date().toISOString(),
-    dimensions: { width: maxWidth, height: maxHeight }
-  };
+    const result = {
+      siteId,
+      device,
+      baselineFile,
+      afterFile,
+      diffFile: diffFilename,
+      diffPath: `/diffs/${siteId}/${device}/threshold-${threshold}/${diffFilename}`,
+      diffPixels,
+      diffPercentage: preciseDiffPercentage,  // 高精度値を返す
+      status,
+      threshold,
+      timestamp: new Date().toISOString(),
+      dimensions: { width: maxWidth, height: maxHeight }
+    };
+
+    // データベースに結果を保存
+    try {
+      await database.saveComparisonResult({
+        siteId,
+        device,
+        status,
+        diffPercentage: preciseDiffPercentage,
+        diffPixels,
+        threshold,
+        baselineFile,
+        afterFile,
+        diffFile: diffFilename,
+        metadata: {
+          dimensions: { width: maxWidth, height: maxHeight }
+        }
+      });
+    } catch (dbError) {
+      console.log('⚠️ DB保存エラー:', dbError.message);
+    }
+
+    return result;
+  }, `画像比較: ${siteId}/${device}`, 2);
 }
 
 /**
