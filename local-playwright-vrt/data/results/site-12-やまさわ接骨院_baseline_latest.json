@@ -1,0 +1,78 @@
+{
+  "timestamp": "2025-09-05T04:21:58.336Z",
+  "type": "baseline",
+  "siteId": "site-12-やまさわ接骨院",
+  "siteName": "やまさわ接骨院",
+  "device": "desktop",
+  "captureCount": 6,
+  "captureResults": [
+    {
+      "url": "https://yamasawa-sekkotsuin.jp/",
+      "filename": "page-001_top_2025-09-05T04-21-07-292Z.png",
+      "timestamp": "2025-09-05T04:21:57.878Z"
+    },
+    {
+      "url": "https://yamasawa-sekkotsuin.jp/store/",
+      "filename": "page-002_store_2025-09-05T04-21-07-292Z.png",
+      "timestamp": "2025-09-05T04:21:30.928Z"
+    },
+    {
+      "url": "https://yamasawa-sekkotsuin.jp/equipment/",
+      "filename": "page-003_equipment_2025-09-05T04-21-07-292Z.png",
+      "timestamp": "2025-09-05T04:21:30.935Z"
+    },
+    {
+      "url": "https://yamasawa-sekkotsuin.jp/interview/",
+      "filename": "page-004_interview_2025-09-05T04-21-07-292Z.png",
+      "timestamp": "2025-09-05T04:21:35.308Z"
+    },
+    {
+      "url": "https://yamasawa-sekkotsuin.jp/privacy-policy/",
+      "filename": "page-005_privacy-policy_2025-09-05T04-21-07-292Z.png",
+      "timestamp": "2025-09-05T04:21:31.944Z"
+    },
+    {
+      "url": "https://yamasawa-sekkotsuin.jp/term/",
+      "filename": "page-006_term_2025-09-05T04-21-07-292Z.png",
+      "timestamp": "2025-09-05T04:21:33.057Z"
+    }
+  ],
+  "pages": [
+    {
+      "url": "https://yamasawa-sekkotsuin.jp/",
+      "pageId": "001",
+      "identifier": "top",
+      "title": "やまさわ接骨院"
+    },
+    {
+      "url": "https://yamasawa-sekkotsuin.jp/store/",
+      "pageId": "002",
+      "identifier": "store",
+      "title": "店舗情報 – やまさわ接骨院"
+    },
+    {
+      "url": "https://yamasawa-sekkotsuin.jp/equipment/",
+      "pageId": "003",
+      "identifier": "equipment",
+      "title": "器具紹介 – やまさわ接骨院"
+    },
+    {
+      "url": "https://yamasawa-sekkotsuin.jp/interview/",
+      "pageId": "004",
+      "identifier": "interview",
+      "title": "インタビュー – やまさわ接骨院"
+    },
+    {
+      "url": "https://yamasawa-sekkotsuin.jp/privacy-policy/",
+      "pageId": "005",
+      "identifier": "privacy-policy",
+      "title": "プライバシーポリシー – やまさわ接骨院"
+    },
+    {
+      "url": "https://yamasawa-sekkotsuin.jp/term/",
+      "pageId": "006",
+      "identifier": "term",
+      "title": "利用規約 – やまさわ接骨院"
+    }
+  ]
+}

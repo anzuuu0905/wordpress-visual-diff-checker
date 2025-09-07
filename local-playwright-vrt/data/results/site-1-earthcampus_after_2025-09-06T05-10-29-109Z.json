@@ -1,0 +1,312 @@
+{
+  "timestamp": "2025-09-06T05:10:29.109Z",
+  "type": "after",
+  "siteId": "site-1-earthcampus",
+  "siteName": "earthcampus",
+  "device": "desktop",
+  "threshold": 2,
+  "captureCount": 20,
+  "captureResults": [
+    {
+      "url": "https://earthcampus.co.jp/",
+      "filename": "page-001_top_2025-09-06T05-07-17-483Z.png",
+      "timestamp": "2025-09-06T05:07:58.911Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/works/",
+      "filename": "page-002_works_2025-09-06T05-07-17-483Z.png",
+      "timestamp": "2025-09-06T05:08:11.072Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/about/",
+      "filename": "page-003_about_2025-09-06T05-07-17-483Z.png",
+      "timestamp": "2025-09-06T05:07:55.324Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/member/",
+      "filename": "page-004_member_2025-09-06T05-07-17-483Z.png",
+      "timestamp": "2025-09-06T05:07:47.200Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/category/news/",
+      "filename": "page-005_category-news_2025-09-06T05-07-17-483Z.png",
+      "timestamp": "2025-09-06T05:07:45.448Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/category/journal/",
+      "filename": "page-006_category-journal_2025-09-06T05-07-17-483Z.png",
+      "timestamp": "2025-09-06T05:07:46.922Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/recruit/",
+      "filename": "page-007_recruit_2025-09-06T05-07-17-483Z.png",
+      "timestamp": "2025-09-06T05:07:45.496Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/contact/",
+      "filename": "page-008_contact_2025-09-06T05-07-17-483Z.png",
+      "timestamp": "2025-09-06T05:07:56.131Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/nafudel/",
+      "filename": "page-009_nafudel_2025-09-06T05-07-17-483Z.png",
+      "timestamp": "2025-09-06T05:07:48.417Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/works/meijiyu/",
+      "filename": "page-010_works-meijiyu_2025-09-06T05-07-17-483Z.png",
+      "timestamp": "2025-09-06T05:07:55.213Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/works/manzara/",
+      "filename": "page-011_works-manzara_2025-09-06T05-07-17-483Z.png",
+      "timestamp": "2025-09-06T05:09:09.316Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/works/oudon-hajime/",
+      "filename": "page-012_works-oudon-hajime_2025-09-06T05-07-17-483Z.png",
+      "timestamp": "2025-09-06T05:07:51.535Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/works/kyotosi-teijuiju-logo/",
+      "filename": "page-013_works-kyotosi-teijuiju-logo_2025-09-06T05-07-17-483Z.png",
+      "timestamp": "2025-09-06T05:09:39.750Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/works/2025-ehimefc/",
+      "filename": "page-014_works-2025-ehimefc_2025-09-06T05-07-17-483Z.png",
+      "timestamp": "2025-09-06T05:10:19.426Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/works/%e3%82%b0%e3%83%aa%e3%83%a0%e6%9c%ac%e7%a4%be/",
+      "filename": "page-015_works--e3-82-b0-e3-83-aa-e3-83_2025-09-06T05-07-17-483Z.png",
+      "timestamp": "2025-09-06T05:09:37.851Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/instagram-tech-location/",
+      "filename": "page-016_instagram-tech-location_2025-09-06T05-07-17-483Z.png",
+      "timestamp": "2025-09-06T05:10:02.351Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/instagram-tech-reserve/",
+      "filename": "page-017_instagram-tech-reserve_2025-09-06T05-07-17-483Z.png",
+      "timestamp": "2025-09-06T05:09:44.585Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/hidden-cost-of-outsourcing/",
+      "filename": "page-018_hidden-cost-of-outsourcing_2025-09-06T05-07-17-483Z.png",
+      "timestamp": "2025-09-06T05:09:47.942Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/designing-your-first-step/",
+      "filename": "page-019_designing-your-first-step_2025-09-06T05-07-17-483Z.png",
+      "timestamp": "2025-09-06T05:09:46.272Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/solving-budget-worries/",
+      "filename": "page-020_solving-budget-worries_2025-09-06T05-07-17-483Z.png",
+      "timestamp": "2025-09-06T05:09:42.691Z"
+    }
+  ],
+  "compareResults": {
+    "siteId": "site-1-earthcampus",
+    "device": "desktop",
+    "summary": {
+      "totalPages": 24,
+      "ok": 3,
+      "ng": 1,
+      "error": 20,
+      "threshold": 2
+    },
+    "results": [
+      {
+        "pageId": "001",
+        "pageIdentifier": "top",
+        "error": "unrecognised content at end of stream",
+        "status": "ERROR"
+      },
+      {
+        "pageId": "002",
+        "pageIdentifier": "works",
+        "error": "unrecognised content at end of stream",
+        "status": "ERROR"
+      },
+      {
+        "pageId": "003",
+        "pageIdentifier": "about",
+        "error": "unrecognised content at end of stream",
+        "status": "ERROR"
+      },
+      {
+        "pageId": "004",
+        "pageIdentifier": "member",
+        "error": "unrecognised content at end of stream",
+        "status": "ERROR"
+      },
+      {
+        "pageId": "005",
+        "pageIdentifier": "category-news",
+        "error": "unrecognised content at end of stream",
+        "status": "ERROR"
+      },
+      {
+        "pageId": "006",
+        "pageIdentifier": "category-journal",
+        "error": "unrecognised content at end of stream",
+        "status": "ERROR"
+      },
+      {
+        "pageId": "007",
+        "pageIdentifier": "recruit",
+        "error": "unrecognised content at end of stream",
+        "status": "ERROR"
+      },
+      {
+        "pageId": "008",
+        "pageIdentifier": "contact",
+        "error": "unrecognised content at end of stream",
+        "status": "ERROR"
+      },
+      {
+        "pageId": "009",
+        "pageIdentifier": "nafudel",
+        "error": "unrecognised content at end of stream",
+        "status": "ERROR"
+      },
+      {
+        "pageId": "010",
+        "pageIdentifier": "works-meijiyu",
+        "error": "unrecognised content at end of stream",
+        "status": "ERROR"
+      },
+      {
+        "pageId": "011",
+        "pageIdentifier": "works-manzara",
+        "error": "unrecognised content at end of stream",
+        "status": "ERROR"
+      },
+      {
+        "pageId": "012",
+        "pageIdentifier": "works-oudon-hajime",
+        "error": "unrecognised content at end of stream",
+        "status": "ERROR"
+      },
+      {
+        "pageId": "013",
+        "pageIdentifier": "works-kyotosi-teijuiju-logo",
+        "error": "unrecognised content at end of stream",
+        "status": "ERROR"
+      },
+      {
+        "pageId": "013",
+        "pageIdentifier": "works-miyazu-public-relations",
+        "baselineFile": "page-013_works-miyazu-public-relations_2025-07-22T02-15-22-794Z.png",
+        "afterFile": "page-013_works-miyazu-public-relations_2025-07-22T02-22-43-537Z.png",
+        "baselineTimestamp": "2025-07-22T02-15-22-794Z",
+        "afterTimestamp": "2025-07-22T02-22-43-537Z",
+        "diffPath": "/diffs/site-1-earthcampus/desktop/threshold-2/page-013_works-miyazu-public-relations_2025-09-06T05-10-20-732Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 6004
+        }
+      },
+      {
+        "pageId": "014",
+        "pageIdentifier": "works-2025-ehimefc",
+        "error": "unrecognised content at end of stream",
+        "status": "ERROR"
+      },
+      {
+        "pageId": "014",
+        "pageIdentifier": "works-tobemori-seeds",
+        "baselineFile": "page-014_works-tobemori-seeds_2025-07-22T02-15-22-794Z.png",
+        "afterFile": "page-014_works-tobemori-seeds_2025-07-22T02-22-43-537Z.png",
+        "baselineTimestamp": "2025-07-22T02-15-22-794Z",
+        "afterTimestamp": "2025-07-22T02-22-43-537Z",
+        "diffPath": "/diffs/site-1-earthcampus/desktop/threshold-2/page-014_works-tobemori-seeds_2025-09-06T05-10-23-350Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 6281
+        }
+      },
+      {
+        "pageId": "015",
+        "pageIdentifier": "works--e3-82-b0-e3-83-aa-e3-83",
+        "error": "unrecognised content at end of stream",
+        "status": "ERROR"
+      },
+      {
+        "pageId": "015",
+        "pageIdentifier": "works-nutram-japan",
+        "baselineFile": "page-015_works-nutram-japan_2025-07-22T02-15-22-794Z.png",
+        "afterFile": "page-015_works-nutram-japan_2025-07-22T02-22-43-537Z.png",
+        "baselineTimestamp": "2025-07-22T02-15-22-794Z",
+        "afterTimestamp": "2025-07-22T02-22-43-537Z",
+        "diffPath": "/diffs/site-1-earthcampus/desktop/threshold-2/page-015_works-nutram-japan_2025-09-06T05-10-26-238Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 6999
+        }
+      },
+      {
+        "pageId": "016",
+        "pageIdentifier": "instagram-tech-location",
+        "error": "unrecognised content at end of stream",
+        "status": "ERROR"
+      },
+      {
+        "pageId": "017",
+        "pageIdentifier": "instagram-tech-reserve",
+        "error": "unrecognised content at end of stream",
+        "status": "ERROR"
+      },
+      {
+        "pageId": "018",
+        "pageIdentifier": "hidden-cost-of-outsourcing",
+        "error": "unrecognised content at end of stream",
+        "status": "ERROR"
+      },
+      {
+        "pageId": "019",
+        "pageIdentifier": "designing-your-first-step",
+        "error": "unrecognised content at end of stream",
+        "status": "ERROR"
+      },
+      {
+        "pageId": "019",
+        "pageIdentifier": "note03-satoryo",
+        "baselineFile": "page-019_note03-satoryo_2025-09-02T05-02-15-078Z.png",
+        "afterFile": "page-020_note03-satoryo_2025-09-02T05-14-41-953Z.png",
+        "baselineTimestamp": "2025-09-02T05-02-15-078Z",
+        "afterTimestamp": "2025-09-02T05-14-41-953Z",
+        "diffPath": "/diffs/site-1-earthcampus/desktop/threshold-2/page-019_note03-satoryo_2025-09-06T05-10-28-642Z_diff-48.7587%.png",
+        "diffPixels": 1936929,
+        "diffPercentage": 48.758685,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2069
+        }
+      },
+      {
+        "pageId": "020",
+        "pageIdentifier": "solving-budget-worries",
+        "error": "unrecognised content at end of stream",
+        "status": "ERROR"
+      }
+    ]
+  }
+}

@@ -1,0 +1,425 @@
+{
+  "timestamp": "2025-09-05T09:38:26.108Z",
+  "type": "after",
+  "siteId": "site-14-台湾蔬食楽膳オンラインショップ",
+  "siteName": "台湾蔬食 楽膳 オンラインショップ",
+  "device": "desktop",
+  "threshold": 2,
+  "captureCount": 19,
+  "captureResults": [
+    {
+      "url": "https://vegan-rakuzen.com/",
+      "filename": "page-001_top_2025-09-05T09-32-12-374Z.png",
+      "timestamp": "2025-09-05T09:32:48.614Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/about/",
+      "filename": "page-002_about_2025-09-05T09-32-12-374Z.png",
+      "timestamp": "2025-09-05T09:32:39.211Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/bento-list/",
+      "filename": "page-003_bento-list_2025-09-05T09-32-12-374Z.png",
+      "timestamp": "2025-09-05T09:32:42.380Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/voice/",
+      "filename": "page-004_voice_2025-09-05T09-32-12-374Z.png",
+      "timestamp": "2025-09-05T09:32:41.401Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/contact/",
+      "filename": "page-005_contact_2025-09-05T09-32-12-374Z.png",
+      "timestamp": "2025-09-05T09:32:36.948Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/cancel-policy/",
+      "filename": "page-006_cancel-policy_2025-09-05T09-32-12-374Z.png",
+      "timestamp": "2025-09-05T09:32:36.635Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/cart/",
+      "filename": "page-007_cart_2025-09-05T09-32-12-374Z.png",
+      "timestamp": "2025-09-05T09:32:36.947Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/privacy-policy/",
+      "filename": "page-008_privacy-policy_2025-09-05T09-32-12-374Z.png",
+      "timestamp": "2025-09-05T09:32:39.842Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/terms/",
+      "filename": "page-009_terms_2025-09-05T09-32-12-374Z.png",
+      "timestamp": "2025-09-05T09:33:17.534Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/law/",
+      "filename": "page-010_law_2025-09-05T09-32-12-374Z.png",
+      "timestamp": "2025-09-05T09:33:13.208Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/shop/",
+      "filename": "page-012_shop_2025-09-05T09-32-12-374Z.png",
+      "timestamp": "2025-09-05T09:33:17.126Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/wp-content/uploads/2022/11/7960356c3c5e89618640f2a5473bbe29.jpg",
+      "filename": "page-013_wp-content-uploads-2022-11-796_2025-09-05T09-32-12-374Z.png",
+      "timestamp": "2025-09-05T09:33:01.331Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product-category/bento/wappa/",
+      "filename": "page-014_product-category-bento-wappa_2025-09-05T09-32-12-374Z.png",
+      "timestamp": "2025-09-05T09:33:14.537Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product-category/bento/vegan/",
+      "filename": "page-015_product-category-bento-vegan_2025-09-05T09-32-12-374Z.png",
+      "timestamp": "2025-09-05T09:33:16.627Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product-category/okara-konnyaku/",
+      "filename": "page-016_product-category-okara-konnyak_2025-09-05T09-32-12-374Z.png",
+      "timestamp": "2025-09-05T09:33:13.443Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product-category/bento/",
+      "filename": "page-017_product-category-bento_2025-09-05T09-32-12-374Z.png",
+      "timestamp": "2025-09-05T09:37:20.872Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product-category/bento/irodori-wappa/",
+      "filename": "page-018_product-category-bento-irodori_2025-09-05T09-32-12-374Z.png",
+      "timestamp": "2025-09-05T09:37:19.121Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product-category/bento/box/",
+      "filename": "page-019_product-category-bento-box_2025-09-05T09-32-12-374Z.png",
+      "timestamp": "2025-09-05T09:37:21.120Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product-category/bento/soup/",
+      "filename": "page-020_product-category-bento-soup_2025-09-05T09-32-12-374Z.png",
+      "timestamp": "2025-09-05T09:37:17.614Z"
+    }
+  ],
+  "compareResults": {
+    "siteId": "site-14-台湾蔬食楽膳オンラインショップ",
+    "device": "desktop",
+    "summary": {
+      "totalPages": 18,
+      "ok": 0,
+      "ng": 18,
+      "error": 0,
+      "threshold": 2
+    },
+    "results": [
+      {
+        "pageId": "001",
+        "pageIdentifier": "top",
+        "baselineFile": "page-001_top_2025-09-05T04-21-31-063Z.png",
+        "afterFile": "page-001_top_2025-09-05T09-32-12-374Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-31-063Z",
+        "afterTimestamp": "2025-09-05T09-32-12-374Z",
+        "diffPath": "/diffs/site-14-台湾蔬食楽膳オンラインショップ/desktop/threshold-2/page-001_top_2025-09-05T09-37-31-151Z_diff-52.861%.png",
+        "diffPixels": 17626324,
+        "diffPercentage": 52.861042,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 2880,
+          "height": 11578
+        }
+      },
+      {
+        "pageId": "002",
+        "pageIdentifier": "about",
+        "baselineFile": "page-002_about_2025-09-05T04-21-31-063Z.png",
+        "afterFile": "page-002_about_2025-09-05T09-32-12-374Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-31-063Z",
+        "afterTimestamp": "2025-09-05T09-32-12-374Z",
+        "diffPath": "/diffs/site-14-台湾蔬食楽膳オンラインショップ/desktop/threshold-2/page-002_about_2025-09-05T09-37-40-631Z_diff-81.6187%.png",
+        "diffPixels": 6398382,
+        "diffPercentage": 81.618678,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 4083
+        }
+      },
+      {
+        "pageId": "003",
+        "pageIdentifier": "bento-list",
+        "baselineFile": "page-003_bento-list_2025-09-05T04-21-31-063Z.png",
+        "afterFile": "page-003_bento-list_2025-09-05T09-32-12-374Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-31-063Z",
+        "afterTimestamp": "2025-09-05T09-32-12-374Z",
+        "diffPath": "/diffs/site-14-台湾蔬食楽膳オンラインショップ/desktop/threshold-2/page-003_bento-list_2025-09-05T09-37-45-161Z_diff-33.6716%.png",
+        "diffPixels": 4230020,
+        "diffPercentage": 33.67164,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 6543
+        }
+      },
+      {
+        "pageId": "004",
+        "pageIdentifier": "product--e3-81-8a-e3-81-8b-e3-",
+        "baselineFile": "page-004_product--e3-81-8a-e3-81-8b-e3-_2025-09-05T04-21-31-063Z.png",
+        "afterFile": "page-004_product--e3-81-8a-e3-81-8b-e3-_2025-09-05T05-27-11-953Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-31-063Z",
+        "afterTimestamp": "2025-09-05T05-27-11-953Z",
+        "diffPath": "/diffs/site-14-台湾蔬食楽膳オンラインショップ/desktop/threshold-2/page-004_product--e3-81-8a-e3-81-8b-e3-_2025-09-05T09-37-49-337Z_diff-50.7424%.png",
+        "diffPixels": 2885740,
+        "diffPercentage": 50.74239,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2962
+        }
+      },
+      {
+        "pageId": "005",
+        "pageIdentifier": "voice",
+        "baselineFile": "page-005_voice_2025-09-05T04-21-31-063Z.png",
+        "afterFile": "page-004_voice_2025-09-05T09-32-12-374Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-31-063Z",
+        "afterTimestamp": "2025-09-05T09-32-12-374Z",
+        "diffPath": "/diffs/site-14-台湾蔬食楽膳オンラインショップ/desktop/threshold-2/page-005_voice_2025-09-05T09-37-53-837Z_diff-27.1846%.png",
+        "diffPixels": 2940111,
+        "diffPercentage": 27.184587,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 5633
+        }
+      },
+      {
+        "pageId": "006",
+        "pageIdentifier": "contact",
+        "baselineFile": "page-006_contact_2025-09-05T04-21-31-063Z.png",
+        "afterFile": "page-005_contact_2025-09-05T09-32-12-374Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-31-063Z",
+        "afterTimestamp": "2025-09-05T09-32-12-374Z",
+        "diffPath": "/diffs/site-14-台湾蔬食楽膳オンラインショップ/desktop/threshold-2/page-006_contact_2025-09-05T09-37-56-408Z_diff-29.203%.png",
+        "diffPixels": 1164570,
+        "diffPercentage": 29.202998,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1951,
+          "height": 2044
+        }
+      },
+      {
+        "pageId": "007",
+        "pageIdentifier": "cancel-policy",
+        "baselineFile": "page-007_cancel-policy_2025-09-05T04-21-31-063Z.png",
+        "afterFile": "page-006_cancel-policy_2025-09-05T09-32-12-374Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-31-063Z",
+        "afterTimestamp": "2025-09-05T09-32-12-374Z",
+        "diffPath": "/diffs/site-14-台湾蔬食楽膳オンラインショップ/desktop/threshold-2/page-007_cancel-policy_2025-09-05T09-37-57-781Z_diff-18.5896%.png",
+        "diffPixels": 562150,
+        "diffPercentage": 18.589616,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1575
+        }
+      },
+      {
+        "pageId": "008",
+        "pageIdentifier": "cart",
+        "baselineFile": "page-008_cart_2025-09-05T04-21-31-063Z.png",
+        "afterFile": "page-007_cart_2025-09-05T09-32-12-374Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-31-063Z",
+        "afterTimestamp": "2025-09-05T09-32-12-374Z",
+        "diffPath": "/diffs/site-14-台湾蔬食楽膳オンラインショップ/desktop/threshold-2/page-008_cart_2025-09-05T09-37-58-599Z_diff-9.391%.png",
+        "diffPixels": 194732,
+        "diffPercentage": 9.391011,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "pageId": "009",
+        "pageIdentifier": "product--e5-8f-b0-e6-b9-be-e9-",
+        "baselineFile": "page-009_product--e5-8f-b0-e6-b9-be-e9-_2025-09-05T04-21-31-063Z.png",
+        "afterFile": "page-009_product--e5-8f-b0-e6-b9-be-e9-_2025-09-05T05-27-11-953Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-31-063Z",
+        "afterTimestamp": "2025-09-05T05-27-11-953Z",
+        "diffPath": "/diffs/site-14-台湾蔬食楽膳オンラインショップ/desktop/threshold-2/page-009_product--e5-8f-b0-e6-b9-be-e9-_2025-09-05T09-38-00-345Z_diff-34.6628%.png",
+        "diffPixels": 3308325,
+        "diffPercentage": 34.662763,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 4971
+        }
+      },
+      {
+        "pageId": "010",
+        "pageIdentifier": "product-4-e7-a8-ae-e3-81-ae-e3",
+        "baselineFile": "page-010_product-4-e7-a8-ae-e3-81-ae-e3_2025-09-05T04-21-31-063Z.png",
+        "afterFile": "page-010_product-4-e7-a8-ae-e3-81-ae-e3_2025-09-05T05-27-11-953Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-31-063Z",
+        "afterTimestamp": "2025-09-05T05-27-11-953Z",
+        "diffPath": "/diffs/site-14-台湾蔬食楽膳オンラインショップ/desktop/threshold-2/page-010_product-4-e7-a8-ae-e3-81-ae-e3_2025-09-05T09-38-02-690Z_diff-46.8852%.png",
+        "diffPixels": 3098476,
+        "diffPercentage": 46.885229,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 3442
+        }
+      },
+      {
+        "pageId": "011",
+        "pageIdentifier": "product-3-e7-a8-ae-e3-81-ae-e3",
+        "baselineFile": "page-011_product-3-e7-a8-ae-e3-81-ae-e3_2025-09-05T04-21-31-063Z.png",
+        "afterFile": "page-011_product-3-e7-a8-ae-e3-81-ae-e3_2025-09-05T05-27-11-953Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-31-063Z",
+        "afterTimestamp": "2025-09-05T05-27-11-953Z",
+        "diffPath": "/diffs/site-14-台湾蔬食楽膳オンラインショップ/desktop/threshold-2/page-011_product-3-e7-a8-ae-e3-81-ae-e3_2025-09-05T09-38-05-594Z_diff-34.2401%.png",
+        "diffPixels": 3294280,
+        "diffPercentage": 34.240088,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 5011
+        }
+      },
+      {
+        "pageId": "013",
+        "pageIdentifier": "product--e8-96-ac-e8-86-b3-e3-",
+        "baselineFile": "page-013_product--e8-96-ac-e8-86-b3-e3-_2025-09-05T04-21-31-063Z.png",
+        "afterFile": "page-013_product--e8-96-ac-e8-86-b3-e3-_2025-09-05T05-27-11-953Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-31-063Z",
+        "afterTimestamp": "2025-09-05T05-27-11-953Z",
+        "diffPath": "/diffs/site-14-台湾蔬食楽膳オンラインショップ/desktop/threshold-2/page-013_product--e8-96-ac-e8-86-b3-e3-_2025-09-05T09-38-09-544Z_diff-35.7249%.png",
+        "diffPixels": 3258800,
+        "diffPercentage": 35.724935,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 4751
+        }
+      },
+      {
+        "pageId": "014",
+        "pageIdentifier": "product--e8-87-aa-e5-ae-b6-e8-",
+        "baselineFile": "page-014_product--e8-87-aa-e5-ae-b6-e8-_2025-09-05T04-21-31-063Z.png",
+        "afterFile": "page-014_product--e8-87-aa-e5-ae-b6-e8-_2025-09-05T05-27-11-953Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-31-063Z",
+        "afterTimestamp": "2025-09-05T05-27-11-953Z",
+        "diffPath": "/diffs/site-14-台湾蔬食楽膳オンラインショップ/desktop/threshold-2/page-014_product--e8-87-aa-e5-ae-b6-e8-_2025-09-05T09-38-12-743Z_diff-31.7529%.png",
+        "diffPixels": 3334209,
+        "diffPercentage": 31.75292,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 5469
+        }
+      },
+      {
+        "pageId": "015",
+        "pageIdentifier": "product--e6-bf-83-e5-8e-9a-e3-",
+        "baselineFile": "page-015_product--e6-bf-83-e5-8e-9a-e3-_2025-09-05T04-21-31-063Z.png",
+        "afterFile": "page-015_product--e6-bf-83-e5-8e-9a-e3-_2025-09-05T05-27-11-953Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-31-063Z",
+        "afterTimestamp": "2025-09-05T05-27-11-953Z",
+        "diffPath": "/diffs/site-14-台湾蔬食楽膳オンラインショップ/desktop/threshold-2/page-015_product--e6-bf-83-e5-8e-9a-e3-_2025-09-05T09-38-16-044Z_diff-33.7942%.png",
+        "diffPixels": 3273438,
+        "diffPercentage": 33.794165,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 5045
+        }
+      },
+      {
+        "pageId": "016",
+        "pageIdentifier": "privacy-policy",
+        "baselineFile": "page-016_privacy-policy_2025-09-05T04-21-31-063Z.png",
+        "afterFile": "page-008_privacy-policy_2025-09-05T09-32-12-374Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-31-063Z",
+        "afterTimestamp": "2025-09-05T09-32-12-374Z",
+        "diffPath": "/diffs/site-14-台湾蔬食楽膳オンラインショップ/desktop/threshold-2/page-016_privacy-policy_2025-09-05T09-38-19-394Z_diff-24.0203%.png",
+        "diffPixels": 1873356,
+        "diffPercentage": 24.020341,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 4062
+        }
+      },
+      {
+        "pageId": "017",
+        "pageIdentifier": "terms",
+        "baselineFile": "page-017_terms_2025-09-05T04-21-31-063Z.png",
+        "afterFile": "page-009_terms_2025-09-05T09-32-12-374Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-31-063Z",
+        "afterTimestamp": "2025-09-05T09-32-12-374Z",
+        "diffPath": "/diffs/site-14-台湾蔬食楽膳オンラインショップ/desktop/threshold-2/page-017_terms_2025-09-05T09-38-22-519Z_diff-26.9268%.png",
+        "diffPixels": 2708538,
+        "diffPercentage": 26.926835,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 5239
+        }
+      },
+      {
+        "pageId": "018",
+        "pageIdentifier": "law",
+        "baselineFile": "page-018_law_2025-09-05T04-21-31-063Z.png",
+        "afterFile": "page-010_law_2025-09-05T09-32-12-374Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-31-063Z",
+        "afterTimestamp": "2025-09-05T09-32-12-374Z",
+        "diffPath": "/diffs/site-14-台湾蔬食楽膳オンラインショップ/desktop/threshold-2/page-018_law_2025-09-05T09-38-24-282Z_diff-24.8514%.png",
+        "diffPixels": 917555,
+        "diffPercentage": 24.851442,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1923
+        }
+      },
+      {
+        "pageId": "020",
+        "pageIdentifier": "product--e9-ae-ad-e3-81-ae-e5-",
+        "baselineFile": "page-020_product--e9-ae-ad-e3-81-ae-e5-_2025-07-23T02-24-56-445Z.png",
+        "afterFile": "page-020_product--e9-ae-ad-e3-81-ae-e5-_2025-07-23T03-43-07-700Z.png",
+        "baselineTimestamp": "2025-07-23T02-24-56-445Z",
+        "afterTimestamp": "2025-07-23T03-43-07-700Z",
+        "diffPath": "/diffs/site-14-台湾蔬食楽膳オンラインショップ/desktop/threshold-2/page-020_product--e9-ae-ad-e3-81-ae-e5-_2025-09-05T09-38-25-473Z_diff-5.1166%.png",
+        "diffPixels": 270157,
+        "diffPercentage": 5.11661,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2750
+        }
+      }
+    ]
+  }
+}

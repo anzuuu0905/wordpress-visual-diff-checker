@@ -1,0 +1,464 @@
+{
+  "timestamp": "2025-09-05T09:52:45.217Z",
+  "type": "after",
+  "siteId": "site-21-ウルリア",
+  "siteName": "ウルリア",
+  "device": "desktop",
+  "threshold": 2,
+  "captureCount": 20,
+  "captureResults": [
+    {
+      "url": "https://ururia.com/",
+      "filename": "page-001_top_2025-09-05T09-50-54-677Z.png",
+      "timestamp": "2025-09-05T09:51:26.924Z"
+    },
+    {
+      "url": "https://ururia.com/herb-peeling/",
+      "filename": "page-002_herb-peeling_2025-09-05T09-50-54-677Z.png",
+      "timestamp": "2025-09-05T09:51:29.489Z"
+    },
+    {
+      "url": "https://ururia.com/other-machines/",
+      "filename": "page-003_other-machines_2025-09-05T09-50-54-677Z.png",
+      "timestamp": "2025-09-05T09:51:23.356Z"
+    },
+    {
+      "url": "https://ururia.com/introduction/",
+      "filename": "page-004_introduction_2025-09-05T09-50-54-677Z.png",
+      "timestamp": "2025-09-05T09:51:21.114Z"
+    },
+    {
+      "url": "https://ururia.com/salon/",
+      "filename": "page-005_salon_2025-09-05T09-50-54-677Z.png",
+      "timestamp": "2025-09-05T09:51:22.013Z"
+    },
+    {
+      "url": "https://ururia.com/cosmetic/",
+      "filename": "page-006_cosmetic_2025-09-05T09-50-54-677Z.png",
+      "timestamp": "2025-09-05T09:51:24.010Z"
+    },
+    {
+      "url": "https://ururia.com/contact/",
+      "filename": "page-007_contact_2025-09-05T09-50-54-677Z.png",
+      "timestamp": "2025-09-05T09:51:19.802Z"
+    },
+    {
+      "url": "https://ururia.com/my-account/",
+      "filename": "page-008_my-account_2025-09-05T09-50-54-677Z.png",
+      "timestamp": "2025-09-05T09:51:19.798Z"
+    },
+    {
+      "url": "https://ururia.com/medical-hifu/",
+      "filename": "page-009_medical-hifu_2025-09-05T09-50-54-677Z.png",
+      "timestamp": "2025-09-05T09:51:54.945Z"
+    },
+    {
+      "url": "https://ururia.com/news",
+      "filename": "page-010_news_2025-09-05T09-50-54-677Z.png",
+      "timestamp": "2025-09-05T09:51:54.943Z"
+    },
+    {
+      "url": "https://ururia.com/policy/",
+      "filename": "page-011_policy_2025-09-05T09-50-54-677Z.png",
+      "timestamp": "2025-09-05T09:51:54.940Z"
+    },
+    {
+      "url": "https://ururia.com/product-category/skincare/",
+      "filename": "page-012_product-category-skincare_2025-09-05T09-50-54-677Z.png",
+      "timestamp": "2025-09-05T09:51:57.805Z"
+    },
+    {
+      "url": "https://ururia.com/product-category/egeneration-factor-cysay/",
+      "filename": "page-013_product-category-egeneration-f_2025-09-05T09-50-54-677Z.png",
+      "timestamp": "2025-09-05T09:51:54.941Z"
+    },
+    {
+      "url": "https://ururia.com/product-category/nmn/",
+      "filename": "page-014_product-category-nmn_2025-09-05T09-50-54-677Z.png",
+      "timestamp": "2025-09-05T09:51:55.234Z"
+    },
+    {
+      "url": "https://ururia.com/product-category/make-up/",
+      "filename": "page-015_product-category-make-up_2025-09-05T09-50-54-677Z.png",
+      "timestamp": "2025-09-05T09:51:54.948Z"
+    },
+    {
+      "url": "https://ururia.com/product-category/supplement-healthyfood/",
+      "filename": "page-016_product-category-supplement-he_2025-09-05T09-50-54-677Z.png",
+      "timestamp": "2025-09-05T09:51:55.470Z"
+    },
+    {
+      "url": "https://ururia.com/product-category/salon-care/",
+      "filename": "page-017_product-category-salon-care_2025-09-05T09-50-54-677Z.png",
+      "timestamp": "2025-09-05T09:52:23.766Z"
+    },
+    {
+      "url": "https://ururia.com/my-account/lost-password/",
+      "filename": "page-018_my-account-lost-password_2025-09-05T09-50-54-677Z.png",
+      "timestamp": "2025-09-05T09:52:21.647Z"
+    },
+    {
+      "url": "https://ururia.com/privacy-policy/",
+      "filename": "page-019_privacy-policy_2025-09-05T09-50-54-677Z.png",
+      "timestamp": "2025-09-05T09:52:25.184Z"
+    },
+    {
+      "url": "https://ururia.com/shipping-policy/",
+      "filename": "page-020_shipping-policy_2025-09-05T09-50-54-677Z.png",
+      "timestamp": "2025-09-05T09:52:22.238Z"
+    }
+  ],
+  "compareResults": {
+    "siteId": "site-21-ウルリア",
+    "device": "desktop",
+    "summary": {
+      "totalPages": 20,
+      "ok": 20,
+      "ng": 0,
+      "error": 0,
+      "threshold": 2
+    },
+    "results": [
+      {
+        "pageId": "001",
+        "pageIdentifier": "top",
+        "baselineFile": "page-001_top_2025-07-28T01-07-39-145Z.png",
+        "afterFile": "page-001_top_2025-09-05T09-50-54-677Z.png",
+        "baselineTimestamp": "2025-07-28T01-07-39-145Z",
+        "afterTimestamp": "2025-09-05T09-50-54-677Z",
+        "diffPath": "/diffs/site-21-ウルリア/desktop/threshold-2/page-001_top_2025-09-05T09-52-25-914Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 4069
+        }
+      },
+      {
+        "pageId": "002",
+        "pageIdentifier": "herb-peeling",
+        "baselineFile": "page-002_herb-peeling_2025-07-28T01-07-39-145Z.png",
+        "afterFile": "page-002_herb-peeling_2025-09-05T09-50-54-677Z.png",
+        "baselineTimestamp": "2025-07-28T01-07-39-145Z",
+        "afterTimestamp": "2025-09-05T09-50-54-677Z",
+        "diffPath": "/diffs/site-21-ウルリア/desktop/threshold-2/page-002_herb-peeling_2025-09-05T09-52-28-443Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 8222
+        }
+      },
+      {
+        "pageId": "003",
+        "pageIdentifier": "other-machines",
+        "baselineFile": "page-003_other-machines_2025-07-28T01-07-39-145Z.png",
+        "afterFile": "page-003_other-machines_2025-09-05T09-50-54-677Z.png",
+        "baselineTimestamp": "2025-07-28T01-07-39-145Z",
+        "afterTimestamp": "2025-09-05T09-50-54-677Z",
+        "diffPath": "/diffs/site-21-ウルリア/desktop/threshold-2/page-003_other-machines_2025-09-05T09-52-31-042Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 3424
+        }
+      },
+      {
+        "pageId": "004",
+        "pageIdentifier": "introduction",
+        "baselineFile": "page-004_introduction_2025-07-28T01-07-39-145Z.png",
+        "afterFile": "page-004_introduction_2025-09-05T09-50-54-677Z.png",
+        "baselineTimestamp": "2025-07-28T01-07-39-145Z",
+        "afterTimestamp": "2025-09-05T09-50-54-677Z",
+        "diffPath": "/diffs/site-21-ウルリア/desktop/threshold-2/page-004_introduction_2025-09-05T09-52-32-227Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2327
+        }
+      },
+      {
+        "pageId": "005",
+        "pageIdentifier": "salon",
+        "baselineFile": "page-005_salon_2025-07-28T01-07-39-145Z.png",
+        "afterFile": "page-005_salon_2025-09-05T09-50-54-677Z.png",
+        "baselineTimestamp": "2025-07-28T01-07-39-145Z",
+        "afterTimestamp": "2025-09-05T09-50-54-677Z",
+        "diffPath": "/diffs/site-21-ウルリア/desktop/threshold-2/page-005_salon_2025-09-05T09-52-33-250Z_diff-0.0385%.png",
+        "diffPixels": 1840,
+        "diffPercentage": 0.038487,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2490
+        }
+      },
+      {
+        "pageId": "006",
+        "pageIdentifier": "cosmetic",
+        "baselineFile": "page-006_cosmetic_2025-07-28T01-07-39-145Z.png",
+        "afterFile": "page-006_cosmetic_2025-09-05T09-50-54-677Z.png",
+        "baselineTimestamp": "2025-07-28T01-07-39-145Z",
+        "afterTimestamp": "2025-09-05T09-50-54-677Z",
+        "diffPath": "/diffs/site-21-ウルリア/desktop/threshold-2/page-006_cosmetic_2025-09-05T09-52-34-191Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2175
+        }
+      },
+      {
+        "pageId": "007",
+        "pageIdentifier": "contact",
+        "baselineFile": "page-007_contact_2025-07-28T01-07-39-145Z.png",
+        "afterFile": "page-007_contact_2025-09-05T09-50-54-677Z.png",
+        "baselineTimestamp": "2025-07-28T01-07-39-145Z",
+        "afterTimestamp": "2025-09-05T09-50-54-677Z",
+        "diffPath": "/diffs/site-21-ウルリア/desktop/threshold-2/page-007_contact_2025-09-05T09-52-35-093Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1910
+        }
+      },
+      {
+        "pageId": "008",
+        "pageIdentifier": "my-account",
+        "baselineFile": "page-008_my-account_2025-07-28T01-07-39-145Z.png",
+        "afterFile": "page-008_my-account_2025-09-05T09-50-54-677Z.png",
+        "baselineTimestamp": "2025-07-28T01-07-39-145Z",
+        "afterTimestamp": "2025-09-05T09-50-54-677Z",
+        "diffPath": "/diffs/site-21-ウルリア/desktop/threshold-2/page-008_my-account_2025-09-05T09-52-35-836Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1195
+        }
+      },
+      {
+        "pageId": "009",
+        "pageIdentifier": "medical-hifu",
+        "baselineFile": "page-009_medical-hifu_2025-07-28T01-07-39-145Z.png",
+        "afterFile": "page-009_medical-hifu_2025-09-05T09-50-54-677Z.png",
+        "baselineTimestamp": "2025-07-28T01-07-39-145Z",
+        "afterTimestamp": "2025-09-05T09-50-54-677Z",
+        "diffPath": "/diffs/site-21-ウルリア/desktop/threshold-2/page-009_medical-hifu_2025-09-05T09-52-36-338Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "pageId": "010",
+        "pageIdentifier": "news",
+        "baselineFile": "page-010_news_2025-07-28T01-07-39-145Z.png",
+        "afterFile": "page-010_news_2025-09-05T09-50-54-677Z.png",
+        "baselineTimestamp": "2025-07-28T01-07-39-145Z",
+        "afterTimestamp": "2025-09-05T09-50-54-677Z",
+        "diffPath": "/diffs/site-21-ウルリア/desktop/threshold-2/page-010_news_2025-09-05T09-52-36-810Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "pageId": "011",
+        "pageIdentifier": "policy",
+        "baselineFile": "page-011_policy_2025-07-28T01-07-39-145Z.png",
+        "afterFile": "page-011_policy_2025-09-05T09-50-54-677Z.png",
+        "baselineTimestamp": "2025-07-28T01-07-39-145Z",
+        "afterTimestamp": "2025-09-05T09-50-54-677Z",
+        "diffPath": "/diffs/site-21-ウルリア/desktop/threshold-2/page-011_policy_2025-09-05T09-52-37-313Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "pageId": "012",
+        "pageIdentifier": "product-category-skincare",
+        "baselineFile": "page-012_product-category-skincare_2025-07-28T01-07-39-145Z.png",
+        "afterFile": "page-012_product-category-skincare_2025-09-05T09-50-54-677Z.png",
+        "baselineTimestamp": "2025-07-28T01-07-39-145Z",
+        "afterTimestamp": "2025-09-05T09-50-54-677Z",
+        "diffPath": "/diffs/site-21-ウルリア/desktop/threshold-2/page-012_product-category-skincare_2025-09-05T09-52-38-122Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 3160
+        }
+      },
+      {
+        "pageId": "013",
+        "pageIdentifier": "product-category-egeneration-f",
+        "baselineFile": "page-013_product-category-egeneration-f_2025-07-28T01-07-39-145Z.png",
+        "afterFile": "page-013_product-category-egeneration-f_2025-09-05T09-50-54-677Z.png",
+        "baselineTimestamp": "2025-07-28T01-07-39-145Z",
+        "afterTimestamp": "2025-09-05T09-50-54-677Z",
+        "diffPath": "/diffs/site-21-ウルリア/desktop/threshold-2/page-013_product-category-egeneration-f_2025-09-05T09-52-38-986Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "pageId": "014",
+        "pageIdentifier": "product-category-nmn",
+        "baselineFile": "page-014_product-category-nmn_2025-07-28T01-07-39-145Z.png",
+        "afterFile": "page-014_product-category-nmn_2025-09-05T09-50-54-677Z.png",
+        "baselineTimestamp": "2025-07-28T01-07-39-145Z",
+        "afterTimestamp": "2025-09-05T09-50-54-677Z",
+        "diffPath": "/diffs/site-21-ウルリア/desktop/threshold-2/page-014_product-category-nmn_2025-09-05T09-52-39-578Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "pageId": "015",
+        "pageIdentifier": "product-category-make-up",
+        "baselineFile": "page-015_product-category-make-up_2025-07-28T01-07-39-145Z.png",
+        "afterFile": "page-015_product-category-make-up_2025-09-05T09-50-54-677Z.png",
+        "baselineTimestamp": "2025-07-28T01-07-39-145Z",
+        "afterTimestamp": "2025-09-05T09-50-54-677Z",
+        "diffPath": "/diffs/site-21-ウルリア/desktop/threshold-2/page-015_product-category-make-up_2025-09-05T09-52-40-197Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "pageId": "016",
+        "pageIdentifier": "product-category-supplement-he",
+        "baselineFile": "page-016_product-category-supplement-he_2025-07-28T01-07-39-145Z.png",
+        "afterFile": "page-016_product-category-supplement-he_2025-09-05T09-50-54-677Z.png",
+        "baselineTimestamp": "2025-07-28T01-07-39-145Z",
+        "afterTimestamp": "2025-09-05T09-50-54-677Z",
+        "diffPath": "/diffs/site-21-ウルリア/desktop/threshold-2/page-016_product-category-supplement-he_2025-09-05T09-52-40-780Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1235
+        }
+      },
+      {
+        "pageId": "017",
+        "pageIdentifier": "product-category-salon-care",
+        "baselineFile": "page-017_product-category-salon-care_2025-07-28T01-07-39-145Z.png",
+        "afterFile": "page-017_product-category-salon-care_2025-09-05T09-50-54-677Z.png",
+        "baselineTimestamp": "2025-07-28T01-07-39-145Z",
+        "afterTimestamp": "2025-09-05T09-50-54-677Z",
+        "diffPath": "/diffs/site-21-ウルリア/desktop/threshold-2/page-017_product-category-salon-care_2025-09-05T09-52-41-767Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2459
+        }
+      },
+      {
+        "pageId": "018",
+        "pageIdentifier": "my-account-lost-password",
+        "baselineFile": "page-018_my-account-lost-password_2025-07-28T01-07-39-145Z.png",
+        "afterFile": "page-018_my-account-lost-password_2025-09-05T09-50-54-677Z.png",
+        "baselineTimestamp": "2025-07-28T01-07-39-145Z",
+        "afterTimestamp": "2025-09-05T09-50-54-677Z",
+        "diffPath": "/diffs/site-21-ウルリア/desktop/threshold-2/page-018_my-account-lost-password_2025-09-05T09-52-42-591Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "pageId": "019",
+        "pageIdentifier": "privacy-policy",
+        "baselineFile": "page-019_privacy-policy_2025-07-28T01-07-39-145Z.png",
+        "afterFile": "page-019_privacy-policy_2025-09-05T09-50-54-677Z.png",
+        "baselineTimestamp": "2025-07-28T01-07-39-145Z",
+        "afterTimestamp": "2025-09-05T09-50-54-677Z",
+        "diffPath": "/diffs/site-21-ウルリア/desktop/threshold-2/page-019_privacy-policy_2025-09-05T09-52-43-645Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 4287
+        }
+      },
+      {
+        "pageId": "020",
+        "pageIdentifier": "shipping-policy",
+        "baselineFile": "page-020_shipping-policy_2025-07-28T01-07-39-145Z.png",
+        "afterFile": "page-020_shipping-policy_2025-09-05T09-50-54-677Z.png",
+        "baselineTimestamp": "2025-07-28T01-07-39-145Z",
+        "afterTimestamp": "2025-09-05T09-50-54-677Z",
+        "diffPath": "/diffs/site-21-ウルリア/desktop/threshold-2/page-020_shipping-policy_2025-09-05T09-52-44-890Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1365
+        }
+      }
+    ]
+  }
+}

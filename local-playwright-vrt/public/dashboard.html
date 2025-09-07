@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VRT実行結果ダッシュボード</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .summary-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .summary-card .number {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .summary-card .label {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .summary-card.ok { background: #e8f5e9; }
+        .summary-card.ok .number { color: #4caf50; }
+        
+        .summary-card.ng { background: #ffebee; }
+        .summary-card.ng .number { color: #f44336; }
+        
+        .summary-card.error { background: #fff3e0; }
+        .summary-card.error .number { color: #ff9800; }
+        
+        .sites-table {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background: #f5f5f5;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        th {
+            font-weight: 600;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        tbody tr:hover {
+            background: #f9f9f9;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-ok {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .status-ng {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .status-error {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+        
+        .status-baseline-only {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .status-not-executed {
+            background: #f5f5f5;
+            color: #999;
+        }
+        
+        .timestamp {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .page-count {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .diff-rate {
+            font-weight: bold;
+        }
+        
+        .diff-rate.high {
+            color: #f44336;
+        }
+        
+        .diff-rate.medium {
+            color: #ff9800;
+        }
+        
+        .diff-rate.low {
+            color: #4caf50;
+        }
+        
+        .refresh-btn, .export-btn, .pdf-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        
+        .export-btn {
+            background: #4caf50;
+        }
+        
+        .pdf-btn {
+            background: #ff9800;
+        }
+        
+        .refresh-btn:hover {
+            background: #5a67d8;
+        }
+        
+        .export-btn:hover {
+            background: #45a049;
+        }
+        
+        .pdf-btn:hover {
+            background: #e68900;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .site-name {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .site-url {
+            color: #666;
+            font-size: 12px;
+            display: block;
+            margin-top: 2px;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .last-updated {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .no-data {
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .mini-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .mini-btn:hover {
+            background: #5a67d8;
+        }
+        
+        .mini-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>📊 VRT実行結果ダッシュボード</h1>
+            
+            <div class="controls">
+                <button class="refresh-btn" onclick="loadDashboard()">🔄 更新</button>
+                <button class="export-btn" onclick="exportToCSV()">📊 CSV エクスポート</button>
+                <button class="pdf-btn" onclick="exportAllImagesPDF()">📄 全サイト画像PDF</button>
+                <div class="last-updated" id="lastUpdated"></div>
+            </div>
+            
+            <div class="summary-cards" id="summaryCards">
+                <div class="summary-card">
+                    <div class="number">-</div>
+                    <div class="label">全サイト</div>
+                </div>
+                <div class="summary-card">
+                    <div class="number">-</div>
+                    <div class="label">実行済み</div>
+                </div>
+                <div class="summary-card ok">
+                    <div class="number">-</div>
+                    <div class="label">OK</div>
+                </div>
+                <div class="summary-card ng">
+                    <div class="number">-</div>
+                    <div class="label">NG（差分あり）</div>
+                </div>
+                <div class="summary-card error">
+                    <div class="number">-</div>
+                    <div class="label">エラー</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="sites-table">
+            <h2 style="margin-bottom: 20px;">サイト別実行結果</h2>
+            <div id="tableContainer">
+                <div class="loading">データを読み込み中...</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        async function loadDashboard() {
+            try {
+                const response = await fetch('/dashboard-results');
+                const data = await response.json();
+                
+                if (data.success) {
+                    updateSummary(data.summary);
+                    updateTable(data.sites);
+                    updateLastUpdated(data.lastUpdated);
+                } else {
+                    console.error('データ取得エラー:', data.error);
+                }
+            } catch (error) {
+                console.error('通信エラー:', error);
+                document.getElementById('tableContainer').innerHTML = 
+                    '<div class="loading">エラーが発生しました。再度お試しください。</div>';
+            }
+        }
+        
+        function updateSummary(summary) {
+            document.getElementById('summaryCards').innerHTML = `
+                <div class="summary-card">
+                    <div class="number">${summary.totalSites}</div>
+                    <div class="label">全サイト</div>
+                </div>
+                <div class="summary-card">
+                    <div class="number">${summary.executedSites}</div>
+                    <div class="label">実行済み</div>
+                </div>
+                <div class="summary-card ok">
+                    <div class="number">${summary.okSites}</div>
+                    <div class="label">OK</div>
+                </div>
+                <div class="summary-card ng">
+                    <div class="number">${summary.ngSites}</div>
+                    <div class="label">NG（差分あり）</div>
+                </div>
+                <div class="summary-card error">
+                    <div class="number">${summary.errorSites}</div>
+                    <div class="label">エラー</div>
+                </div>
+            `;
+        }
+        
+        function updateTable(sites) {
+            if (sites.length === 0) {
+                document.getElementById('tableContainer').innerHTML = 
+                    '<div class="no-data">データがありません</div>';
+                return;
+            }
+            
+            const tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>サイト</th>
+                            <th>ステータス</th>
+                            <th>Baseline</th>
+                            <th>After</th>
+                            <th>比較結果</th>
+                            <th>差分率</th>
+                            <th>画像PDF</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${sites.map(site => `
+                            <tr>
+                                <td>
+                                    <div class="site-name">${site.siteName}</div>
+                                    <div class="site-url">${site.baseUrl}</div>
+                                </td>
+                                <td>
+                                    ${getStatusBadge(site.status)}
+                                </td>
+                                <td>
+                                    ${site.baseline ? `
+                                        <span class="page-count">${site.baseline.pageCount}ページ</span>
+                                        <div class="timestamp">${formatDate(site.baseline.timestamp)}</div>
+                                    ` : '<span class="no-data">-</span>'}
+                                </td>
+                                <td>
+                                    ${site.after ? `
+                                        <span class="page-count">${site.after.pageCount}ページ</span>
+                                        <div class="timestamp">${formatDate(site.after.timestamp)}</div>
+                                    ` : '<span class="no-data">-</span>'}
+                                </td>
+                                <td>
+                                    ${site.compare ? `
+                                        <div>
+                                            ✅ ${site.compare.okCount} / ❌ ${site.compare.ngCount}
+                                        </div>
+                                    ` : '<span class="no-data">-</span>'}
+                                </td>
+                                <td>
+                                    ${site.compare ? `
+                                        <span class="diff-rate ${getDiffRateClass(site.compare.diffRate)}">
+                                            ${site.compare.diffRate.toFixed(2)}%
+                                        </span>
+                                    ` : '<span class="no-data">-</span>'}
+                                </td>
+                                <td>
+                                    <button class="mini-btn" onclick="exportSiteImagesPDF('${site.siteId}', '${site.siteName}')" 
+                                            ${(!site.baseline && !site.after) ? 'disabled' : ''}>
+                                        📄 PDF
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            document.getElementById('tableContainer').innerHTML = tableHTML;
+        }
+        
+        function getStatusBadge(status) {
+            const statusText = {
+                'ok': '✅ OK',
+                'ng': '❌ NG',
+                'error': '⚠️ エラー',
+                'baseline_only': '📸 Baseline済',
+                'pending_compare': '⏳ 比較待ち',
+                'not_executed': '未実行'
+            };
+            
+            return `<span class="status-badge status-${status}">${statusText[status] || status}</span>`;
+        }
+        
+        function getDiffRateClass(rate) {
+            if (rate > 5) return 'high';
+            if (rate > 2) return 'medium';
+            return 'low';
+        }
+        
+        function formatDate(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diff = now - date;
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            
+            if (hours < 1) {
+                const minutes = Math.floor(diff / (1000 * 60));
+                return `${minutes}分前`;
+            } else if (hours < 24) {
+                return `${hours}時間前`;
+            } else {
+                const days = Math.floor(hours / 24);
+                return `${days}日前`;
+            }
+        }
+        
+        function updateLastUpdated(timestamp) {
+            document.getElementById('lastUpdated').textContent = 
+                `最終更新: ${new Date(timestamp).toLocaleString('ja-JP')}`;
+        }
+        
+        // CSV エクスポート機能
+        async function exportToCSV() {
+            try {
+                const button = event.target;
+                button.disabled = true;
+                button.innerHTML = '📊 エクスポート中...';
+                
+                const response = await fetch('/export-csv');
+                
+                if (response.ok) {
+                    // ファイルのダウンロード処理
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `VRT実行結果_${new Date().toLocaleDateString('ja-JP').replace(/\//g, '-')}.csv`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    
+                    alert('✅ CSV ファイルのダウンロードが完了しました');
+                } else {
+                    const error = await response.json();
+                    alert(`❌ エクスポートエラー: ${error.error}`);
+                }
+            } catch (error) {
+                console.error('CSV エクスポートエラー:', error);
+                alert('❌ エクスポート中にエラーが発生しました');
+            } finally {
+                const button = document.querySelector('.export-btn');
+                button.disabled = false;
+                button.innerHTML = '📊 CSV エクスポート';
+            }
+        }
+        
+        // 全サイト画像PDF エクスポート機能
+        async function exportAllImagesPDF() {
+            try {
+                const button = event.target;
+                button.disabled = true;
+                button.innerHTML = '📄 PDF生成中...';
+                
+                // Baseline/After/Compare から選択（デフォルト: baseline）
+                const imageType = prompt('画像タイプを選択してください:\n1. baseline (更新前)\n2. after (更新後)\n3. compare (差分)', 'baseline') || 'baseline';
+                const maxSites = prompt('最大サイト数を入力してください（1-27）:', '10');
+                
+                if (!imageType || !maxSites) {
+                    alert('❌ キャンセルされました');
+                    return;
+                }
+                
+                const response = await fetch(`/export-all-images-pdf?type=${imageType}&maxSites=${maxSites}`);
+                
+                if (response.ok) {
+                    // PDFファイルのダウンロード処理
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `全サイト_${imageType}_画像一覧_${new Date().toLocaleDateString('ja-JP').replace(/\//g, '-')}.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    
+                    alert('✅ PDF ファイルのダウンロードが完了しました');
+                } else {
+                    const error = await response.json();
+                    alert(`❌ PDF生成エラー: ${error.error}`);
+                }
+            } catch (error) {
+                console.error('PDF エクスポートエラー:', error);
+                alert('❌ PDF生成中にエラーが発生しました');
+            } finally {
+                const button = document.querySelector('.pdf-btn');
+                button.disabled = false;
+                button.innerHTML = '📄 全サイト画像PDF';
+            }
+        }
+        
+        // 個別サイト画像PDF エクスポート機能
+        async function exportSiteImagesPDF(siteId, siteName) {
+            try {
+                const imageType = prompt(`${siteName} の画像タイプを選択してください:\n1. baseline (更新前)\n2. after (更新後)`, 'baseline') || 'baseline';
+                
+                if (!imageType) {
+                    alert('❌ キャンセルされました');
+                    return;
+                }
+                
+                const response = await fetch(`/export-image-pdf/${siteId}?type=${imageType}`);
+                
+                if (response.ok) {
+                    // PDFファイルのダウンロード処理
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${siteName}_${imageType}_画像一覧_${new Date().toLocaleDateString('ja-JP').replace(/\//g, '-')}.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    
+                    alert('✅ PDF ファイルのダウンロードが完了しました');
+                } else {
+                    const error = await response.json();
+                    alert(`❌ PDF生成エラー: ${error.error}`);
+                }
+            } catch (error) {
+                console.error('個別PDF エクスポートエラー:', error);
+                alert('❌ PDF生成中にエラーが発生しました');
+            }
+        }
+        
+        // 初回読み込み
+        loadDashboard();
+        
+        // 30秒ごとに自動更新
+        setInterval(loadDashboard, 30000);
+    </script>
+</body>
+</html>

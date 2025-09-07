@@ -1,0 +1,396 @@
+{
+  "timestamp": "2025-09-05T05:26:59.578Z",
+  "type": "compare",
+  "siteId": "site-13-着物レンタルきもの吉兆",
+  "siteName": "着物レンタル きもの吉兆",
+  "device": "desktop",
+  "threshold": 2,
+  "captureCount": 20,
+  "captureResults": [
+    {
+      "url": "https://kiccho-rental.com/",
+      "filename": "page-001_top_2025-09-05T05-23-57-405Z.png",
+      "timestamp": "2025-09-05T05:24:55.361Z"
+    },
+    {
+      "url": "https://kiccho-rental.com/kimono-list/",
+      "filename": "page-002_kimono-list_2025-09-05T05-23-57-405Z.png",
+      "timestamp": "2025-09-05T05:24:48.383Z"
+    },
+    {
+      "url": "https://kiccho-rental.com/flow/",
+      "filename": "page-003_flow_2025-09-05T05-23-57-405Z.png",
+      "timestamp": "2025-09-05T05:24:39.821Z"
+    },
+    {
+      "url": "https://kiccho-rental.com/faq/",
+      "filename": "page-004_faq_2025-09-05T05-23-57-405Z.png",
+      "timestamp": "2025-09-05T05:24:39.876Z"
+    },
+    {
+      "url": "https://kiccho-rental.com/booking/",
+      "filename": "page-005_booking_2025-09-05T05-23-57-405Z.png",
+      "timestamp": "2025-09-05T05:24:30.311Z"
+    },
+    {
+      "url": "https://kiccho-rental.com/2025/05/24/%e5%a4%8f%e3%81%ae%e8%a3%85%e3%81%84%e3%80%80%e3%81%af%e3%81%98%e3%81%be%e3%82%8a%e3%81%be%e3%81%99/",
+      "filename": "page-006_2025-05-24--e5-a4-8f-e3-81-ae-_2025-09-05T05-23-57-405Z.png",
+      "timestamp": "2025-09-05T05:24:34.724Z"
+    },
+    {
+      "url": "https://kiccho-rental.com/2025/05/13/%e7%b5%90%e5%a9%9a%e5%bc%8f%e3%82%b3%e3%83%bc%e3%83%87%e3%80%80%e3%82%ad%e3%83%a3%e3%83%b3%e3%83%9a%e3%83%bc%e3%83%b3/",
+      "filename": "page-007_2025-05-13--e7-b5-90-e5-a9-9a-_2025-09-05T05-23-57-405Z.png",
+      "timestamp": "2025-09-05T05:24:34.541Z"
+    },
+    {
+      "url": "https://kiccho-rental.com/2025/04/20/%e5%88%9d%e7%af%80%e5%8f%a5%e3%80%80%e3%81%8a%e6%af%8d%e3%81%95%e3%81%be%e3%81%a8%e4%b8%80%e7%b7%92%e3%81%ab%e3%80%80%e6%92%ae%e5%bd%b1%e3%83%97%e3%83%a9%e3%83%b3/",
+      "filename": "page-008_2025-04-20--e5-88-9d-e7-af-80-_2025-09-05T05-23-57-405Z.png",
+      "timestamp": "2025-09-05T05:24:34.642Z"
+    },
+    {
+      "url": "https://kiccho-rental.com/2025/04/02/%e5%ae%85%e9%85%8d%e3%83%ac%e3%83%b3%e3%82%bf%e3%83%ab%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6%e3%81%ae%e3%81%8a%e7%9f%a5%e3%82%89%e3%81%9b/",
+      "filename": "page-009_2025-04-02--e5-ae-85-e9-85-8d-_2025-09-05T05-23-57-405Z.png",
+      "timestamp": "2025-09-05T05:25:34.443Z"
+    },
+    {
+      "url": "https://kiccho-rental.com/2025/02/11/%e3%81%8a%e6%af%8d%e6%a7%98%e3%81%ae%e3%81%9f%e3%82%81%e3%81%ae%e8%a8%aa%e5%95%8f%e7%9d%80%e3%80%80%e5%bf%9c%e6%8f%b4%e7%89%b9%e9%9b%86/",
+      "filename": "page-010_2025-02-11--e3-81-8a-e6-af-8d-_2025-09-05T05-23-57-405Z.png",
+      "timestamp": "2025-09-05T05:25:32.593Z"
+    },
+    {
+      "url": "https://kiccho-rental.com/2024/12/01/%e5%b9%b4%e6%9c%ab%e5%b9%b4%e5%a7%8b%e3%81%ae%e5%96%b6%e6%a5%ad%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6-2/",
+      "filename": "page-011_2024-12-01--e5-b9-b4-e6-9c-ab-_2025-09-05T05-23-57-405Z.png",
+      "timestamp": "2025-09-05T05:25:32.604Z"
+    },
+    {
+      "url": "https://kiccho-rental.com/blog/",
+      "filename": "page-012_blog_2025-09-05T05-23-57-405Z.png",
+      "timestamp": "2025-09-05T05:25:33.653Z"
+    },
+    {
+      "url": "http://kiccho-rental.com/",
+      "filename": "page-013_top_2025-09-05T05-23-57-405Z.png",
+      "timestamp": "2025-09-05T05:25:43.210Z"
+    },
+    {
+      "url": "https://kiccho-rental.com/privacy-policy/",
+      "filename": "page-014_privacy-policy_2025-09-05T05-23-57-405Z.png",
+      "timestamp": "2025-09-05T05:25:30.782Z"
+    },
+    {
+      "url": "https://kiccho-rental.com/wp-content/uploads/2022/03/rental-top.jpg",
+      "filename": "page-015_wp-content-uploads-2022-03-ren_2025-09-05T05-23-57-405Z.png",
+      "timestamp": "2025-09-05T05:25:11.306Z"
+    },
+    {
+      "url": "https://kiccho-rental.com/wp-content/uploads/2022/02/L1050639_edit-scaled.jpg",
+      "filename": "page-016_wp-content-uploads-2022-02-l10_2025-09-05T05-23-57-405Z.png",
+      "timestamp": "2025-09-05T05:25:11.260Z"
+    },
+    {
+      "url": "https://kiccho-rental.com/wp-content/uploads/2022/02/L1050705_edit-scaled.jpg",
+      "filename": "page-017_wp-content-uploads-2022-02-l10_2025-09-05T05-23-57-405Z.png",
+      "timestamp": "2025-09-05T05:25:56.880Z"
+    },
+    {
+      "url": "https://kiccho-rental.com/wp-content/uploads/2022/02/L1050735_edit-1-scaled.jpg",
+      "filename": "page-018_wp-content-uploads-2022-02-l10_2025-09-05T05-23-57-405Z.png",
+      "timestamp": "2025-09-05T05:25:56.932Z"
+    },
+    {
+      "url": "https://kiccho-rental.com/wp-content/uploads/2022/02/L1050725_edit-scaled.jpg",
+      "filename": "page-019_wp-content-uploads-2022-02-l10_2025-09-05T05-23-57-405Z.png",
+      "timestamp": "2025-09-05T05:25:56.915Z"
+    },
+    {
+      "url": "https://kiccho-rental.com/wp-content/uploads/2022/02/L1050783_edit-scaled.jpg",
+      "filename": "page-020_wp-content-uploads-2022-02-l10_2025-09-05T05-23-57-405Z.png",
+      "timestamp": "2025-09-05T05:25:56.902Z"
+    }
+  ],
+  "compareResults": {
+    "siteId": "site-13-着物レンタルきもの吉兆",
+    "device": "desktop",
+    "summary": {
+      "totalPages": 16,
+      "ok": 13,
+      "ng": 3,
+      "error": 0,
+      "threshold": 2
+    },
+    "results": [
+      {
+        "pageId": "001",
+        "pageIdentifier": "top",
+        "baselineFile": "page-001_top_2025-09-05T04-20-52-897Z.png",
+        "afterFile": "page-001_top_2025-09-05T05-23-57-405Z.png",
+        "baselineTimestamp": "2025-09-05T04-20-52-897Z",
+        "afterTimestamp": "2025-09-05T05-23-57-405Z",
+        "diffPath": "/diffs/site-13-着物レンタルきもの吉兆/desktop/threshold-2/page-001_top_2025-09-05T05-26-05-904Z_diff-10.1101%.png",
+        "diffPixels": 2031401,
+        "diffPercentage": 10.110094,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 10465
+        }
+      },
+      {
+        "pageId": "002",
+        "pageIdentifier": "kimono-list",
+        "baselineFile": "page-002_kimono-list_2025-09-05T04-20-52-897Z.png",
+        "afterFile": "page-002_kimono-list_2025-09-05T05-23-57-405Z.png",
+        "baselineTimestamp": "2025-09-05T04-20-52-897Z",
+        "afterTimestamp": "2025-09-05T05-23-57-405Z",
+        "diffPath": "/diffs/site-13-着物レンタルきもの吉兆/desktop/threshold-2/page-002_kimono-list_2025-09-05T05-26-15-704Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 9814
+        }
+      },
+      {
+        "pageId": "003",
+        "pageIdentifier": "flow",
+        "baselineFile": "page-003_flow_2025-09-05T04-20-52-897Z.png",
+        "afterFile": "page-003_flow_2025-09-05T05-23-57-405Z.png",
+        "baselineTimestamp": "2025-09-05T04-20-52-897Z",
+        "afterTimestamp": "2025-09-05T05-23-57-405Z",
+        "diffPath": "/diffs/site-13-着物レンタルきもの吉兆/desktop/threshold-2/page-003_flow_2025-09-05T05-26-24-316Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 5747
+        }
+      },
+      {
+        "pageId": "004",
+        "pageIdentifier": "faq",
+        "baselineFile": "page-004_faq_2025-09-05T04-20-52-897Z.png",
+        "afterFile": "page-004_faq_2025-09-05T05-23-57-405Z.png",
+        "baselineTimestamp": "2025-09-05T04-20-52-897Z",
+        "afterTimestamp": "2025-09-05T05-23-57-405Z",
+        "diffPath": "/diffs/site-13-着物レンタルきもの吉兆/desktop/threshold-2/page-004_faq_2025-09-05T05-26-29-715Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 8217
+        }
+      },
+      {
+        "pageId": "005",
+        "pageIdentifier": "booking",
+        "baselineFile": "page-005_booking_2025-09-05T04-20-52-897Z.png",
+        "afterFile": "page-005_booking_2025-09-05T05-23-57-405Z.png",
+        "baselineTimestamp": "2025-09-05T04-20-52-897Z",
+        "afterTimestamp": "2025-09-05T05-23-57-405Z",
+        "diffPath": "/diffs/site-13-着物レンタルきもの吉兆/desktop/threshold-2/page-005_booking_2025-09-05T05-26-35-249Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2912
+        }
+      },
+      {
+        "pageId": "006",
+        "pageIdentifier": "2025-05-24--e5-a4-8f-e3-81-ae-",
+        "baselineFile": "page-006_2025-05-24--e5-a4-8f-e3-81-ae-_2025-09-05T04-20-52-897Z.png",
+        "afterFile": "page-006_2025-05-24--e5-a4-8f-e3-81-ae-_2025-09-05T05-23-57-405Z.png",
+        "baselineTimestamp": "2025-09-05T04-20-52-897Z",
+        "afterTimestamp": "2025-09-05T05-23-57-405Z",
+        "diffPath": "/diffs/site-13-着物レンタルきもの吉兆/desktop/threshold-2/page-006_2025-05-24--e5-a4-8f-e3-81-ae-_2025-09-05T05-26-41-530Z_diff-1.8251%.png",
+        "diffPixels": 84940,
+        "diffPercentage": 1.825065,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2424
+        }
+      },
+      {
+        "pageId": "007",
+        "pageIdentifier": "2025-05-13--e7-b5-90-e5-a9-9a-",
+        "baselineFile": "page-007_2025-05-13--e7-b5-90-e5-a9-9a-_2025-09-05T04-20-52-897Z.png",
+        "afterFile": "page-007_2025-05-13--e7-b5-90-e5-a9-9a-_2025-09-05T05-23-57-405Z.png",
+        "baselineTimestamp": "2025-09-05T04-20-52-897Z",
+        "afterTimestamp": "2025-09-05T05-23-57-405Z",
+        "diffPath": "/diffs/site-13-着物レンタルきもの吉兆/desktop/threshold-2/page-007_2025-05-13--e7-b5-90-e5-a9-9a-_2025-09-05T05-26-43-892Z_diff-2.0433%.png",
+        "diffPixels": 85091,
+        "diffPercentage": 2.043256,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2169
+        }
+      },
+      {
+        "pageId": "008",
+        "pageIdentifier": "2025-04-20--e5-88-9d-e7-af-80-",
+        "baselineFile": "page-008_2025-04-20--e5-88-9d-e7-af-80-_2025-09-05T04-20-52-897Z.png",
+        "afterFile": "page-008_2025-04-20--e5-88-9d-e7-af-80-_2025-09-05T05-23-57-405Z.png",
+        "baselineTimestamp": "2025-09-05T04-20-52-897Z",
+        "afterTimestamp": "2025-09-05T05-23-57-405Z",
+        "diffPath": "/diffs/site-13-着物レンタルきもの吉兆/desktop/threshold-2/page-008_2025-04-20--e5-88-9d-e7-af-80-_2025-09-05T05-26-46-060Z_diff-1.4645%.png",
+        "diffPixels": 84550,
+        "diffPercentage": 1.464465,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 3007
+        }
+      },
+      {
+        "pageId": "009",
+        "pageIdentifier": "2025-04-02--e5-ae-85-e9-85-8d-",
+        "baselineFile": "page-009_2025-04-02--e5-ae-85-e9-85-8d-_2025-09-05T04-20-52-897Z.png",
+        "afterFile": "page-009_2025-04-02--e5-ae-85-e9-85-8d-_2025-09-05T05-23-57-405Z.png",
+        "baselineTimestamp": "2025-09-05T04-20-52-897Z",
+        "afterTimestamp": "2025-09-05T05-23-57-405Z",
+        "diffPath": "/diffs/site-13-着物レンタルきもの吉兆/desktop/threshold-2/page-009_2025-04-02--e5-ae-85-e9-85-8d-_2025-09-05T05-26-48-506Z_diff-1.5909%.png",
+        "diffPixels": 84060,
+        "diffPercentage": 1.590888,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2752
+        }
+      },
+      {
+        "pageId": "010",
+        "pageIdentifier": "2025-02-11--e3-81-8a-e6-af-8d-",
+        "baselineFile": "page-010_2025-02-11--e3-81-8a-e6-af-8d-_2025-09-05T04-20-52-897Z.png",
+        "afterFile": "page-010_2025-02-11--e3-81-8a-e6-af-8d-_2025-09-05T05-23-57-405Z.png",
+        "baselineTimestamp": "2025-09-05T04-20-52-897Z",
+        "afterTimestamp": "2025-09-05T05-23-57-405Z",
+        "diffPath": "/diffs/site-13-着物レンタルきもの吉兆/desktop/threshold-2/page-010_2025-02-11--e3-81-8a-e6-af-8d-_2025-09-05T05-26-50-395Z_diff-1.2407%.png",
+        "diffPixels": 59290,
+        "diffPercentage": 1.240667,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2489
+        }
+      },
+      {
+        "pageId": "011",
+        "pageIdentifier": "2024-12-01--e5-b9-b4-e6-9c-ab-",
+        "baselineFile": "page-011_2024-12-01--e5-b9-b4-e6-9c-ab-_2025-09-05T04-20-52-897Z.png",
+        "afterFile": "page-011_2024-12-01--e5-b9-b4-e6-9c-ab-_2025-09-05T05-23-57-405Z.png",
+        "baselineTimestamp": "2025-09-05T04-20-52-897Z",
+        "afterTimestamp": "2025-09-05T05-23-57-405Z",
+        "diffPath": "/diffs/site-13-着物レンタルきもの吉兆/desktop/threshold-2/page-011_2024-12-01--e5-b9-b4-e6-9c-ab-_2025-09-05T05-26-52-017Z_diff-2.0214%.png",
+        "diffPixels": 84026,
+        "diffPercentage": 2.021411,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2165
+        }
+      },
+      {
+        "pageId": "012",
+        "pageIdentifier": "blog",
+        "baselineFile": "page-012_blog_2025-09-05T04-20-52-897Z.png",
+        "afterFile": "page-012_blog_2025-09-05T05-23-57-405Z.png",
+        "baselineTimestamp": "2025-09-05T04-20-52-897Z",
+        "afterTimestamp": "2025-09-05T05-23-57-405Z",
+        "diffPath": "/diffs/site-13-着物レンタルきもの吉兆/desktop/threshold-2/page-012_blog_2025-09-05T05-26-53-816Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 3457
+        }
+      },
+      {
+        "pageId": "014",
+        "pageIdentifier": "privacy-policy",
+        "baselineFile": "page-014_privacy-policy_2025-09-05T04-20-52-897Z.png",
+        "afterFile": "page-014_privacy-policy_2025-09-05T05-23-57-405Z.png",
+        "baselineTimestamp": "2025-09-05T04-20-52-897Z",
+        "afterTimestamp": "2025-09-05T05-23-57-405Z",
+        "diffPath": "/diffs/site-13-着物レンタルきもの吉兆/desktop/threshold-2/page-014_privacy-policy_2025-09-05T05-26-56-027Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2462
+        }
+      },
+      {
+        "pageId": "015",
+        "pageIdentifier": "wp-content-uploads-2022-03-ren",
+        "baselineFile": "page-015_wp-content-uploads-2022-03-ren_2025-09-05T04-20-52-897Z.png",
+        "afterFile": "page-015_wp-content-uploads-2022-03-ren_2025-09-05T05-23-57-405Z.png",
+        "baselineTimestamp": "2025-09-05T04-20-52-897Z",
+        "afterTimestamp": "2025-09-05T05-23-57-405Z",
+        "diffPath": "/diffs/site-13-着物レンタルきもの吉兆/desktop/threshold-2/page-015_wp-content-uploads-2022-03-ren_2025-09-05T05-26-58-401Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "pageId": "016",
+        "pageIdentifier": "wp-content-uploads-2022-02-l10",
+        "baselineFile": "page-016_wp-content-uploads-2022-02-l10_2025-09-05T04-20-52-897Z.png",
+        "afterFile": "page-016_wp-content-uploads-2022-02-l10_2025-09-05T05-23-57-405Z.png",
+        "baselineTimestamp": "2025-09-05T04-20-52-897Z",
+        "afterTimestamp": "2025-09-05T05-23-57-405Z",
+        "diffPath": "/diffs/site-13-着物レンタルきもの吉兆/desktop/threshold-2/page-016_wp-content-uploads-2022-02-l10_2025-09-05T05-26-57-250Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "pageId": "020",
+        "pageIdentifier": "wp-content-uploads-2022-01-c10",
+        "baselineFile": "page-020_wp-content-uploads-2022-01-c10_2025-07-23T02-24-46-194Z.png",
+        "afterFile": "page-020_wp-content-uploads-2022-01-c10_2025-07-23T03-39-05-915Z.png",
+        "baselineTimestamp": "2025-07-23T02-24-46-194Z",
+        "afterTimestamp": "2025-07-23T03-39-05-915Z",
+        "diffPath": "/diffs/site-13-着物レンタルきもの吉兆/desktop/threshold-2/page-020_wp-content-uploads-2022-01-c10_2025-09-05T05-26-59-239Z_diff-0.0029%.png",
+        "diffPixels": 61,
+        "diffPercentage": 0.002942,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      }
+    ]
+  }
+}

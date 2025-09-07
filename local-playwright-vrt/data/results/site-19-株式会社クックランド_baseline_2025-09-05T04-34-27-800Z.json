@@ -1,0 +1,232 @@
+{
+  "timestamp": "2025-09-05T04:34:27.800Z",
+  "type": "baseline",
+  "siteId": "site-19-株式会社クックランド",
+  "siteName": "株式会社クックランド",
+  "device": "desktop",
+  "captureCount": 20,
+  "captureResults": [
+    {
+      "url": "https://cook-land.co.jp/",
+      "filename": "page-001_top_2025-09-05T04-30-36-462Z.png",
+      "timestamp": "2025-09-05T04:31:37.856Z"
+    },
+    {
+      "url": "https://cook-land.co.jp/food-processing/",
+      "filename": "page-002_food-processing_2025-09-05T04-30-36-462Z.png",
+      "timestamp": "2025-09-05T04:31:33.721Z"
+    },
+    {
+      "url": "https://cook-land.co.jp/category/column/",
+      "filename": "page-003_category-column_2025-09-05T04-30-36-462Z.png",
+      "timestamp": "2025-09-05T04:31:18.442Z"
+    },
+    {
+      "url": "https://cook-land.co.jp/bento/",
+      "filename": "page-004_bento_2025-09-05T04-30-36-462Z.png",
+      "timestamp": "2025-09-05T04:31:44.024Z"
+    },
+    {
+      "url": "https://cook-land.co.jp/products/",
+      "filename": "page-005_products_2025-09-05T04-30-36-462Z.png",
+      "timestamp": "2025-09-05T04:31:27.566Z"
+    },
+    {
+      "url": "https://cook-land.co.jp/aboutus/",
+      "filename": "page-006_aboutus_2025-09-05T04-30-36-462Z.png",
+      "timestamp": "2025-09-05T04:31:25.621Z"
+    },
+    {
+      "url": "https://cook-land.co.jp/contact-customer/",
+      "filename": "page-007_contact-customer_2025-09-05T04-30-36-462Z.png",
+      "timestamp": "2025-09-05T04:31:18.497Z"
+    },
+    {
+      "url": "https://cook-land.co.jp/contact-media/",
+      "filename": "page-008_contact-media_2025-09-05T04-30-36-462Z.png",
+      "timestamp": "2025-09-05T04:31:29.200Z"
+    },
+    {
+      "url": "https://cook-land.co.jp/contact-company/",
+      "filename": "page-009_contact-company_2025-09-05T04-30-36-462Z.png",
+      "timestamp": "2025-09-05T04:32:27.573Z"
+    },
+    {
+      "url": "https://cook-land.co.jp/cart/",
+      "filename": "page-010_cart_2025-09-05T04-30-36-462Z.png",
+      "timestamp": "2025-09-05T04:33:09.771Z"
+    },
+    {
+      "url": "https://cook-land.co.jp/my-account/",
+      "filename": "page-011_my-account_2025-09-05T04-30-36-462Z.png",
+      "timestamp": "2025-09-05T04:32:29.871Z"
+    },
+    {
+      "url": "https://cook-land.co.jp/food-processing/%e9%95%b7%e5%a4%aa%e3%81%ae%e8%82%89%e3%83%81%e3%83%a3%e3%83%bc%e3%83%8f%e3%83%b3/",
+      "filename": "page-012_food-processing--e9-95-b7-e5-a_2025-09-05T04-30-36-462Z.png",
+      "timestamp": "2025-09-05T04:32:31.329Z"
+    },
+    {
+      "url": "https://cook-land.co.jp/food-processing/kinmedai/",
+      "filename": "page-013_food-processing-kinmedai_2025-09-05T04-30-36-462Z.png",
+      "timestamp": "2025-09-05T04:32:38.934Z"
+    },
+    {
+      "url": "https://cook-land.co.jp/food-processing/dougajima-noodle/",
+      "filename": "page-014_food-processing-dougajima-nood_2025-09-05T04-30-36-462Z.png",
+      "timestamp": "2025-09-05T04:32:48.587Z"
+    },
+    {
+      "url": "https://cook-land.co.jp/2023/11/02/%e5%9c%b0%e5%9f%9f%e3%81%ae%e7%89%b9%e7%94%a3%e5%93%81%e3%82%92%e6%b4%bb%e3%81%8b%e3%81%97%e3%81%9f%e5%95%86%e5%93%81%e9%96%8b%e7%99%ba-%ef%bd%9e%e9%87%91%e7%9b%ae%e9%af%9b%e6%8a%bc%e5%af%bf%e5%8f%b8/",
+      "filename": "page-015_2023-11-02--e5-9c-b0-e5-9f-9f-_2025-09-05T04-30-36-462Z.png",
+      "timestamp": "2025-09-05T04:32:29.939Z"
+    },
+    {
+      "url": "https://cook-land.co.jp/2023/06/23/%e4%bc%8a%e8%b1%86%e6%97%a5%e6%97%a5%e6%96%b0%e8%81%9e%e6%a7%98%e3%81%ab%e3%81%8f%e3%82%8b%e3%82%89%e6%88%b8%e7%94%b0%e3%81%ae%e3%83%aa%e3%83%8b%e3%83%a5%e3%83%bc%e3%82%a2%e3%83%ab%e3%82%aa%e3%83%bc/",
+      "filename": "page-016_2023-06-23--e4-bc-8a-e8-b1-86-_2025-09-05T04-30-36-462Z.png",
+      "timestamp": "2025-09-05T04:32:29.891Z"
+    },
+    {
+      "url": "https://cook-land.co.jp/2023/06/23/%e4%bc%8a%e8%b1%86%e6%96%b0%e8%81%9e%e6%a7%98%e3%81%ab%e5%a0%82%e3%83%b6%e5%b3%b6%e8%a3%bd%e9%ba%ba%e3%81%ae%e4%ba%8b%e6%a5%ad%e9%96%8b%e5%a7%8b%e3%81%ae%e8%a8%98%e4%ba%8b%e3%82%92%e6%8e%b2%e8%bc%89/",
+      "filename": "page-017_2023-06-23--e4-bc-8a-e8-b1-86-_2025-09-05T04-30-36-462Z.png",
+      "timestamp": "2025-09-05T04:33:37.907Z"
+    },
+    {
+      "url": "https://cook-land.co.jp/2023/06/14/%e3%80%8c%e3%83%95%e3%82%a1%e3%83%b3%e3%81%ab%e6%81%a5%e3%81%98%e3%81%aa%e3%81%84%e5%91%b3%e5%b1%8a%e3%81%91%e3%82%8b%e3%80%8d%e5%90%8d%e7%89%a9%e3%83%bb%e8%82%89%e3%83%81%e3%83%a3%e3%83%bc%e3%83%8f/",
+      "filename": "page-018_2023-06-14--e3-80-8c-e3-83-95-_2025-09-05T04-30-36-462Z.png",
+      "timestamp": "2025-09-05T04:34:27.751Z"
+    },
+    {
+      "url": "https://cook-land.co.jp/2023/06/06/%e8%aa%ad%e5%a3%b2%e6%96%b0%e8%81%9e%e3%81%ab%e9%95%b7%e5%a4%aa%e3%81%ae%e8%82%89%e3%83%81%e3%83%a3%e3%83%bc%e3%83%8f%e3%83%b3%e3%81%ae%e8%a8%98%e4%ba%8b%e3%81%8c%e6%8e%b2%e8%bc%89%e3%81%95%e3%82%8c/",
+      "filename": "page-019_2023-06-06--e8-aa-ad-e5-a3-b2-_2025-09-05T04-30-36-462Z.png",
+      "timestamp": "2025-09-05T04:33:59.701Z"
+    },
+    {
+      "url": "https://cook-land.co.jp/2023/01/18/%e8%aa%ad%e5%a3%b2%e6%96%b0%e8%81%9e%e3%81%95%e3%82%93%e3%81%ab%e3%82%ad%e3%83%b3%e3%83%a1%e3%82%b3%e3%83%ad%e3%83%83%e3%82%b1%e3%82%92%e3%81%94%e6%8e%b2%e8%bc%89%e3%81%84%e3%81%9f%e3%81%a0%e3%81%8d/",
+      "filename": "page-020_2023-01-18--e8-aa-ad-e5-a3-b2-_2025-09-05T04-30-36-462Z.png",
+      "timestamp": "2025-09-05T04:34:00.112Z"
+    }
+  ],
+  "pages": [
+    {
+      "url": "https://cook-land.co.jp/",
+      "pageId": "001",
+      "identifier": "top",
+      "title": "株式会社クックランド – 加工食品製造・販売／仕出し・宅配弁当"
+    },
+    {
+      "url": "https://cook-land.co.jp/food-processing/",
+      "pageId": "002",
+      "identifier": "food-processing",
+      "title": "食品加工 – 株式会社クックランド"
+    },
+    {
+      "url": "https://cook-land.co.jp/category/column/",
+      "pageId": "003",
+      "identifier": "category-column",
+      "title": "コラム – 株式会社クックランド"
+    },
+    {
+      "url": "https://cook-land.co.jp/bento/",
+      "pageId": "004",
+      "identifier": "bento",
+      "title": "お弁当・仕出し料理 – 株式会社クックランド"
+    },
+    {
+      "url": "https://cook-land.co.jp/products/",
+      "pageId": "005",
+      "identifier": "products",
+      "title": "商品一覧 – 株式会社クックランド"
+    },
+    {
+      "url": "https://cook-land.co.jp/aboutus/",
+      "pageId": "006",
+      "identifier": "aboutus",
+      "title": "会社概要 – 株式会社クックランド"
+    },
+    {
+      "url": "https://cook-land.co.jp/contact-customer/",
+      "pageId": "007",
+      "identifier": "contact-customer",
+      "title": "オンラインショップ・注文に関して – 株式会社クックランド"
+    },
+    {
+      "url": "https://cook-land.co.jp/contact-media/",
+      "pageId": "008",
+      "identifier": "contact-media",
+      "title": "メディア・報道機関の方向けお問い合わせフォーム – 株式会社クックランド"
+    },
+    {
+      "url": "https://cook-land.co.jp/contact-company/",
+      "pageId": "009",
+      "identifier": "contact-company",
+      "title": "法人の方向けお問い合わせフォーム – 株式会社クックランド"
+    },
+    {
+      "url": "https://cook-land.co.jp/cart/",
+      "pageId": "010",
+      "identifier": "cart",
+      "title": "お買い物カゴ – 株式会社クックランド"
+    },
+    {
+      "url": "https://cook-land.co.jp/my-account/",
+      "pageId": "011",
+      "identifier": "my-account",
+      "title": "マイアカウント – 株式会社クックランド"
+    },
+    {
+      "url": "https://cook-land.co.jp/food-processing/%e9%95%b7%e5%a4%aa%e3%81%ae%e8%82%89%e3%83%81%e3%83%a3%e3%83%bc%e3%83%8f%e3%83%b3/",
+      "pageId": "012",
+      "identifier": "food-processing--e9-95-b7-e5-a",
+      "title": "長太の肉チャーハン – 株式会社クックランド"
+    },
+    {
+      "url": "https://cook-land.co.jp/food-processing/kinmedai/",
+      "pageId": "013",
+      "identifier": "food-processing-kinmedai",
+      "title": "伊豆下田の金目鯛 – 株式会社クックランド"
+    },
+    {
+      "url": "https://cook-land.co.jp/food-processing/dougajima-noodle/",
+      "pageId": "014",
+      "identifier": "food-processing-dougajima-nood",
+      "title": "堂ヶ島製麺 – 株式会社クックランド"
+    },
+    {
+      "url": "https://cook-land.co.jp/2023/11/02/%e5%9c%b0%e5%9f%9f%e3%81%ae%e7%89%b9%e7%94%a3%e5%93%81%e3%82%92%e6%b4%bb%e3%81%8b%e3%81%97%e3%81%9f%e5%95%86%e5%93%81%e9%96%8b%e7%99%ba-%ef%bd%9e%e9%87%91%e7%9b%ae%e9%af%9b%e6%8a%bc%e5%af%bf%e5%8f%b8/",
+      "pageId": "015",
+      "identifier": "2023-11-02--e5-9c-b0-e5-9f-9f-",
+      "title": "地域の特産品を活かした商品開発 　　　　　　　　～金目鯛押寿司 匠の三種～ – 株式会社クックランド"
+    },
+    {
+      "url": "https://cook-land.co.jp/2023/06/23/%e4%bc%8a%e8%b1%86%e6%97%a5%e6%97%a5%e6%96%b0%e8%81%9e%e6%a7%98%e3%81%ab%e3%81%8f%e3%82%8b%e3%82%89%e6%88%b8%e7%94%b0%e3%81%ae%e3%83%aa%e3%83%8b%e3%83%a5%e3%83%bc%e3%82%a2%e3%83%ab%e3%82%aa%e3%83%bc/",
+      "pageId": "016",
+      "identifier": "2023-06-23--e4-bc-8a-e8-b1-86-",
+      "title": "伊豆日日新聞にくるら戸田のリニューアルオープンに関する記事を掲載いただきました。 – 株式会社クックランド"
+    },
+    {
+      "url": "https://cook-land.co.jp/2023/06/23/%e4%bc%8a%e8%b1%86%e6%96%b0%e8%81%9e%e6%a7%98%e3%81%ab%e5%a0%82%e3%83%b6%e5%b3%b6%e8%a3%bd%e9%ba%ba%e3%81%ae%e4%ba%8b%e6%a5%ad%e9%96%8b%e5%a7%8b%e3%81%ae%e8%a8%98%e4%ba%8b%e3%82%92%e6%8e%b2%e8%bc%89/",
+      "pageId": "017",
+      "identifier": "2023-06-23--e4-bc-8a-e8-b1-86-",
+      "title": "伊豆新聞に堂ヶ島製麺に関する記事を掲載いただきました – 株式会社クックランド"
+    },
+    {
+      "url": "https://cook-land.co.jp/2023/06/14/%e3%80%8c%e3%83%95%e3%82%a1%e3%83%b3%e3%81%ab%e6%81%a5%e3%81%98%e3%81%aa%e3%81%84%e5%91%b3%e5%b1%8a%e3%81%91%e3%82%8b%e3%80%8d%e5%90%8d%e7%89%a9%e3%83%bb%e8%82%89%e3%83%81%e3%83%a3%e3%83%bc%e3%83%8f/",
+      "pageId": "018",
+      "identifier": "2023-06-14--e3-80-8c-e3-83-95-",
+      "title": "静岡テレビにて『長太』の肉チャーハンの復活ストーリーが放送されました – 株式会社クックランド"
+    },
+    {
+      "url": "https://cook-land.co.jp/2023/06/06/%e8%aa%ad%e5%a3%b2%e6%96%b0%e8%81%9e%e3%81%ab%e9%95%b7%e5%a4%aa%e3%81%ae%e8%82%89%e3%83%81%e3%83%a3%e3%83%bc%e3%83%8f%e3%83%b3%e3%81%ae%e8%a8%98%e4%ba%8b%e3%81%8c%e6%8e%b2%e8%bc%89%e3%81%95%e3%82%8c/",
+      "pageId": "019",
+      "identifier": "2023-06-06--e8-aa-ad-e5-a3-b2-",
+      "title": "読売新聞に長太の肉チャーハンの記事が掲載されました – 株式会社クックランド"
+    },
+    {
+      "url": "https://cook-land.co.jp/2023/01/18/%e8%aa%ad%e5%a3%b2%e6%96%b0%e8%81%9e%e3%81%95%e3%82%93%e3%81%ab%e3%82%ad%e3%83%b3%e3%83%a1%e3%82%b3%e3%83%ad%e3%83%83%e3%82%b1%e3%82%92%e3%81%94%e6%8e%b2%e8%bc%89%e3%81%84%e3%81%9f%e3%81%a0%e3%81%8d/",
+      "pageId": "020",
+      "identifier": "2023-01-18--e8-aa-ad-e5-a3-b2-",
+      "title": "読売新聞さんにキンメコロッケをご掲載いただきました – 株式会社クックランド"
+    }
+  ]
+}

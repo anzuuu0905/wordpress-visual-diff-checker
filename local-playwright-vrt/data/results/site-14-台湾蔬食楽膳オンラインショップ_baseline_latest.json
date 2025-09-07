@@ -1,0 +1,232 @@
+{
+  "timestamp": "2025-09-05T04:24:43.643Z",
+  "type": "baseline",
+  "siteId": "site-14-台湾蔬食楽膳オンラインショップ",
+  "siteName": "台湾蔬食 楽膳 オンラインショップ",
+  "device": "desktop",
+  "captureCount": 20,
+  "captureResults": [
+    {
+      "url": "https://vegan-rakuzen.com/",
+      "filename": "page-001_top_2025-09-05T04-21-31-063Z.png",
+      "timestamp": "2025-09-05T04:22:22.001Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/about/",
+      "filename": "page-002_about_2025-09-05T04-21-31-063Z.png",
+      "timestamp": "2025-09-05T04:22:13.677Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/bento-list/",
+      "filename": "page-003_bento-list_2025-09-05T04-21-31-063Z.png",
+      "timestamp": "2025-09-05T04:22:21.829Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product/%e3%81%8a%e3%81%8b%e3%82%89%e3%81%93%e3%82%93%e3%81%ab%e3%82%83%e3%81%8f%e3%80%8c%e6%b4%a5%e8%bb%bd%e9%9b%aa%e8%8a%b1-300g%e3%83%97%e3%83%ac%e3%83%bc%e3%83%b3%e3%82%bf%e3%82%a4%e3%83%97%e3%80%8d/",
+      "filename": "page-004_product--e3-81-8a-e3-81-8b-e3-_2025-09-05T04-21-31-063Z.png",
+      "timestamp": "2025-09-05T04:22:16.297Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/voice/",
+      "filename": "page-005_voice_2025-09-05T04-21-31-063Z.png",
+      "timestamp": "2025-09-05T04:22:16.516Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/contact/",
+      "filename": "page-006_contact_2025-09-05T04-21-31-063Z.png",
+      "timestamp": "2025-09-05T04:22:11.047Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/cancel-policy/",
+      "filename": "page-007_cancel-policy_2025-09-05T04-21-31-063Z.png",
+      "timestamp": "2025-09-05T04:22:10.161Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/cart/",
+      "filename": "page-008_cart_2025-09-05T04-21-31-063Z.png",
+      "timestamp": "2025-09-05T04:22:11.035Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product/%e5%8f%b0%e6%b9%be%e9%a2%a8%e5%94%90%e6%8f%9a%e3%81%92%e3%81%a8%e3%81%99%e3%81%8d%e7%84%bc%e3%81%8d%e3%81%ae%e4%ba%8c%e6%ae%b5%e5%be%a1%e8%86%b3%e3%80%90%e3%83%b4%e3%82%a3%e3%83%bc%e3%82%ac%e3%83%b3/",
+      "filename": "page-009_product--e5-8f-b0-e6-b9-be-e9-_2025-09-05T04-21-31-063Z.png",
+      "timestamp": "2025-09-05T04:23:11.022Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product/4%e7%a8%ae%e3%81%ae%e3%83%a1%e3%82%a4%e3%83%b3%e6%96%99%e7%90%86%e5%bc%81%e5%bd%93%ef%bc%88%e7%89%b9%e8%a3%bd%e3%81%a4%e3%81%bf%e3%82%8c%e3%83%bb%e6%8f%9a%e3%81%92%e3%81%aa%e3%81%84%e5%8d%97%e7%93%9c/",
+      "filename": "page-010_product-4-e7-a8-ae-e3-81-ae-e3_2025-09-05T04-21-31-063Z.png",
+      "timestamp": "2025-09-05T04:23:00.896Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product/3%e7%a8%ae%e3%81%ae%e3%83%a1%e3%82%a4%e3%83%b3%e6%96%99%e7%90%86%e5%bc%81%e5%bd%93%ef%bc%88%e5%8f%b0%e6%b9%be%e9%a2%a8%e3%81%b2%e3%81%a8%e3%81%8f%e3%81%a1%e5%94%90%e6%8f%9a%e3%81%92%e3%83%bb%e3%82%ab/",
+      "filename": "page-011_product-3-e7-a8-ae-e3-81-ae-e3_2025-09-05T04-21-31-063Z.png",
+      "timestamp": "2025-09-05T04:23:11.831Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product/%e5%8f%b0%e6%b9%be%e9%a2%a8%e3%81%a8%e3%82%93%e3%81%8b%e3%81%a4%e3%81%a8%e3%81%a4%e3%81%bf%e3%82%8c%e3%81%ae%e7%99%bd%e8%8f%9c%e5%b7%bb%e3%81%8d%e3%81%ae%e3%82%8f%e3%81%a3%e3%81%b1%e4%ba%8c%e6%ae%b5/",
+      "filename": "page-012_product--e5-8f-b0-e6-b9-be-e9-_2025-09-05T04-21-31-063Z.png",
+      "timestamp": "2025-09-05T04:23:12.438Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product/%e8%96%ac%e8%86%b3%e3%83%8f%e3%83%b3%e3%83%90%e3%83%bc%e3%82%b0%e3%81%a8%e9%87%8e%e8%8f%9c%e3%81%ae%e8%82%89%e5%b7%bb%e3%81%8d%e3%81%ae%e3%82%8f%e3%81%a3%e3%81%b1%e4%ba%8c%e6%ae%b5%e5%be%a1%e8%86%b3/",
+      "filename": "page-013_product--e8-96-ac-e8-86-b3-e3-_2025-09-05T04-21-31-063Z.png",
+      "timestamp": "2025-09-05T04:23:11.049Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product/%e8%87%aa%e5%ae%b6%e8%a3%bd%e3%82%ad%e3%83%a0%e3%83%81%e7%85%ae%e8%be%bc%e3%81%bf%e3%81%ae%e3%82%8f%e3%81%a3%e3%81%b1%e5%bc%81%e5%bd%93/",
+      "filename": "page-014_product--e8-87-aa-e5-ae-b6-e8-_2025-09-05T04-21-31-063Z.png",
+      "timestamp": "2025-09-05T04:23:14.022Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product/%e6%bf%83%e5%8e%9a%e3%82%b4%e3%83%9e%e3%81%a0%e3%82%8c%e3%81%ae%e3%82%88%e3%81%a0%e3%82%8c%e9%b6%8f%e5%bc%81%e5%bd%93/",
+      "filename": "page-015_product--e6-bf-83-e5-8e-9a-e3-_2025-09-05T04-21-31-063Z.png",
+      "timestamp": "2025-09-05T04:23:11.004Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/privacy-policy/",
+      "filename": "page-016_privacy-policy_2025-09-05T04-21-31-063Z.png",
+      "timestamp": "2025-09-05T04:23:06.664Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/terms/",
+      "filename": "page-017_terms_2025-09-05T04-21-31-063Z.png",
+      "timestamp": "2025-09-05T04:23:42.207Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/law/",
+      "filename": "page-018_law_2025-09-05T04-21-31-063Z.png",
+      "timestamp": "2025-09-05T04:23:40.565Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product/%e8%96%ac%e8%86%b3%e3%83%8f%e3%83%b3%e3%83%90%e3%83%bc%e3%82%b0%e5%bc%81%e5%bd%93/",
+      "filename": "page-019_product--e8-96-ac-e8-86-b3-e3-_2025-09-05T04-21-31-063Z.png",
+      "timestamp": "2025-09-05T04:24:43.625Z"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product/%e5%8f%b0%e6%b9%be%e9%a2%a8%e9%b6%8f%e3%81%ae%e3%81%8b%e3%82%89%e6%8f%9a%e3%81%92%e5%bc%81%e5%bd%93/",
+      "filename": "page-020_product--e5-8f-b0-e6-b9-be-e9-_2025-09-05T04-21-31-063Z.png",
+      "timestamp": "2025-09-05T04:23:45.371Z"
+    }
+  ],
+  "pages": [
+    {
+      "url": "https://vegan-rakuzen.com/",
+      "pageId": "001",
+      "identifier": "top",
+      "title": "台湾蔬食 楽膳 オンラインショップ – Taiwan Veggies Kitchen"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/about/",
+      "pageId": "002",
+      "identifier": "about",
+      "title": "楽膳について – 台湾蔬食 楽膳 オンラインショップ"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/bento-list/",
+      "pageId": "003",
+      "identifier": "bento-list",
+      "title": "お弁当メニュー – 台湾蔬食 楽膳 オンラインショップ"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product/%e3%81%8a%e3%81%8b%e3%82%89%e3%81%93%e3%82%93%e3%81%ab%e3%82%83%e3%81%8f%e3%80%8c%e6%b4%a5%e8%bb%bd%e9%9b%aa%e8%8a%b1-300g%e3%83%97%e3%83%ac%e3%83%bc%e3%83%b3%e3%82%bf%e3%82%a4%e3%83%97%e3%80%8d/",
+      "pageId": "004",
+      "identifier": "product--e3-81-8a-e3-81-8b-e3-",
+      "title": "おからこんにゃく「津軽雪花 300gプレーンタイプ」 – 台湾蔬食 楽膳 オンラインショップ"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/voice/",
+      "pageId": "005",
+      "identifier": "voice",
+      "title": "お客様の声 – 台湾蔬食 楽膳 オンラインショップ"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/contact/",
+      "pageId": "006",
+      "identifier": "contact",
+      "title": "お問い合わせ – 台湾蔬食 楽膳 オンラインショップ"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/cancel-policy/",
+      "pageId": "007",
+      "identifier": "cancel-policy",
+      "title": "キャンセルポリシー – 台湾蔬食 楽膳 オンラインショップ"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/cart/",
+      "pageId": "008",
+      "identifier": "cart",
+      "title": "お買い物カゴ – 台湾蔬食 楽膳 オンラインショップ"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product/%e5%8f%b0%e6%b9%be%e9%a2%a8%e5%94%90%e6%8f%9a%e3%81%92%e3%81%a8%e3%81%99%e3%81%8d%e7%84%bc%e3%81%8d%e3%81%ae%e4%ba%8c%e6%ae%b5%e5%be%a1%e8%86%b3%e3%80%90%e3%83%b4%e3%82%a3%e3%83%bc%e3%82%ac%e3%83%b3/",
+      "pageId": "009",
+      "identifier": "product--e5-8f-b0-e6-b9-be-e9-",
+      "title": "台湾風唐揚げとすき焼きの二段御膳【ヴィーガン対応】 – 台湾蔬食 楽膳 オンラインショップ"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product/4%e7%a8%ae%e3%81%ae%e3%83%a1%e3%82%a4%e3%83%b3%e6%96%99%e7%90%86%e5%bc%81%e5%bd%93%ef%bc%88%e7%89%b9%e8%a3%bd%e3%81%a4%e3%81%bf%e3%82%8c%e3%83%bb%e6%8f%9a%e3%81%92%e3%81%aa%e3%81%84%e5%8d%97%e7%93%9c/",
+      "pageId": "010",
+      "identifier": "product-4-e7-a8-ae-e3-81-ae-e3",
+      "title": "4種のメイン料理弁当（特製つみれ・揚げない南瓜コロッケ・カキの豆鼓ソース炒め・ブロッコリーの海鮮炒め） – 台湾蔬食 楽膳 オンラインショップ"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product/3%e7%a8%ae%e3%81%ae%e3%83%a1%e3%82%a4%e3%83%b3%e6%96%99%e7%90%86%e5%bc%81%e5%bd%93%ef%bc%88%e5%8f%b0%e6%b9%be%e9%a2%a8%e3%81%b2%e3%81%a8%e3%81%8f%e3%81%a1%e5%94%90%e6%8f%9a%e3%81%92%e3%83%bb%e3%82%ab/",
+      "pageId": "011",
+      "identifier": "product-3-e7-a8-ae-e3-81-ae-e3",
+      "title": "3種のメイン料理弁当（台湾風ひとくち唐揚げ・カキの豆鼓ソース炒め・ブロッコリーの海鮮炒め） – 台湾蔬食 楽膳 オンラインショップ"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product/%e5%8f%b0%e6%b9%be%e9%a2%a8%e3%81%a8%e3%82%93%e3%81%8b%e3%81%a4%e3%81%a8%e3%81%a4%e3%81%bf%e3%82%8c%e3%81%ae%e7%99%bd%e8%8f%9c%e5%b7%bb%e3%81%8d%e3%81%ae%e3%82%8f%e3%81%a3%e3%81%b1%e4%ba%8c%e6%ae%b5/",
+      "pageId": "012",
+      "identifier": "product--e5-8f-b0-e6-b9-be-e9-",
+      "title": "台湾風とんかつとつみれの白菜巻きのわっぱ二段御膳【ヴィーガン対応】 – 台湾蔬食 楽膳 オンラインショップ"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product/%e8%96%ac%e8%86%b3%e3%83%8f%e3%83%b3%e3%83%90%e3%83%bc%e3%82%b0%e3%81%a8%e9%87%8e%e8%8f%9c%e3%81%ae%e8%82%89%e5%b7%bb%e3%81%8d%e3%81%ae%e3%82%8f%e3%81%a3%e3%81%b1%e4%ba%8c%e6%ae%b5%e5%be%a1%e8%86%b3/",
+      "pageId": "013",
+      "identifier": "product--e8-96-ac-e8-86-b3-e3-",
+      "title": "薬膳ハンバーグと野菜の肉巻きのわっぱ二段御膳【ヴィーガン対応】 – 台湾蔬食 楽膳 オンラインショップ"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product/%e8%87%aa%e5%ae%b6%e8%a3%bd%e3%82%ad%e3%83%a0%e3%83%81%e7%85%ae%e8%be%bc%e3%81%bf%e3%81%ae%e3%82%8f%e3%81%a3%e3%81%b1%e5%bc%81%e5%bd%93/",
+      "pageId": "014",
+      "identifier": "product--e8-87-aa-e5-ae-b6-e8-",
+      "title": "自家製キムチ煮込みのわっぱ弁当【ヴィーガン対応】 – 台湾蔬食 楽膳 オンラインショップ"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product/%e6%bf%83%e5%8e%9a%e3%82%b4%e3%83%9e%e3%81%a0%e3%82%8c%e3%81%ae%e3%82%88%e3%81%a0%e3%82%8c%e9%b6%8f%e5%bc%81%e5%bd%93/",
+      "pageId": "015",
+      "identifier": "product--e6-bf-83-e5-8e-9a-e3-",
+      "title": "濃厚ゴマだれのよだれ鶏弁当 – 台湾蔬食 楽膳 オンラインショップ"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/privacy-policy/",
+      "pageId": "016",
+      "identifier": "privacy-policy",
+      "title": "プライバシーポリシー – 台湾蔬食 楽膳 オンラインショップ"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/terms/",
+      "pageId": "017",
+      "identifier": "terms",
+      "title": "利用規約 – 台湾蔬食 楽膳 オンラインショップ"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/law/",
+      "pageId": "018",
+      "identifier": "law",
+      "title": "特定商取引法に基づく表記 – 台湾蔬食 楽膳 オンラインショップ"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product/%e8%96%ac%e8%86%b3%e3%83%8f%e3%83%b3%e3%83%90%e3%83%bc%e3%82%b0%e5%bc%81%e5%bd%93/",
+      "pageId": "019",
+      "identifier": "product--e8-96-ac-e8-86-b3-e3-",
+      "title": "薬膳ハンバーグ弁当 – 台湾蔬食 楽膳 オンラインショップ"
+    },
+    {
+      "url": "https://vegan-rakuzen.com/product/%e5%8f%b0%e6%b9%be%e9%a2%a8%e9%b6%8f%e3%81%ae%e3%81%8b%e3%82%89%e6%8f%9a%e3%81%92%e5%bc%81%e5%bd%93/",
+      "pageId": "020",
+      "identifier": "product--e5-8f-b0-e6-b9-be-e9-",
+      "title": "台湾風鶏のから揚げ弁当 – 台湾蔬食 楽膳 オンラインショップ"
+    }
+  ]
+}

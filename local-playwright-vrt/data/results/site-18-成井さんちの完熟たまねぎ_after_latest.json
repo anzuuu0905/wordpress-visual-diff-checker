@@ -1,0 +1,447 @@
+{
+  "timestamp": "2025-09-05T05:49:04.704Z",
+  "type": "after",
+  "siteId": "site-18-成井さんちの完熟たまねぎ",
+  "siteName": "成井さんちの完熟たまねぎ",
+  "device": "desktop",
+  "threshold": 2,
+  "captureCount": 20,
+  "captureResults": [
+    {
+      "url": "https://naruisonion.com/",
+      "filename": "page-001_top_2025-09-05T05-46-11-996Z.png",
+      "timestamp": "2025-09-05T05:46:58.154Z"
+    },
+    {
+      "url": "https://naruisonion.com/about/",
+      "filename": "page-002_about_2025-09-05T05-46-11-996Z.png",
+      "timestamp": "2025-09-05T05:46:41.423Z"
+    },
+    {
+      "url": "https://naruisonion.com/blog/",
+      "filename": "page-003_blog_2025-09-05T05-46-11-996Z.png",
+      "timestamp": "2025-09-05T05:46:44.576Z"
+    },
+    {
+      "url": "https://naruisonion.com/gallery/",
+      "filename": "page-004_gallery_2025-09-05T05-46-11-996Z.png",
+      "timestamp": "2025-09-05T05:46:53.039Z"
+    },
+    {
+      "url": "https://naruisonion.com/recipe/",
+      "filename": "page-005_recipe_2025-09-05T05-46-11-996Z.png",
+      "timestamp": "2025-09-05T05:46:39.193Z"
+    },
+    {
+      "url": "https://naruisonion.com/wp-content/uploads/2023/07/naruisonion-pc.png",
+      "filename": "page-006_wp-content-uploads-2023-07-nar_2025-09-05T05-46-11-996Z.png",
+      "timestamp": "2025-09-05T05:46:24.689Z"
+    },
+    {
+      "url": "https://naruisonion.com/recipe/%e5%8d%b3%e5%b8%ad%e3%82%aa%e3%83%8b%e3%82%aa%e3%83%b3%e3%83%94%e3%82%af%e3%83%ab%e3%82%b9/",
+      "filename": "page-007_recipe--e5-8d-b3-e5-b8-ad-e3-8_2025-09-05T05-46-11-996Z.png",
+      "timestamp": "2025-09-05T05:46:38.040Z"
+    },
+    {
+      "url": "https://naruisonion.com/recipe/%e4%b8%b8%e3%81%94%e3%81%a8%e7%8e%89%e3%81%ad%e3%81%8e%e3%81%ae%e3%82%aa%e3%83%8b%e3%82%aa%e3%83%b3%e3%83%94%e3%83%a9%e3%83%95/",
+      "filename": "page-008_recipe--e4-b8-b8-e3-81-94-e3-8_2025-09-05T05-46-11-996Z.png",
+      "timestamp": "2025-09-05T05:46:41.390Z"
+    },
+    {
+      "url": "https://naruisonion.com/recipe/%e4%b8%87%e8%83%bd%ef%bc%81%e3%83%94%e3%83%aa%e8%be%9b%e3%81%9f%e3%81%be%e3%81%ad%e3%81%8e%e3%83%9d%e3%83%b3%e9%85%a2%e3%83%80%e3%83%ac/",
+      "filename": "page-009_recipe--e4-b8-87-e8-83-bd-ef-b_2025-09-05T05-46-11-996Z.png",
+      "timestamp": "2025-09-05T05:47:25.074Z"
+    },
+    {
+      "url": "https://naruisonion.com/recipe/%e8%92%b8%e3%81%97%e7%84%bc%e3%81%8d%e3%81%9f%e3%81%be%e3%81%ad%e3%81%8e%e3%82%b9%e3%83%86%e3%83%bc%e3%82%ad/",
+      "filename": "page-010_recipe--e8-92-b8-e3-81-97-e7-8_2025-09-05T05-46-11-996Z.png",
+      "timestamp": "2025-09-05T05:47:26.136Z"
+    },
+    {
+      "url": "https://naruisonion.com/2024%e5%b9%b4%e5%8f%8e%e7%a9%ab%e3%81%9f%e3%81%be%e3%81%ad%e3%81%8e%e3%80%80%ef%bc%92%e6%9c%88%ef%bc%91%ef%bc%95%e6%97%a5%e3%81%a7%e6%8f%90%e4%be%9b%e7%b5%82%e4%ba%86%e3%81%97%e3%81%be%e3%81%99/",
+      "filename": "page-011_2024-e5-b9-b4-e5-8f-8e-e7-a9-a_2025-09-05T05-46-11-996Z.png",
+      "timestamp": "2025-09-05T05:47:27.784Z"
+    },
+    {
+      "url": "https://naruisonion.com/%e5%85%a8%e5%9b%bd%e5%88%9d%e3%80%80%e3%81%9f%e3%81%be%e3%81%ad%e3%81%8e%e3%81%ae%e8%87%aa%e5%8b%95%e8%b2%a9%e5%a3%b2%e6%a9%9f%e8%a8%ad%e7%bd%ae%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6%ef%bc%882024/",
+      "filename": "page-012_-e5-85-a8-e5-9b-bd-e5-88-9d-e3_2025-09-05T05-46-11-996Z.png",
+      "timestamp": "2025-09-05T05:47:31.570Z"
+    },
+    {
+      "url": "https://naruisonion.com/%e3%81%8a%e7%9b%86%e6%9c%9f%e9%96%93%e3%81%ae%e9%85%8d%e9%80%81%e3%81%a8%e4%bc%91%e6%a5%ad%e3%81%ab%e9%96%a2%e3%81%97%e3%81%a6/",
+      "filename": "page-013_-e3-81-8a-e7-9b-86-e6-9c-9f-e9_2025-09-05T05-46-11-996Z.png",
+      "timestamp": "2025-09-05T05:47:28.493Z"
+    },
+    {
+      "url": "https://naruisonion.com/%e6%8f%90%e4%be%9b%e5%93%81%e7%a8%ae%e3%81%ae%e5%88%87%e3%82%8a%e6%9b%bf%e3%81%88%e3%81%ab%e9%96%a2%e3%81%99%e3%82%8b%e3%81%94%e6%a1%88%e5%86%85/",
+      "filename": "page-014_-e6-8f-90-e4-be-9b-e5-93-81-e7_2025-09-05T05-46-11-996Z.png",
+      "timestamp": "2025-09-05T05:47:29.947Z"
+    },
+    {
+      "url": "https://naruisonion.com/%e8%a8%83%e5%a0%b1%e3%81%ae%e3%81%8a%e7%9f%a5%e3%82%89%e3%81%9b/",
+      "filename": "page-015_-e8-a8-83-e5-a0-b1-e3-81-ae-e3_2025-09-05T05-46-11-996Z.png",
+      "timestamp": "2025-09-05T05:47:31.641Z"
+    },
+    {
+      "url": "https://naruisonion.com/%e6%96%b0%e3%81%9f%e3%81%be%e3%81%ad%e3%81%8e%e5%87%ba%e8%8d%b7%e3%82%92%e9%96%8b%e5%a7%8b%e3%81%97%e3%81%be%e3%81%97%e3%81%9f%e3%80%82/",
+      "filename": "page-016_-e6-96-b0-e3-81-9f-e3-81-be-e3_2025-09-05T05-46-11-996Z.png",
+      "timestamp": "2025-09-05T05:47:29.989Z"
+    },
+    {
+      "url": "http://naruisonion.com/",
+      "filename": "page-017_top_2025-09-05T05-46-11-996Z.png",
+      "timestamp": "2025-09-05T05:48:12.774Z"
+    },
+    {
+      "url": "https://naruisonion.com/privacy-policy/",
+      "filename": "page-018_privacy-policy_2025-09-05T05-46-11-996Z.png",
+      "timestamp": "2025-09-05T05:48:03.068Z"
+    },
+    {
+      "url": "https://naruisonion.com/wp-content/uploads/2023/07/946492ceb02f303d09740613e913de41.jpg",
+      "filename": "page-019_wp-content-uploads-2023-07-946_2025-09-05T05-46-11-996Z.png",
+      "timestamp": "2025-09-05T05:47:45.632Z"
+    },
+    {
+      "url": "https://naruisonion.com/%e3%83%9b%e3%83%bc%e3%83%a0%e3%83%9a%e3%83%bc%e3%82%b8%e3%82%92%e3%83%aa%e3%83%8b%e3%83%a5%e3%83%bc%e3%82%a2%e3%83%ab%e3%81%97%e3%81%be%e3%81%97%e3%81%9f/",
+      "filename": "page-020_-e3-83-9b-e3-83-bc-e3-83-a0-e3_2025-09-05T05-46-11-996Z.png",
+      "timestamp": "2025-09-05T05:48:00.575Z"
+    }
+  ],
+  "compareResults": {
+    "siteId": "site-18-成井さんちの完熟たまねぎ",
+    "device": "desktop",
+    "summary": {
+      "totalPages": 19,
+      "ok": 11,
+      "ng": 8,
+      "error": 0,
+      "threshold": 2
+    },
+    "results": [
+      {
+        "pageId": "001",
+        "pageIdentifier": "top",
+        "baselineFile": "page-001_top_2025-09-05T04-28-56-582Z.png",
+        "afterFile": "page-001_top_2025-09-05T05-46-11-996Z.png",
+        "baselineTimestamp": "2025-09-05T04-28-56-582Z",
+        "afterTimestamp": "2025-09-05T05-46-11-996Z",
+        "diffPath": "/diffs/site-18-成井さんちの完熟たまねぎ/desktop/threshold-2/page-001_top_2025-09-05T05-48-16-483Z_diff-3.6288%.png",
+        "diffPixels": 823475,
+        "diffPercentage": 3.628845,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 11819
+        }
+      },
+      {
+        "pageId": "002",
+        "pageIdentifier": "about",
+        "baselineFile": "page-002_about_2025-09-05T04-28-56-582Z.png",
+        "afterFile": "page-002_about_2025-09-05T05-46-11-996Z.png",
+        "baselineTimestamp": "2025-09-05T04-28-56-582Z",
+        "afterTimestamp": "2025-09-05T05-46-11-996Z",
+        "diffPath": "/diffs/site-18-成井さんちの完熟たまねぎ/desktop/threshold-2/page-002_about_2025-09-05T05-48-20-672Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2609
+        }
+      },
+      {
+        "pageId": "003",
+        "pageIdentifier": "blog",
+        "baselineFile": "page-003_blog_2025-09-05T04-28-56-582Z.png",
+        "afterFile": "page-003_blog_2025-09-05T05-46-11-996Z.png",
+        "baselineTimestamp": "2025-09-05T04-28-56-582Z",
+        "afterTimestamp": "2025-09-05T05-46-11-996Z",
+        "diffPath": "/diffs/site-18-成井さんちの完熟たまねぎ/desktop/threshold-2/page-003_blog_2025-09-05T05-48-22-342Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2868
+        }
+      },
+      {
+        "pageId": "004",
+        "pageIdentifier": "gallery",
+        "baselineFile": "page-004_gallery_2025-09-05T04-28-56-582Z.png",
+        "afterFile": "page-004_gallery_2025-09-05T05-46-11-996Z.png",
+        "baselineTimestamp": "2025-09-05T04-28-56-582Z",
+        "afterTimestamp": "2025-09-05T05-46-11-996Z",
+        "diffPath": "/diffs/site-18-成井さんちの完熟たまねぎ/desktop/threshold-2/page-004_gallery_2025-09-05T05-48-26-849Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 11090
+        }
+      },
+      {
+        "pageId": "005",
+        "pageIdentifier": "recipe",
+        "baselineFile": "page-005_recipe_2025-09-05T04-28-56-582Z.png",
+        "afterFile": "page-005_recipe_2025-09-05T05-46-11-996Z.png",
+        "baselineTimestamp": "2025-09-05T04-28-56-582Z",
+        "afterTimestamp": "2025-09-05T05-46-11-996Z",
+        "diffPath": "/diffs/site-18-成井さんちの完熟たまねぎ/desktop/threshold-2/page-005_recipe_2025-09-05T05-48-31-409Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2453
+        }
+      },
+      {
+        "pageId": "006",
+        "pageIdentifier": "wp-content-uploads-2023-07-nar",
+        "baselineFile": "page-006_wp-content-uploads-2023-07-nar_2025-09-05T04-28-56-582Z.png",
+        "afterFile": "page-006_wp-content-uploads-2023-07-nar_2025-09-05T05-46-11-996Z.png",
+        "baselineTimestamp": "2025-09-05T04-28-56-582Z",
+        "afterTimestamp": "2025-09-05T05-46-11-996Z",
+        "diffPath": "/diffs/site-18-成井さんちの完熟たまねぎ/desktop/threshold-2/page-006_wp-content-uploads-2023-07-nar_2025-09-05T05-48-32-992Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "pageId": "007",
+        "pageIdentifier": "recipe--e5-8d-b3-e5-b8-ad-e3-8",
+        "baselineFile": "page-007_recipe--e5-8d-b3-e5-b8-ad-e3-8_2025-09-05T04-28-56-582Z.png",
+        "afterFile": "page-007_recipe--e5-8d-b3-e5-b8-ad-e3-8_2025-09-05T05-46-11-996Z.png",
+        "baselineTimestamp": "2025-09-05T04-28-56-582Z",
+        "afterTimestamp": "2025-09-05T05-46-11-996Z",
+        "diffPath": "/diffs/site-18-成井さんちの完熟たまねぎ/desktop/threshold-2/page-007_recipe--e5-8d-b3-e5-b8-ad-e3-8_2025-09-05T05-48-35-291Z_diff-52.8771%.png",
+        "diffPixels": 2368555,
+        "diffPercentage": 52.877085,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2333
+        }
+      },
+      {
+        "pageId": "008",
+        "pageIdentifier": "recipe--e4-b8-b8-e3-81-94-e3-8",
+        "baselineFile": "page-008_recipe--e4-b8-b8-e3-81-94-e3-8_2025-09-05T04-28-56-582Z.png",
+        "afterFile": "page-008_recipe--e4-b8-b8-e3-81-94-e3-8_2025-09-05T05-46-11-996Z.png",
+        "baselineTimestamp": "2025-09-05T04-28-56-582Z",
+        "afterTimestamp": "2025-09-05T05-46-11-996Z",
+        "diffPath": "/diffs/site-18-成井さんちの完熟たまねぎ/desktop/threshold-2/page-008_recipe--e4-b8-b8-e3-81-94-e3-8_2025-09-05T05-48-36-750Z_diff-3.8256%.png",
+        "diffPixels": 194208,
+        "diffPercentage": 3.825643,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2644
+        }
+      },
+      {
+        "pageId": "009",
+        "pageIdentifier": "recipe--e4-b8-87-e8-83-bd-ef-b",
+        "baselineFile": "page-009_recipe--e4-b8-87-e8-83-bd-ef-b_2025-09-05T04-28-56-582Z.png",
+        "afterFile": "page-009_recipe--e4-b8-87-e8-83-bd-ef-b_2025-09-05T05-46-11-996Z.png",
+        "baselineTimestamp": "2025-09-05T04-28-56-582Z",
+        "afterTimestamp": "2025-09-05T05-46-11-996Z",
+        "diffPath": "/diffs/site-18-成井さんちの完熟たまねぎ/desktop/threshold-2/page-009_recipe--e4-b8-87-e8-83-bd-ef-b_2025-09-05T05-48-39-433Z_diff-54.2423%.png",
+        "diffPixels": 2429709,
+        "diffPercentage": 54.242325,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2333
+        }
+      },
+      {
+        "pageId": "010",
+        "pageIdentifier": "recipe--e8-92-b8-e3-81-97-e7-8",
+        "baselineFile": "page-010_recipe--e8-92-b8-e3-81-97-e7-8_2025-09-05T04-28-56-582Z.png",
+        "afterFile": "page-010_recipe--e8-92-b8-e3-81-97-e7-8_2025-09-05T05-46-11-996Z.png",
+        "baselineTimestamp": "2025-09-05T04-28-56-582Z",
+        "afterTimestamp": "2025-09-05T05-46-11-996Z",
+        "diffPath": "/diffs/site-18-成井さんちの完熟たまねぎ/desktop/threshold-2/page-010_recipe--e8-92-b8-e3-81-97-e7-8_2025-09-05T05-48-43-814Z_diff-44.8484%.png",
+        "diffPixels": 2008920,
+        "diffPercentage": 44.848371,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2333
+        }
+      },
+      {
+        "pageId": "011",
+        "pageIdentifier": "2024-e5-b9-b4-e5-8f-8e-e7-a9-a",
+        "baselineFile": "page-011_2024-e5-b9-b4-e5-8f-8e-e7-a9-a_2025-09-05T04-28-56-582Z.png",
+        "afterFile": "page-011_2024-e5-b9-b4-e5-8f-8e-e7-a9-a_2025-09-05T05-46-11-996Z.png",
+        "baselineTimestamp": "2025-09-05T04-28-56-582Z",
+        "afterTimestamp": "2025-09-05T05-46-11-996Z",
+        "diffPath": "/diffs/site-18-成井さんちの完熟たまねぎ/desktop/threshold-2/page-011_2024-e5-b9-b4-e5-8f-8e-e7-a9-a_2025-09-05T05-48-45-057Z_diff-0.05%.png",
+        "diffPixels": 1661,
+        "diffPercentage": 0.050006,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1730
+        }
+      },
+      {
+        "pageId": "012",
+        "pageIdentifier": "-e5-85-a8-e5-9b-bd-e5-88-9d-e3",
+        "baselineFile": "page-012_-e5-85-a8-e5-9b-bd-e5-88-9d-e3_2025-09-05T04-28-56-582Z.png",
+        "afterFile": "page-012_-e5-85-a8-e5-9b-bd-e5-88-9d-e3_2025-09-05T05-46-11-996Z.png",
+        "baselineTimestamp": "2025-09-05T04-28-56-582Z",
+        "afterTimestamp": "2025-09-05T05-46-11-996Z",
+        "diffPath": "/diffs/site-18-成井さんちの完熟たまねぎ/desktop/threshold-2/page-012_-e5-85-a8-e5-9b-bd-e5-88-9d-e3_2025-09-05T05-48-46-453Z_diff-0.1185%.png",
+        "diffPixels": 5614,
+        "diffPercentage": 0.118475,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2468
+        }
+      },
+      {
+        "pageId": "013",
+        "pageIdentifier": "-e3-81-8a-e7-9b-86-e6-9c-9f-e9",
+        "baselineFile": "page-013_-e3-81-8a-e7-9b-86-e6-9c-9f-e9_2025-09-05T04-28-56-582Z.png",
+        "afterFile": "page-013_-e3-81-8a-e7-9b-86-e6-9c-9f-e9_2025-09-05T05-46-11-996Z.png",
+        "baselineTimestamp": "2025-09-05T04-28-56-582Z",
+        "afterTimestamp": "2025-09-05T05-46-11-996Z",
+        "diffPath": "/diffs/site-18-成井さんちの完熟たまねぎ/desktop/threshold-2/page-013_-e3-81-8a-e7-9b-86-e6-9c-9f-e9_2025-09-05T05-48-48-176Z_diff-0.15%.png",
+        "diffPixels": 5723,
+        "diffPercentage": 0.150012,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1987
+        }
+      },
+      {
+        "pageId": "014",
+        "pageIdentifier": "-e6-8f-90-e4-be-9b-e5-93-81-e7",
+        "baselineFile": "page-014_-e6-8f-90-e4-be-9b-e5-93-81-e7_2025-09-05T04-28-56-582Z.png",
+        "afterFile": "page-014_-e6-8f-90-e4-be-9b-e5-93-81-e7_2025-09-05T05-46-11-996Z.png",
+        "baselineTimestamp": "2025-09-05T04-28-56-582Z",
+        "afterTimestamp": "2025-09-05T05-46-11-996Z",
+        "diffPath": "/diffs/site-18-成井さんちの完熟たまねぎ/desktop/threshold-2/page-014_-e6-8f-90-e4-be-9b-e5-93-81-e7_2025-09-05T05-48-49-475Z_diff-0.1102%.png",
+        "diffPixels": 5567,
+        "diffPercentage": 0.110163,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2632
+        }
+      },
+      {
+        "pageId": "015",
+        "pageIdentifier": "-e8-a8-83-e5-a0-b1-e3-81-ae-e3",
+        "baselineFile": "page-015_-e8-a8-83-e5-a0-b1-e3-81-ae-e3_2025-09-05T04-28-56-582Z.png",
+        "afterFile": "page-015_-e8-a8-83-e5-a0-b1-e3-81-ae-e3_2025-09-05T05-46-11-996Z.png",
+        "baselineTimestamp": "2025-09-05T04-28-56-582Z",
+        "afterTimestamp": "2025-09-05T05-46-11-996Z",
+        "diffPath": "/diffs/site-18-成井さんちの完熟たまねぎ/desktop/threshold-2/page-015_-e8-a8-83-e5-a0-b1-e3-81-ae-e3_2025-09-05T05-48-53-632Z_diff-30.3902%.png",
+        "diffPixels": 1689792,
+        "diffPercentage": 30.390193,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2896
+        }
+      },
+      {
+        "pageId": "016",
+        "pageIdentifier": "-e6-96-b0-e3-81-9f-e3-81-be-e3",
+        "baselineFile": "page-016_-e6-96-b0-e3-81-9f-e3-81-be-e3_2025-09-05T04-28-56-582Z.png",
+        "afterFile": "page-016_-e6-96-b0-e3-81-9f-e3-81-be-e3_2025-09-05T05-46-11-996Z.png",
+        "baselineTimestamp": "2025-09-05T04-28-56-582Z",
+        "afterTimestamp": "2025-09-05T05-46-11-996Z",
+        "diffPath": "/diffs/site-18-成井さんちの完熟たまねぎ/desktop/threshold-2/page-016_-e6-96-b0-e3-81-9f-e3-81-be-e3_2025-09-05T05-48-56-619Z_diff-31.5287%.png",
+        "diffPixels": 1200412,
+        "diffPercentage": 31.528723,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1983
+        }
+      },
+      {
+        "pageId": "018",
+        "pageIdentifier": "privacy-policy",
+        "baselineFile": "page-018_privacy-policy_2025-09-05T04-28-56-582Z.png",
+        "afterFile": "page-018_privacy-policy_2025-09-05T05-46-11-996Z.png",
+        "baselineTimestamp": "2025-09-05T04-28-56-582Z",
+        "afterTimestamp": "2025-09-05T05-46-11-996Z",
+        "diffPath": "/diffs/site-18-成井さんちの完熟たまねぎ/desktop/threshold-2/page-018_privacy-policy_2025-09-05T05-48-59-558Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 7420
+        }
+      },
+      {
+        "pageId": "019",
+        "pageIdentifier": "wp-content-uploads-2023-07-946",
+        "baselineFile": "page-019_wp-content-uploads-2023-07-946_2025-09-05T04-28-56-582Z.png",
+        "afterFile": "page-019_wp-content-uploads-2023-07-946_2025-09-05T05-46-11-996Z.png",
+        "baselineTimestamp": "2025-09-05T04-28-56-582Z",
+        "afterTimestamp": "2025-09-05T05-46-11-996Z",
+        "diffPath": "/diffs/site-18-成井さんちの完熟たまねぎ/desktop/threshold-2/page-019_wp-content-uploads-2023-07-946_2025-09-05T05-49-02-204Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "pageId": "020",
+        "pageIdentifier": "-e3-83-9b-e3-83-bc-e3-83-a0-e3",
+        "baselineFile": "page-020_-e3-83-9b-e3-83-bc-e3-83-a0-e3_2025-09-05T04-28-56-582Z.png",
+        "afterFile": "page-020_-e3-83-9b-e3-83-bc-e3-83-a0-e3_2025-09-05T05-46-11-996Z.png",
+        "baselineTimestamp": "2025-09-05T04-28-56-582Z",
+        "afterTimestamp": "2025-09-05T05-46-11-996Z",
+        "diffPath": "/diffs/site-18-成井さんちの完熟たまねぎ/desktop/threshold-2/page-020_-e3-83-9b-e3-83-bc-e3-83-a0-e3_2025-09-05T05-49-04-203Z_diff-33.9496%.png",
+        "diffPixels": 1198720,
+        "diffPercentage": 33.94961,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1839
+        }
+      }
+    ]
+  }
+}

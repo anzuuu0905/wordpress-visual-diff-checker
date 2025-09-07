@@ -1,0 +1,122 @@
+{
+  "timestamp": "2025-09-05T04:33:54.950Z",
+  "type": "baseline",
+  "siteId": "site-17-実之和フーズ",
+  "siteName": "実之和フーズ",
+  "device": "desktop",
+  "captureCount": 10,
+  "captureResults": [
+    {
+      "url": "https://minowafoods.com/",
+      "filename": "page-001_top_2025-09-05T04-32-13-333Z.png",
+      "timestamp": "2025-09-05T04:33:03.528Z"
+    },
+    {
+      "url": "https://minowafoods.com/taste-of-the-queue-shop/",
+      "filename": "page-002_taste-of-the-queue-shop_2025-09-05T04-32-13-333Z.png",
+      "timestamp": "2025-09-05T04:33:17.439Z"
+    },
+    {
+      "url": "https://minowafoods.com/company/",
+      "filename": "page-003_company_2025-09-05T04-32-13-333Z.png",
+      "timestamp": "2025-09-05T04:33:02.115Z"
+    },
+    {
+      "url": "https://minowafoods.com/my-account/",
+      "filename": "page-004_my-account_2025-09-05T04-32-13-333Z.png",
+      "timestamp": "2025-09-05T04:33:03.104Z"
+    },
+    {
+      "url": "https://minowafoods.com/contact/",
+      "filename": "page-005_contact_2025-09-05T04-32-13-333Z.png",
+      "timestamp": "2025-09-05T04:33:03.401Z"
+    },
+    {
+      "url": "https://minowafoods.com/privacy-policy/",
+      "filename": "page-006_privacy-policy_2025-09-05T04-32-13-333Z.png",
+      "timestamp": "2025-09-05T04:33:09.092Z"
+    },
+    {
+      "url": "https://minowafoods.com/law/",
+      "filename": "page-007_law_2025-09-05T04-32-13-333Z.png",
+      "timestamp": "2025-09-05T04:33:02.113Z"
+    },
+    {
+      "url": "https://minowafoods.com/my-account/lost-password/",
+      "filename": "page-008_my-account-lost-password_2025-09-05T04-32-13-333Z.png",
+      "timestamp": "2025-09-05T04:33:03.121Z"
+    },
+    {
+      "url": "https://minowafoods.com/membership-join/",
+      "filename": "page-009_membership-join_2025-09-05T04-32-13-333Z.png",
+      "timestamp": "2025-09-05T04:33:54.255Z"
+    },
+    {
+      "url": "https://minowafoods.com/term/",
+      "filename": "page-010_term_2025-09-05T04-32-13-333Z.png",
+      "timestamp": "2025-09-05T04:33:54.943Z"
+    }
+  ],
+  "pages": [
+    {
+      "url": "https://minowafoods.com/",
+      "pageId": "001",
+      "identifier": "top",
+      "title": "実之和フーズ – メニュー開発に悩むすべての人へTVでも取り上げられる行列店の味を"
+    },
+    {
+      "url": "https://minowafoods.com/taste-of-the-queue-shop/",
+      "pageId": "002",
+      "identifier": "taste-of-the-queue-shop",
+      "title": "TVでも取り上げられる行列店の味を – 実之和フーズ"
+    },
+    {
+      "url": "https://minowafoods.com/company/",
+      "pageId": "003",
+      "identifier": "company",
+      "title": "会社概要 – 実之和フーズ"
+    },
+    {
+      "url": "https://minowafoods.com/my-account/",
+      "pageId": "004",
+      "identifier": "my-account",
+      "title": "マイアカウント – 実之和フーズ"
+    },
+    {
+      "url": "https://minowafoods.com/contact/",
+      "pageId": "005",
+      "identifier": "contact",
+      "title": "お問い合わせ – 実之和フーズ"
+    },
+    {
+      "url": "https://minowafoods.com/privacy-policy/",
+      "pageId": "006",
+      "identifier": "privacy-policy",
+      "title": "プライバシーポリシー – 実之和フーズ"
+    },
+    {
+      "url": "https://minowafoods.com/law/",
+      "pageId": "007",
+      "identifier": "law",
+      "title": "特定商取引法に基づく表記 – 実之和フーズ"
+    },
+    {
+      "url": "https://minowafoods.com/my-account/lost-password/",
+      "pageId": "008",
+      "identifier": "my-account-lost-password",
+      "title": "パスワードを忘れた場合 – 実之和フーズ"
+    },
+    {
+      "url": "https://minowafoods.com/membership-join/",
+      "pageId": "009",
+      "identifier": "membership-join",
+      "title": "会員登録 – 実之和フーズ"
+    },
+    {
+      "url": "https://minowafoods.com/term/",
+      "pageId": "010",
+      "identifier": "term",
+      "title": "利用規約 – 実之和フーズ"
+    }
+  ]
+}

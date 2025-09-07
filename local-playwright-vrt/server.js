@@ -38,10 +38,12 @@ const database = getDatabase({
 // スクリーンショット保存ディレクトリ
 const SCREENSHOTS_DIR = path.join(__dirname, 'screenshots');
 const DIFFS_DIR = path.join(__dirname, 'diffs');
+const RESULTS_DIR = path.join(__dirname, 'data', 'results');
 
 // ディレクトリ作成
 fs.ensureDirSync(SCREENSHOTS_DIR);
 fs.ensureDirSync(DIFFS_DIR);
+fs.ensureDirSync(RESULTS_DIR);
 
 // ミドルウェア
 app.use(cors());
@@ -61,12 +63,95 @@ const CONFIG = {
   DIFF_JUDGMENT_THRESHOLD: 2.0,           // 差分率判定用閾値（2%超でNG）
   TIMEOUT: 60000,
   SCREENSHOT_QUALITY: 90,
-  MAX_CONCURRENT_SITES: 3, // 同時処理サイト数
-  MAX_CONCURRENT_PAGES: 5  // 同時処理ページ数
+  MAX_CONCURRENT_SITES: 5, // 同時処理サイト数（高速化）
+  MAX_CONCURRENT_PAGES: 8, // 同時処理ページ数（最適化版：安定性重視）
+  CLEANUP_OLD_FILES_DAYS: 90 // 3ヶ月以上古いファイルを削除
 };
 
 console.log('🚀 Local WordPress VRT Server Starting...');
 console.log(`📁 Screenshots: ${SCREENSHOTS_DIR}`);
+
+/**
+ * 🗑️ 古いファイル自動削除
+ */
+async function cleanupOldFiles() {
+  try {
+    if (!fs.existsSync(SCREENSHOTS_DIR)) return;
+    
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - CONFIG.CLEANUP_OLD_FILES_DAYS);
+    
+    let deletedCount = 0;
+    const siteDirs = fs.readdirSync(SCREENSHOTS_DIR);
+    
+    for (const siteDir of siteDirs) {
+      const sitePath = path.join(SCREENSHOTS_DIR, siteDir);
+      if (!fs.statSync(sitePath).isDirectory()) continue;
+      
+      // baseline と after フォルダをチェック
+      for (const type of ['baseline', 'after']) {
+        const typePath = path.join(sitePath, type);
+        if (!fs.existsSync(typePath)) continue;
+        
+        const deviceDirs = fs.readdirSync(typePath);
+        for (const deviceDir of deviceDirs) {
+          const devicePath = path.join(typePath, deviceDir);
+          if (!fs.statSync(devicePath).isDirectory()) continue;
+          
+          const files = fs.readdirSync(devicePath);
+          for (const file of files) {
+            const filePath = path.join(devicePath, file);
+            const stats = fs.statSync(filePath);
+            
+            if (stats.mtime < cutoffDate) {
+              fs.unlinkSync(filePath);
+              deletedCount++;
+            }
+          }
+        }
+      }
+    }
+    
+    if (deletedCount > 0) {
+      console.log(`🗑️ ${deletedCount}個の古いファイルを削除しました（${CONFIG.CLEANUP_OLD_FILES_DAYS}日以上前）`);
+    }
+  } catch (error) {
+    console.error('⚠️ 古いファイル削除エラー:', error.message);
+  }
+}
+
+// 起動時とその後定期的にクリーンアップ実行
+cleanupOldFiles();
+setInterval(cleanupOldFiles, 24 * 60 * 60 * 1000); // 24時間ごと
+
+/**
+ * 💾 実行結果を保存
+ */
+function saveExecutionResult(type, siteId, result) {
+  try {
+    const timestamp = new Date().toISOString();
+    const filename = `${siteId}_${type}_${timestamp.replace(/[:.]/g, '-')}.json`;
+    const filepath = path.join(RESULTS_DIR, filename);
+    
+    const resultData = {
+      timestamp,
+      type, // 'baseline', 'after', 'compare'
+      siteId,
+      siteName: result.siteName,
+      ...result
+    };
+    
+    fs.writeFileSync(filepath, JSON.stringify(resultData, null, 2));
+    console.log(`💾 結果保存: ${filename}`);
+    
+    // 最新結果も別途保存（簡単アクセス用）
+    const latestPath = path.join(RESULTS_DIR, `${siteId}_${type}_latest.json`);
+    fs.writeFileSync(latestPath, JSON.stringify(resultData, null, 2));
+    
+  } catch (error) {
+    console.error('⚠️ 結果保存エラー:', error.message);
+  }
+}
 console.log(`📁 Diffs: ${DIFFS_DIR}`);
 
 /**
@@ -603,7 +688,7 @@ app.post('/capture-baseline', async (req, res) => {
       }
 
       // サイト別結果を返す
-      return {
+      const siteResult = {
         siteId: site.id,
         siteName: site.name,
         device,
@@ -613,8 +698,14 @@ app.post('/capture-baseline', async (req, res) => {
           filename: r.filename,
           timestamp: r.timestamp
         })),
+        pages: targetPages, // ページ情報も保存
         timestamp: new Date().toISOString()
       };
+      
+      // 結果を保存
+      saveExecutionResult('baseline', site.id, siteResult);
+      
+      return siteResult;
     };
 
     // サイトを並列処理
@@ -768,7 +859,7 @@ app.post('/capture-and-compare', async (req, res) => {
       }
 
       // サイト別結果
-      allResults.push({
+      const siteResult = {
         siteId: site.id,
         siteName: site.name,
         device,
@@ -781,7 +872,13 @@ app.post('/capture-and-compare', async (req, res) => {
         })),
         compareResults: compareResults,
         timestamp: new Date().toISOString()
-      });
+      };
+      
+      // After結果とCompare結果を保存
+      saveExecutionResult('after', site.id, siteResult);
+      saveExecutionResult('compare', site.id, siteResult);
+      
+      allResults.push(siteResult);
     }
 
     // 全体的な統計
@@ -795,6 +892,15 @@ app.post('/capture-and-compare', async (req, res) => {
     };
 
     console.log(`✅ Step2+3統合実行完了: ${summary.totalSites}サイト, ${summary.totalPages}ページ`);
+    
+    // 完了通知音を鳴らす
+    console.log('\x07'); // ベル音
+    try {
+      require('child_process').exec('afplay /System/Library/Sounds/Glass.aiff', () => {});
+    } catch (err) {
+      console.log('🔔 処理完了！');
+    }
+    
     res.json({ success: true, summary, results: allResults });
 
   } catch (error) {
@@ -1159,21 +1265,13 @@ app.get('/results', (req, res) => {
       }
     });
 
-    // 最新の更新日時でソート
+    // サイトIDでソート（site-1, site-2, site-3...の順）
     results.sort((a, b) => {
-      const getLatestTime = (site) => {
-        let latest = 0;
-        site.devices.forEach(device => {
-          if (device.baseline.latest) {
-            latest = Math.max(latest, new Date(device.baseline.latest.timestamp).getTime());
-          }
-          if (device.after.latest) {
-            latest = Math.max(latest, new Date(device.after.latest.timestamp).getTime());
-          }
-        });
-        return latest;
+      const extractSiteNumber = (siteId) => {
+        const match = siteId.match(/site-(\d+)/);
+        return match ? parseInt(match[1], 10) : 9999;
       };
-      return getLatestTime(b) - getLatestTime(a);
+      return extractSiteNumber(a.siteId) - extractSiteNumber(b.siteId);
     });
 
     res.json({
@@ -1402,7 +1500,8 @@ app.get('/session-images/:siteId/:device', async (req, res) => {
               diffPath: existingDiff.relativePath,
               status: existingDiff.status,
               diffPercentage: existingDiff.diffPercentage || 0,
-              isExistingResult: true
+              isExistingResult: true,
+              url: baselineFile.pageUrl // URL情報を追加
             });
             console.log(`♻️ 既存差分ファイルを利用: ${baselineFile.pageIdentifier}`);
           } else {
@@ -1416,6 +1515,8 @@ app.get('/session-images/:siteId/:device', async (req, res) => {
             );
             // pageIdentifierを確実に設定
             comparison.pageIdentifier = comparison.pageIdentifier || baselineFile.pageIdentifier;
+            // URL情報を追加
+            comparison.url = baselineFile.pageUrl;
             comparisons.push(comparison);
             console.log(`🆕 新規比較実行: ${baselineFile.pageIdentifier}`);
           }
@@ -1678,7 +1779,7 @@ async function takeHighPrecisionScreenshot(url, siteId, type, device, pageInfo =
       // ページ読み込み（エラーハンドリング強化）
       try {
         await page.goto(url, {
-          waitUntil: 'networkidle',
+          waitUntil: 'load',
           timeout: CONFIG.TIMEOUT
         });
       } catch (error) {
@@ -1811,7 +1912,7 @@ async function waitForWordPressReady(page) {
 
       // 基本的な読み込み完了チェック
       return document.readyState === 'complete' && pendingImages < 3;
-    }, {}, { timeout: 15000 });
+    }, {}, { timeout: 5000 });
   } catch (error) {
     console.log('⚠️ WordPress読み込み完了待機でタイムアウト - 処理を続行します');
   }
@@ -1831,13 +1932,13 @@ async function waitForWordPressReady(page) {
         loader.style.opacity === '0' ||
         !document.body.contains(loader)
       );
-    }, {}, { timeout: 10000 });
+    }, {}, { timeout: 3000 });
   } catch (error) {
     console.log('⚠️ ローダー要素の確認でタイムアウト - 処理を続行します');
   }
 
   // フェードイン効果の完了を待機
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(1000);
 
   // ページを最後までスクロール（遅延読み込み対応）
   await autoScrollToBottom(page);
@@ -1850,53 +1951,82 @@ async function waitForWordPressReady(page) {
  * 自動スクロール（遅延読み込み対応）
  */
 async function autoScrollToBottom(page) {
-  console.log('📜 ページを最後までスクロール中...');
-
+  console.log('⚡ 高速スクロール + 確実な最終読み込み開始...');
+  
+  // 1. 基本読み込み完了
+  await page.waitForLoadState('domcontentloaded');
+  
+  // 2. 高速スクロール（待機時間最小）
   let previousHeight = 0;
-  let currentHeight = await page.evaluate(() => document.body.scrollHeight);
-  let scrollAttempts = 0;
-  const maxScrollAttempts = 10;
-
-  while (previousHeight !== currentHeight && scrollAttempts < maxScrollAttempts) {
-    previousHeight = currentHeight;
-
-    // スムーズスクロール実行
-    await page.evaluate(() => {
-      window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: 'smooth'
-      });
-    });
-
-    // スクロール完了まで待機
-    await page.waitForTimeout(1500);
-
-    // 遅延読み込み要素の読み込み待機
-    try {
-      await page.waitForFunction(() => {
-        const lazyImages = document.querySelectorAll('img[loading="lazy"], img[data-src], .lazy');
-        const loadingImages = Array.from(lazyImages).filter(img =>
-          !img.complete || !img.src || img.src.includes('data:')
-        );
-        return loadingImages.length < 3;
-      }, {}, { timeout: 3000 });
-    } catch (error) {
-      console.log('⚠️ 遅延読み込み画像の確認でタイムアウト');
+  let stableCount = 0;
+  const maxAttempts = 15;
+  
+  for (let i = 0; i < maxAttempts; i++) {
+    const currentHeight = await page.evaluate(() => document.body.scrollHeight);
+    
+    // 高さ安定チェック
+    if (currentHeight === previousHeight) {
+      stableCount++;
+      if (stableCount >= 2) {  // 2回で十分
+        console.log('📏 ページ高さ安定');
+        break;
+      }
+    } else {
+      stableCount = 0;
     }
-
-    currentHeight = await page.evaluate(() => document.body.scrollHeight);
-    scrollAttempts++;
-
-    console.log(`📏 スクロール ${scrollAttempts}: ${previousHeight} → ${currentHeight}`);
+    
+    // 大きなステップで高速スクロール
+    const scrollStep = Math.min(1500, currentHeight / 8);  // 大きめ
+    await page.evaluate((step) => {
+      window.scrollBy(0, step);
+    }, scrollStep);
+    
+    // 最小待機（高速化）
+    await page.waitForTimeout(50);  // 0.05秒のみ
+    
+    previousHeight = currentHeight;
+    
+    console.log(`📏 高速スクロール ${i + 1}: ${previousHeight}px`);
   }
-
+  
+  // 3. 最下部まで移動
+  await page.evaluate(() => {
+    window.scrollTo(0, document.body.scrollHeight);
+  });
+  
+  console.log('📍 最下部到達 - 最終読み込み待機開始');
+  
+  // 4. 最終的な長時間待機（確実性重視）
+  await Promise.all([
+    // 遅延読み込み要素の完了を待つ（長めのタイムアウト）
+    page.waitForFunction(() => {
+      const lazyImages = document.querySelectorAll('img[loading="lazy"], img[data-src], .lazy');
+      const unloadedImages = Array.from(lazyImages).filter(img => 
+        !img.complete || img.naturalWidth === 0
+      );
+      return unloadedImages.length === 0;
+    }, {}, { timeout: 8000 }).catch(() => console.log('⚠️ 一部画像の読み込み未完了')),
+    
+    // フッター要素の表示確認（長めの待機）
+    page.waitForSelector('footer, .footer, #footer', { 
+      state: 'visible', 
+      timeout: 8000 
+    }).catch(() => console.log('フッター検出タイムアウト')),
+    
+    // 固定の短時間待機（最適化）
+    page.waitForTimeout(1000)  // 1秒の確実な待機
+  ]);
+  
+  // 5. 追加の安定化待機
+  await page.waitForTimeout(500);  // 最小限の安定化待機
+  
   // 最終的にトップに戻る
   await page.evaluate(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'instant' });
   });
 
-  await page.waitForTimeout(1000);
-  console.log('✅ スクロール完了');
+  await page.waitForTimeout(200);
+  console.log('✅ 最適化スクロール完了');
 }
 
 /**
@@ -2144,6 +2274,1264 @@ async function autoScroll(page) {
 /**
  * サーバー起動
  */
+/**
+ * 📊 全サイトの最新結果一覧を取得（ダッシュボード用）
+ */
+app.get('/dashboard-results', (req, res) => {
+  try {
+    const allSitesList = sitesManager.getAllSites();
+    const dashboardData = [];
+    
+    for (const site of allSitesList) {
+      const siteData = {
+        siteId: site.id,
+        siteName: site.name,
+        baseUrl: site.baseUrl,
+        baseline: null,
+        after: null,
+        compare: null,
+        status: 'not_executed'
+      };
+      
+      // JSONファイルから結果を取得（もしあれば）
+      const baselinePath = path.join(RESULTS_DIR, `${site.id}_baseline_latest.json`);
+      const afterPath = path.join(RESULTS_DIR, `${site.id}_after_latest.json`);
+      const comparePath = path.join(RESULTS_DIR, `${site.id}_compare_latest.json`);
+      
+      // JSONファイルが存在しない場合は画像ファイルから推定
+      if (!fs.existsSync(baselinePath)) {
+        const baselineDir = path.join(SCREENSHOTS_DIR, site.id, 'baseline', 'desktop');
+        if (fs.existsSync(baselineDir)) {
+          const imageFiles = fs.readdirSync(baselineDir).filter(f => f.endsWith('.png'));
+          if (imageFiles.length > 0) {
+            // 最新セッションの画像を取得
+            const sortedFiles = imageFiles.sort((a, b) => b.localeCompare(a));
+            const latestTimestamp = sortedFiles[0].match(/(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z)/)?.[1];
+            const latestFiles = latestTimestamp ? 
+              sortedFiles.filter(f => f.includes(latestTimestamp)) : [];
+            
+            if (latestFiles.length > 0) {
+              // タイムスタンプを正しいISO形式に変換
+              let isoTimestamp = new Date().toISOString();
+              if (latestTimestamp) {
+                try {
+                  // 2025-09-02T05-02-15-078Z を 2025-09-02T05:02:15.078Z に変換
+                  const parts = latestTimestamp.match(/(\d{4})-(\d{2})-(\d{2})T(\d{2})-(\d{2})-(\d{2})-(\d{3})Z/);
+                  if (parts) {
+                    isoTimestamp = `${parts[1]}-${parts[2]}-${parts[3]}T${parts[4]}:${parts[5]}:${parts[6]}.${parts[7]}Z`;
+                  }
+                } catch (e) {
+                  console.warn('タイムスタンプ変換エラー:', latestTimestamp, e);
+                }
+              }
+              
+              siteData.baseline = {
+                timestamp: isoTimestamp,
+                pageCount: latestFiles.length,
+                pages: latestFiles.map(f => f.replace('.png', ''))
+              };
+            }
+          }
+        }
+      } else {
+        const baselineData = JSON.parse(fs.readFileSync(baselinePath, 'utf8'));
+        siteData.baseline = {
+          timestamp: baselineData.timestamp,
+          pageCount: baselineData.captureCount,
+          pages: baselineData.pages
+        };
+      }
+      
+      // After結果の処理
+      if (!fs.existsSync(afterPath)) {
+        const afterDir = path.join(SCREENSHOTS_DIR, site.id, 'after', 'desktop');
+        if (fs.existsSync(afterDir)) {
+          const imageFiles = fs.readdirSync(afterDir).filter(f => f.endsWith('.png'));
+          if (imageFiles.length > 0) {
+            // 最新セッションの画像を取得
+            const sortedFiles = imageFiles.sort((a, b) => b.localeCompare(a));
+            const latestTimestamp = sortedFiles[0].match(/(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z)/)?.[1];
+            const latestFiles = latestTimestamp ? 
+              sortedFiles.filter(f => f.includes(latestTimestamp)) : [];
+              
+            if (latestFiles.length > 0) {
+              // タイムスタンプを正しいISO形式に変換
+              let isoTimestamp = new Date().toISOString();
+              if (latestTimestamp) {
+                try {
+                  // 2025-09-02T05-14-41-953Z を 2025-09-02T05:14:41.953Z に変換
+                  const parts = latestTimestamp.match(/(\d{4})-(\d{2})-(\d{2})T(\d{2})-(\d{2})-(\d{2})-(\d{3})Z/);
+                  if (parts) {
+                    isoTimestamp = `${parts[1]}-${parts[2]}-${parts[3]}T${parts[4]}:${parts[5]}:${parts[6]}.${parts[7]}Z`;
+                  }
+                } catch (e) {
+                  console.warn('タイムスタンプ変換エラー:', latestTimestamp, e);
+                }
+              }
+              
+              siteData.after = {
+                timestamp: isoTimestamp,
+                pageCount: latestFiles.length
+              };
+            }
+          }
+        }
+      } else {
+        const afterData = JSON.parse(fs.readFileSync(afterPath, 'utf8'));
+        siteData.after = {
+          timestamp: afterData.timestamp,
+          pageCount: afterData.captureCount
+        };
+      }
+      
+      // Compare結果の処理（JSONファイルまたは差分画像から復元）
+      if (fs.existsSync(comparePath)) {
+        const compareData = JSON.parse(fs.readFileSync(comparePath, 'utf8'));
+        siteData.compare = {
+          timestamp: compareData.timestamp,
+          status: compareData.compareResults.status,
+          okCount: compareData.compareResults.summary?.ok || 0,
+          ngCount: compareData.compareResults.summary?.ng || 0,
+          diffRate: compareData.compareResults.summary?.avgDiffRate || 0
+        };
+        
+        // ステータス判定
+        if (compareData.compareResults.status === 'OK') {
+          siteData.status = 'ok';
+        } else if (compareData.compareResults.status === 'NG') {
+          siteData.status = 'ng';
+        } else if (compareData.compareResults.status === 'ERROR') {
+          siteData.status = 'error';
+        }
+      } else {
+        // 差分画像から比較結果を復元
+        const diffsDir = path.join(DIFFS_DIR, site.id, 'desktop', 'threshold-2');
+        if (fs.existsSync(diffsDir)) {
+          const diffFiles = fs.readdirSync(diffsDir).filter(f => f.endsWith('.png'));
+          if (diffFiles.length > 0) {
+            // 最新セッションの差分を取得
+            const latestDiffFiles = diffFiles.sort((a, b) => b.localeCompare(a));
+            let okCount = 0;
+            let ngCount = 0;
+            let totalDiffRate = 0;
+            
+            // 差分率を解析
+            for (const diffFile of latestDiffFiles) {
+              const diffMatch = diffFile.match(/diff-([0-9.]+)%\.png/);
+              if (diffMatch) {
+                const diffRate = parseFloat(diffMatch[1]);
+                totalDiffRate += diffRate;
+                if (diffRate <= 2.0) {
+                  okCount++;
+                } else {
+                  ngCount++;
+                }
+              }
+            }
+            
+            const avgDiffRate = latestDiffFiles.length > 0 ? totalDiffRate / latestDiffFiles.length : 0;
+            const latestTimestamp = latestDiffFiles[0]?.match(/(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z)/)?.[1];
+            
+            if (latestTimestamp) {
+              let isoTimestamp = new Date().toISOString();
+              try {
+                const parts = latestTimestamp.match(/(\d{4})-(\d{2})-(\d{2})T(\d{2})-(\d{2})-(\d{2})-(\d{3})Z/);
+                if (parts) {
+                  isoTimestamp = `${parts[1]}-${parts[2]}-${parts[3]}T${parts[4]}:${parts[5]}:${parts[6]}.${parts[7]}Z`;
+                }
+              } catch (e) {
+                console.warn('差分タイムスタンプ変換エラー:', latestTimestamp, e);
+              }
+              
+              siteData.compare = {
+                timestamp: isoTimestamp,
+                status: avgDiffRate > 2.0 ? 'NG' : 'OK',
+                okCount,
+                ngCount,
+                diffRate: avgDiffRate
+              };
+              
+              // ステータス更新
+              siteData.status = avgDiffRate > 2.0 ? 'ng' : 'ok';
+            }
+          }
+        }
+      }
+      
+      // ステータス判定（Compare結果がない場合）
+      if (siteData.status === 'not_executed') {
+        if (siteData.baseline && siteData.after) {
+          siteData.status = 'pending_compare';
+        } else if (siteData.baseline) {
+          siteData.status = 'baseline_only';
+        }
+      }
+      
+      dashboardData.push(siteData);
+    }
+    
+    // サマリー統計
+    const summary = {
+      totalSites: dashboardData.length,
+      executedSites: dashboardData.filter(s => s.baseline !== null).length,
+      okSites: dashboardData.filter(s => s.status === 'ok').length,
+      ngSites: dashboardData.filter(s => s.status === 'ng').length,
+      errorSites: dashboardData.filter(s => s.status === 'error').length,
+      pendingSites: dashboardData.filter(s => s.status === 'not_executed').length
+    };
+    
+    res.json({
+      success: true,
+      summary,
+      sites: dashboardData,
+      lastUpdated: new Date().toISOString()
+    });
+    
+  } catch (error) {
+    console.error('❌ ダッシュボード結果取得エラー:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+/**
+ * 📊 エクスポート機能
+ */
+const { google } = require('googleapis');
+const csv = require('csv-writer').createObjectCsvWriter;
+const puppeteer = require('puppeteer');
+
+// Google Sheets API設定
+let sheetsService = null;
+
+// CSV用の書き込みオブジェクト
+function getCsvWriter(filename) {
+  return csv({
+    path: filename,
+    header: [
+      { id: 'siteId', title: 'Site ID' },
+      { id: 'siteName', title: 'サイト名' },
+      { id: 'baseUrl', title: 'URL' },
+      { id: 'status', title: 'ステータス' },
+      { id: 'baselinePages', title: 'Baseline ページ数' },
+      { id: 'baselineDate', title: 'Baseline 実行日' },
+      { id: 'afterPages', title: 'After ページ数' },
+      { id: 'afterDate', title: 'After 実行日' },
+      { id: 'okCount', title: 'OK ページ数' },
+      { id: 'ngCount', title: 'NG ページ数' },
+      { id: 'diffRate', title: '差分率 (%)' },
+      { id: 'compareDate', title: '比較実行日' }
+    ]
+  });
+}
+
+/**
+ * VRT結果をCSV形式に変換
+ */
+function convertToCSVData(dashboardData) {
+  return dashboardData.map(site => ({
+    siteId: site.siteId,
+    siteName: site.siteName,
+    baseUrl: site.baseUrl,
+    status: site.status,
+    baselinePages: site.baseline ? site.baseline.pageCount : 0,
+    baselineDate: site.baseline ? new Date(site.baseline.timestamp).toLocaleString('ja-JP') : '',
+    afterPages: site.after ? site.after.pageCount : 0,
+    afterDate: site.after ? new Date(site.after.timestamp).toLocaleString('ja-JP') : '',
+    okCount: site.compare ? site.compare.okCount : 0,
+    ngCount: site.compare ? site.compare.ngCount : 0,
+    diffRate: site.compare ? site.compare.diffRate.toFixed(2) : 0,
+    compareDate: site.compare ? new Date(site.compare.timestamp).toLocaleString('ja-JP') : ''
+  }));
+}
+
+/**
+ * CSV エクスポート API
+ */
+app.get('/export-csv', async (req, res) => {
+  try {
+    // ダッシュボードデータを取得
+    const allSitesList = sitesManager.getAllSites();
+    const dashboardData = [];
+    
+    for (const site of allSitesList) {
+      const siteData = {
+        siteId: site.id,
+        siteName: site.name,
+        baseUrl: site.baseUrl,
+        baseline: null,
+        after: null,
+        compare: null,
+        status: 'not_executed'
+      };
+      
+      // 最新の結果を読み込み
+      const baselineFile = path.join(RESULTS_DIR, `${site.id}_baseline_latest.json`);
+      if (fs.existsSync(baselineFile)) {
+        siteData.baseline = JSON.parse(fs.readFileSync(baselineFile, 'utf8'));
+        siteData.status = 'baseline_only';
+      }
+      
+      const afterFile = path.join(RESULTS_DIR, `${site.id}_after_latest.json`);
+      if (fs.existsSync(afterFile)) {
+        siteData.after = JSON.parse(fs.readFileSync(afterFile, 'utf8'));
+        siteData.status = 'pending_compare';
+      }
+      
+      const compareFile = path.join(RESULTS_DIR, `${site.id}_compare_latest.json`);
+      if (fs.existsSync(compareFile)) {
+        siteData.compare = JSON.parse(fs.readFileSync(compareFile, 'utf8'));
+        
+        if (siteData.compare.diffRate < 0.1) {
+          siteData.status = 'ok';
+        } else {
+          siteData.status = 'ng';
+        }
+      }
+      
+      dashboardData.push(siteData);
+    }
+    
+    // CSV形式に変換
+    const csvData = convertToCSVData(dashboardData);
+    
+    // CSV ファイル生成
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const filename = path.join(__dirname, 'temp', `vrt_results_${timestamp}.csv`);
+    
+    // tempディレクトリ作成
+    const tempDir = path.join(__dirname, 'temp');
+    if (!fs.existsSync(tempDir)) {
+      fs.mkdirSync(tempDir, { recursive: true });
+    }
+    
+    const csvWriter = getCsvWriter(filename);
+    await csvWriter.writeRecords(csvData);
+    
+    // ファイルをダウンロード
+    res.download(filename, `VRT実行結果_${new Date().toLocaleDateString('ja-JP')}.csv`, (err) => {
+      if (err) {
+        console.error('CSV ダウンロードエラー:', err);
+        res.status(500).json({ success: false, error: 'ファイルダウンロードに失敗しました' });
+      } else {
+        // ダウンロード後にファイルを削除
+        setTimeout(() => {
+          try {
+            fs.unlinkSync(filename);
+          } catch (deleteError) {
+            console.error('一時ファイル削除エラー:', deleteError);
+          }
+        }, 60000); // 60秒後に削除
+      }
+    });
+    
+  } catch (error) {
+    console.error('❌ CSV エクスポートエラー:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+/**
+ * Google Sheets エクスポート API
+ */
+app.post('/export-google-sheets', async (req, res) => {
+  try {
+    const { spreadsheetId, sheetName = 'VRT結果' } = req.body;
+    
+    if (!spreadsheetId) {
+      return res.status(400).json({
+        success: false,
+        error: 'スプレッドシートIDが必要です'
+      });
+    }
+    
+    // 認証設定（サービスアカウントキーファイルが必要）
+    // const auth = new google.auth.GoogleAuth({
+    //   keyFile: 'path/to/service-account-key.json',
+    //   scopes: ['https://www.googleapis.com/auth/spreadsheets']
+    // });
+    
+    // sheetsService = google.sheets({ version: 'v4', auth });
+    
+    // 現在はCSVエクスポートのみサポート
+    return res.status(501).json({
+      success: false,
+      error: 'Google Sheets エクスポートは現在準備中です。CSVエクスポートをご利用ください。',
+      csvUrl: '/export-csv'
+    });
+    
+  } catch (error) {
+    console.error('❌ Google Sheets エクスポートエラー:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+/**
+ * 📷 画像一覧PDF レポート生成
+ */
+app.get('/export-image-pdf/:siteId', async (req, res) => {
+  try {
+    const { siteId } = req.params;
+    const { type = 'baseline' } = req.query; // baseline, after, compare
+    
+    const siteInfo = sitesManager.getSite(siteId);
+    if (!siteInfo) {
+      return res.status(404).json({ success: false, error: 'サイトが見つかりません' });
+    }
+    
+    // 画像ファイルのパスを取得
+    const imageDir = path.join(SCREENSHOTS_DIR, siteId, type, 'desktop');
+    
+    if (!fs.existsSync(imageDir)) {
+      return res.status(404).json({ success: false, error: '画像フォルダが見つかりません' });
+    }
+    
+    // 最新セッションの画像のみを取得
+    const allImageFiles = fs.readdirSync(imageDir)
+      .filter(f => f.endsWith('.png'))
+      .sort((a, b) => b.localeCompare(a)); // 降順ソート（最新が先頭）
+    
+    // 最新のタイムスタンプを取得
+    const latestTimestamp = allImageFiles.length > 0 ? 
+      allImageFiles[0].match(/(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z)/)?.[1] : null;
+    
+    const imageFiles = latestTimestamp ? 
+      allImageFiles.filter(f => f.includes(latestTimestamp)).slice(0, 20) : 
+      allImageFiles.slice(0, 20); // 最新セッションの最大20枚
+    
+    if (imageFiles.length === 0) {
+      return res.status(404).json({ success: false, error: '画像ファイルが見つかりません' });
+    }
+    
+    // HTMLテンプレート作成
+    const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>${siteInfo.name} - ${type.toUpperCase()}画像一覧</title>
+        <style>
+            body {
+                font-family: 'Noto Sans JP', Arial, sans-serif;
+                margin: 20px;
+                background: #f5f5f5;
+            }
+            .header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background: white;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+            .header h1 {
+                color: #333;
+                margin: 0 0 10px 0;
+                font-size: 28px;
+            }
+            .header p {
+                color: #666;
+                margin: 5px 0;
+                font-size: 14px;
+            }
+            .image-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+                gap: 20px;
+                margin-top: 20px;
+            }
+            .image-item {
+                background: white;
+                border-radius: 10px;
+                padding: 15px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            .image-item h3 {
+                margin: 0 0 10px 0;
+                color: #333;
+                font-size: 16px;
+                border-bottom: 2px solid #667eea;
+                padding-bottom: 5px;
+            }
+            .image-item img {
+                width: 100%;
+                max-width: 400px;
+                height: auto;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+            .image-info {
+                margin-top: 10px;
+                font-size: 12px;
+                color: #666;
+            }
+            @media print {
+                .image-grid {
+                    grid-template-columns: 1fr;
+                }
+                .image-item {
+                    margin-bottom: 20px;
+                    page-break-inside: avoid;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>📷 ${siteInfo.name}</h1>
+            <p><strong>URL:</strong> ${siteInfo.baseUrl}</p>
+            <p><strong>タイプ:</strong> ${type.toUpperCase()}</p>
+            <p><strong>生成日:</strong> ${new Date().toLocaleString('ja-JP')}</p>
+            <p><strong>画像数:</strong> ${imageFiles.length}枚</p>
+        </div>
+        
+        <div class="image-grid">
+            ${imageFiles.map(filename => {
+              const imagePath = path.join(imageDir, filename);
+              const stats = fs.statSync(imagePath);
+              const base64Image = fs.readFileSync(imagePath, 'base64');
+              
+              // ファイル名からページ情報を抽出
+              const pageMatch = filename.match(/page-(\d+)_([^_]+)/);
+              const pageNum = pageMatch ? pageMatch[1] : '?';
+              const pageName = pageMatch ? pageMatch[2] : filename.replace('.png', '');
+              
+              return `
+                <div class="image-item">
+                    <h3>📄 Page ${pageNum}: ${pageName}</h3>
+                    <img src="data:image/png;base64,${base64Image}" alt="${filename}" />
+                    <div class="image-info">
+                        <div><strong>ファイル名:</strong> ${filename}</div>
+                        <div><strong>サイズ:</strong> ${(stats.size / 1024).toFixed(1)} KB</div>
+                        <div><strong>更新日:</strong> ${stats.mtime.toLocaleString('ja-JP')}</div>
+                    </div>
+                </div>
+              `;
+            }).join('')}
+        </div>
+    </body>
+    </html>
+    `;
+    
+    // PuppeteerでPDF生成
+    const browser = await puppeteer.launch({
+      headless: 'new',
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+    
+    try {
+      const page = await browser.newPage();
+      await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
+      
+      const pdfBuffer = await page.pdf({
+        format: 'A4',
+        printBackground: true,
+        margin: {
+          top: '20px',
+          right: '20px',
+          bottom: '20px',
+          left: '20px'
+        }
+      });
+      
+      await browser.close();
+      
+      // PDFをダウンロード
+      const filename = `${siteInfo.name}_${type}_画像一覧_${new Date().toLocaleDateString('ja-JP').replace(/\//g, '-')}.pdf`;
+      
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(filename)}"`);
+      res.send(pdfBuffer);
+      
+    } catch (error) {
+      await browser.close();
+      throw error;
+    }
+    
+  } catch (error) {
+    console.error('❌ 画像 PDF エクスポートエラー:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+/**
+ * 📋 全サイト画像一覧レポート生成
+ */
+app.get('/export-all-images-pdf', async (req, res) => {
+  try {
+    const { type = 'baseline', maxSites = 10 } = req.query;
+    
+    const allSites = sitesManager.getAllSites().slice(0, parseInt(maxSites));
+    const siteImageData = [];
+    
+    // 各サイトの画像情報を収集
+    for (const site of allSites) {
+      const imageDir = path.join(SCREENSHOTS_DIR, site.id, type, 'desktop');
+      
+      if (fs.existsSync(imageDir)) {
+        // 最新セッションの画像のみを取得
+        const allImageFiles = fs.readdirSync(imageDir)
+          .filter(f => f.endsWith('.png'))
+          .sort((a, b) => b.localeCompare(a)); // 降順ソート（最新が先頭）
+        
+        // 最新のタイムスタンプを取得
+        const latestTimestamp = allImageFiles.length > 0 ? 
+          allImageFiles[0].match(/(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z)/)?.[1] : null;
+        
+        const imageFiles = latestTimestamp ? 
+          allImageFiles.filter(f => f.includes(latestTimestamp)).slice(0, 3) : 
+          allImageFiles.slice(0, 3); // サイトあたり最新3枚まで
+        
+        if (imageFiles.length > 0) {
+          siteImageData.push({
+            site,
+            imageFiles,
+            imageDir
+          });
+        }
+      }
+    }
+    
+    if (siteImageData.length === 0) {
+      return res.status(404).json({ success: false, error: '表示する画像が見つかりません' });
+    }
+    
+    // HTMLテンプレート作成
+    const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>全サイト ${type.toUpperCase()} 画像一覧</title>
+        <style>
+            body {
+                font-family: 'Noto Sans JP', Arial, sans-serif;
+                margin: 20px;
+                background: #f5f5f5;
+            }
+            .header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background: white;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+            .site-section {
+                background: white;
+                margin-bottom: 30px;
+                border-radius: 10px;
+                padding: 20px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                page-break-inside: avoid;
+            }
+            .site-header {
+                border-bottom: 3px solid #667eea;
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+            }
+            .site-header h2 {
+                color: #333;
+                margin: 0 0 5px 0;
+                font-size: 24px;
+            }
+            .site-header p {
+                color: #666;
+                margin: 0;
+                font-size: 14px;
+            }
+            .image-row {
+                display: flex;
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+            }
+            .image-thumb {
+                flex: 0 0 180px;
+                text-align: center;
+            }
+            .image-thumb img {
+                width: 180px;
+                height: auto;
+                max-height: 120px;
+                object-fit: cover;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+            .image-thumb p {
+                margin: 5px 0 0 0;
+                font-size: 10px;
+                color: #666;
+                word-break: break-all;
+            }
+            @media print {
+                .site-section {
+                    page-break-inside: avoid;
+                    margin-bottom: 40px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>📋 全サイト ${type.toUpperCase()} 画像一覧レポート</h1>
+            <p><strong>生成日:</strong> ${new Date().toLocaleString('ja-JP')}</p>
+            <p><strong>対象サイト:</strong> ${siteImageData.length}サイト</p>
+        </div>
+        
+        ${siteImageData.map(({ site, imageFiles, imageDir }) => `
+          <div class="site-section">
+              <div class="site-header">
+                  <h2>🌐 ${site.name}</h2>
+                  <p><strong>URL:</strong> ${site.baseUrl}</p>
+                  <p><strong>画像数:</strong> ${imageFiles.length}枚</p>
+              </div>
+              
+              <div class="image-row">
+                  ${imageFiles.map(filename => {
+                    const imagePath = path.join(imageDir, filename);
+                    const base64Image = fs.readFileSync(imagePath, 'base64');
+                    
+                    const pageMatch = filename.match(/page-(\d+)_([^_]+)/);
+                    const pageNum = pageMatch ? pageMatch[1] : '?';
+                    const pageName = pageMatch ? pageMatch[2] : filename.replace('.png', '').substring(0, 10);
+                    
+                    return `
+                      <div class="image-thumb">
+                          <img src="data:image/png;base64,${base64Image}" alt="${filename}" />
+                          <p>Page ${pageNum}: ${pageName}</p>
+                      </div>
+                    `;
+                  }).join('')}
+              </div>
+          </div>
+        `).join('')}
+    </body>
+    </html>
+    `;
+    
+    // PuppeteerでPDF生成
+    const browser = await puppeteer.launch({
+      headless: 'new',
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+    
+    try {
+      const page = await browser.newPage();
+      await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
+      
+      const pdfBuffer = await page.pdf({
+        format: 'A4',
+        printBackground: true,
+        margin: {
+          top: '20px',
+          right: '20px',
+          bottom: '20px',
+          left: '20px'
+        }
+      });
+      
+      await browser.close();
+      
+      // PDFをダウンロード
+      const filename = `全サイト_${type}_画像一覧_${new Date().toLocaleDateString('ja-JP').replace(/\//g, '-')}.pdf`;
+      
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(filename)}"`);
+      res.send(pdfBuffer);
+      
+    } catch (error) {
+      await browser.close();
+      throw error;
+    }
+    
+  } catch (error) {
+    console.error('❌ 全サイト画像 PDF エクスポートエラー:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+/**
+ * 🗑️ 手動ファイルクリーンアップ
+ */
+app.post('/cleanup-old-files', (req, res) => {
+  try {
+    cleanupOldFiles();
+    res.json({
+      success: true,
+      message: `${CONFIG.CLEANUP_OLD_FILES_DAYS}日以上古いファイルのクリーンアップを実行しました`
+    });
+  } catch (error) {
+    console.error('❌ 手動クリーンアップエラー:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+/**
+ * 📖 ページ名からURLを生成
+ */
+function getPageUrlFromSite(site, pageName) {
+  if (!site || !site.url) return null;
+  
+  const baseUrl = site.url.replace(/\/$/, ''); // 末尾のスラッシュを除去
+  
+  // ページ名のマッピング
+  const pageNameMappings = {
+    'top': '/',
+    'home': '/',
+    'index': '/',
+    'tool': '/tool',
+    'tool-privacy-policy': '/tool/privacy-policy',
+    'tool-clp-url-search-regular': '/tool/clp-url-search-regular',
+    'about': '/about',
+    'works': '/works',
+    'member': '/member',
+    'category-news': '/category/news',
+    'category-journal': '/category/journal',
+    'recruit': '/recruit',
+    'contact': '/contact'
+  };
+  
+  // マッピングがある場合はそれを使用
+  if (pageNameMappings[pageName]) {
+    return baseUrl + pageNameMappings[pageName];
+  }
+  
+  // URLエンコードされている場合のデコード処理
+  const decodedPageName = decodeURIComponent(pageName);
+  
+  // works- で始まる場合は /works/xxx 形式
+  if (pageName.startsWith('works-')) {
+    const workName = pageName.replace('works-', '').replace(/-/g, '/');
+    return `${baseUrl}/works/${workName}`;
+  }
+  
+  // 一般的なケース：ハイフンをスラッシュに変換
+  const urlPath = pageName.replace(/-/g, '/');
+  return `${baseUrl}/${urlPath}`;
+}
+
+/**
+ * 🔍 比較画像データを取得 (compare.html用)
+ */
+app.get('/compare-images/:siteId', async (req, res) => {
+  try {
+    const siteId = req.params.siteId;
+    const site = sitesManager.getSite(siteId);
+    
+    if (!site) {
+      return res.status(404).json({
+        success: false,
+        error: 'サイトが見つかりません'
+      });
+    }
+
+    const comparisons = [];
+    const stats = { okCount: 0, ngCount: 0, avgDiffRate: 0, totalDiffRate: 0 };
+
+    // Screenshots directories
+    const baselineDir = path.join(SCREENSHOTS_DIR, siteId, 'baseline', 'desktop');
+    const afterDir = path.join(SCREENSHOTS_DIR, siteId, 'after', 'desktop');
+    
+    // Diff images directory
+    const diffsDir = path.join(DIFFS_DIR, siteId, 'desktop', 'threshold-2');
+    
+    if (!fs.existsSync(diffsDir)) {
+      return res.json({
+        success: true,
+        comparisons: [],
+        stats: stats
+      });
+    }
+
+    // Get all diff files and find the latest timestamp from them
+    const allDiffFiles = fs.readdirSync(diffsDir).filter(f => f.endsWith('.png'));
+    
+    const diffTimestamps = [...new Set(allDiffFiles.map(f => {
+      const match = f.match(/(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z)/);
+      return match ? match[1] : null;
+    }).filter(Boolean))];
+    
+    if (diffTimestamps.length === 0) {
+      return res.json({
+        success: true,
+        comparisons: [],
+        stats: stats
+      });
+    }
+
+    // Use timestamp with most diff files (complete session)
+    const timestampCounts = {};
+    allDiffFiles.forEach(f => {
+      const match = f.match(/(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z)/);
+      if (match) {
+        timestampCounts[match[1]] = (timestampCounts[match[1]] || 0) + 1;
+      }
+    });
+    
+    const sortedTimestamps = Object.entries(timestampCounts)
+      .sort(([timeA, countA], [timeB, countB]) => {
+        // First sort by count desc, then by time desc
+        if (countA !== countB) return countB - countA;
+        return timeB.localeCompare(timeA);
+      });
+    
+    const latestTimestamp = sortedTimestamps[0][0];
+    
+    // Get diff files for latest session
+    const diffFiles = allDiffFiles
+      .filter(f => f.includes(latestTimestamp))
+      .sort();
+
+    // Process each diff file
+    for (const diffFile of diffFiles) {
+      // Match both formats: new format with diff-X.X% and old format without percentage
+      let pageMatch = diffFile.match(/page-(\d+)_([^_]+)_(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z)_diff-([0-9.]+)%\.png$/);
+      if (!pageMatch) {
+        // Try old format
+        pageMatch = diffFile.match(/page-(\d+)_([^_]+)_(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z)_diff\.png$/);
+        if (pageMatch) {
+          pageMatch = [...pageMatch, '0']; // Add default 0% diff for old format
+        }
+      }
+      if (!pageMatch) continue;
+      
+      const [, pageNum, pageName, timestamp, diffRateStr] = pageMatch;
+      const diffRate = parseFloat(diffRateStr);
+      
+      // Find corresponding baseline and after images (any timestamp for same page)
+      let baselineFile = null;
+      let afterFile = null;
+      
+      if (fs.existsSync(baselineDir)) {
+        const baselineFiles = fs.readdirSync(baselineDir).filter(f => f.endsWith('.png'));
+        baselineFile = baselineFiles
+          .filter(f => f.includes(`page-${pageNum}_${pageName}`))
+          .sort().reverse()[0]; // Get latest baseline for this page
+      }
+      
+      if (fs.existsSync(afterDir)) {
+        const afterFiles = fs.readdirSync(afterDir).filter(f => f.endsWith('.png'));
+        afterFile = afterFiles
+          .filter(f => f.includes(`page-${pageNum}_${pageName}`))
+          .sort().reverse()[0]; // Get latest after for this page
+      }
+
+      // ページURLを生成
+      const pageUrl = getPageUrlFromSite(site, pageName);
+      
+      comparisons.push({
+        pageName: pageName,
+        pageNum: parseInt(pageNum),
+        diffRate: diffRate,
+        url: pageUrl,
+        baseline: baselineFile ? `${siteId}/baseline/desktop/${baselineFile}` : null,
+        after: afterFile ? `${siteId}/after/desktop/${afterFile}` : null,
+        diff: `${siteId}/desktop/threshold-2/${diffFile}`
+      });
+
+      // Update stats
+      if (diffRate <= 2.0) {
+        stats.okCount++;
+      } else {
+        stats.ngCount++;
+      }
+      stats.totalDiffRate += diffRate;
+    }
+
+    // Calculate average diff rate
+    if (comparisons.length > 0) {
+      stats.avgDiffRate = stats.totalDiffRate / comparisons.length;
+    }
+
+    // Sort by page number
+    comparisons.sort((a, b) => a.pageNum - b.pageNum);
+
+    res.json({
+      success: true,
+      comparisons: comparisons,
+      stats: stats
+    });
+
+  } catch (error) {
+    console.error('❌ 比較画像データ取得エラー:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+/**
+ * 🔍 全サイトの比較画像データを取得
+ */
+app.get('/compare-images-all', async (req, res) => {
+  try {
+    const allSites = sitesManager.getEnabledSites();
+    const allResults = [];
+    
+    for (const site of allSites) {
+      const siteId = site.id;
+      const comparisons = [];
+      const stats = { okCount: 0, ngCount: 0, avgDiffRate: 0, totalDiffRate: 0 };
+
+      // Screenshots directories
+      const baselineDir = path.join(SCREENSHOTS_DIR, siteId, 'baseline', 'desktop');
+      const afterDir = path.join(SCREENSHOTS_DIR, siteId, 'after', 'desktop');
+      
+      // Diff images directory
+      const diffsDir = path.join(DIFFS_DIR, siteId, 'desktop', 'threshold-2');
+      
+      if (!fs.existsSync(diffsDir)) {
+        allResults.push({
+          siteId: siteId,
+          siteName: site.name,
+          comparisons: [],
+          stats: stats
+        });
+        continue;
+      }
+
+      // Get all diff files and find the latest timestamp from them
+      const allDiffFiles = fs.readdirSync(diffsDir).filter(f => f.endsWith('.png'));
+      
+      const diffTimestamps = [...new Set(allDiffFiles.map(f => {
+        const match = f.match(/(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z)/);
+        return match ? match[1] : null;
+      }).filter(Boolean))];
+      
+      if (diffTimestamps.length === 0) {
+        allResults.push({
+          siteId: siteId,
+          siteName: site.name,
+          comparisons: [],
+          stats: stats
+        });
+        continue;
+      }
+
+      // Use timestamp with most diff files (complete session)
+      const timestampCounts = {};
+      allDiffFiles.forEach(f => {
+        const match = f.match(/(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z)/);
+        if (match) {
+          timestampCounts[match[1]] = (timestampCounts[match[1]] || 0) + 1;
+        }
+      });
+      
+      const sortedTimestamps = Object.entries(timestampCounts)
+        .sort(([timeA, countA], [timeB, countB]) => {
+          // First sort by count desc, then by time desc
+          if (countA !== countB) return countB - countA;
+          return timeB.localeCompare(timeA);
+        });
+      
+      const latestTimestamp = sortedTimestamps[0][0];
+      
+      // Get diff files for latest session
+      const diffFiles = allDiffFiles
+        .filter(f => f.includes(latestTimestamp))
+        .sort();
+
+      // Process each diff file
+      for (const diffFile of diffFiles) {
+        // Match both formats: new format with diff-X.X% and old format without percentage
+        let pageMatch = diffFile.match(/page-(\d+)_([^_]+)_(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z)_diff-([0-9.]+)%\.png$/);
+        if (!pageMatch) {
+          // Try old format
+          pageMatch = diffFile.match(/page-(\d+)_([^_]+)_(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z)_diff\.png$/);
+          if (pageMatch) {
+            pageMatch = [...pageMatch, '0']; // Add default 0% diff for old format
+          }
+        }
+        if (!pageMatch) continue;
+        
+        const [, pageNum, pageName, timestamp, diffRateStr] = pageMatch;
+        const diffRate = parseFloat(diffRateStr);
+        
+        // Find corresponding baseline and after images (any timestamp for same page)
+        let baselineFile = null;
+        let afterFile = null;
+        
+        if (fs.existsSync(baselineDir)) {
+          const baselineFiles = fs.readdirSync(baselineDir).filter(f => f.endsWith('.png'));
+          baselineFile = baselineFiles
+            .filter(f => f.includes(`page-${pageNum}_${pageName}`))
+            .sort().reverse()[0]; // Get latest baseline for this page
+        }
+        
+        if (fs.existsSync(afterDir)) {
+          const afterFiles = fs.readdirSync(afterDir).filter(f => f.endsWith('.png'));
+          afterFile = afterFiles
+            .filter(f => f.includes(`page-${pageNum}_${pageName}`))
+            .sort().reverse()[0]; // Get latest after for this page
+        }
+
+        // ページURLを生成
+        const pageUrl = getPageUrlFromSite(site, pageName);
+        
+        comparisons.push({
+          pageName: pageName,
+          pageNum: parseInt(pageNum),
+          diffRate: diffRate,
+          url: pageUrl,
+          baseline: baselineFile ? `${siteId}/baseline/desktop/${baselineFile}` : null,
+          after: afterFile ? `${siteId}/after/desktop/${afterFile}` : null,
+          diff: `${siteId}/desktop/threshold-2/${diffFile}`
+        });
+
+        // Update stats
+        if (diffRate <= 2.0) {
+          stats.okCount++;
+        } else {
+          stats.ngCount++;
+        }
+        stats.totalDiffRate += diffRate;
+      }
+
+      // Calculate average diff rate
+      if (comparisons.length > 0) {
+        stats.avgDiffRate = stats.totalDiffRate / comparisons.length;
+      }
+
+      // Sort by page number
+      comparisons.sort((a, b) => a.pageNum - b.pageNum);
+
+      allResults.push({
+        siteId: siteId,
+        siteName: site.name,
+        comparisons: comparisons,
+        stats: stats
+      });
+    }
+
+    res.json({
+      success: true,
+      sites: allResults
+    });
+
+  } catch (error) {
+    console.error('❌ 全サイト比較画像データ取得エラー:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+/**
+ * 📦 比較画像ZIP ダウンロード
+ */
+app.get('/download-comparison-zip/:siteId', async (req, res) => {
+  try {
+    const siteId = req.params.siteId;
+    const site = sitesManager.getSite(siteId);
+    
+    if (!site) {
+      return res.status(404).json({
+        success: false,
+        error: 'サイトが見つかりません'
+      });
+    }
+
+    const archiver = require('archiver');
+    const archive = archiver('zip', { zlib: { level: 9 }});
+    
+    const filename = `${siteId}_comparison_images_${new Date().toISOString().split('T')[0]}.zip`;
+    
+    res.setHeader('Content-Type', 'application/zip');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    
+    archive.pipe(res);
+
+    // Screenshots directories
+    const baselineDir = path.join(SCREENSHOTS_DIR, siteId, 'baseline', 'desktop');
+    const afterDir = path.join(SCREENSHOTS_DIR, siteId, 'after', 'desktop');
+    
+    // Diff images directory  
+    const diffsDir = path.join(DIFFS_DIR, siteId, 'desktop', 'threshold-2');
+
+    // Get latest timestamp from all screenshot files
+    let allScreenshotFiles = [];
+    if (fs.existsSync(baselineDir)) {
+      const baselineFiles = fs.readdirSync(baselineDir).filter(f => f.endsWith('.png'));
+      allScreenshotFiles = allScreenshotFiles.concat(baselineFiles.map(f => ({ file: f, type: 'baseline', dir: baselineDir })));
+    }
+    if (fs.existsSync(afterDir)) {
+      const afterFiles = fs.readdirSync(afterDir).filter(f => f.endsWith('.png'));
+      allScreenshotFiles = allScreenshotFiles.concat(afterFiles.map(f => ({ file: f, type: 'after', dir: afterDir })));
+    }
+    
+    if (allScreenshotFiles.length > 0) {
+      const timestamps = [...new Set(allScreenshotFiles.map(item => {
+        const match = item.file.match(/(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z)/);
+        return match ? match[1] : null;
+      }).filter(Boolean))];
+      
+      if (timestamps.length > 0) {
+        const latestTimestamp = timestamps.sort().reverse()[0];
+        const latestFiles = allScreenshotFiles.filter(item => item.file.includes(latestTimestamp));
+        
+        for (const item of latestFiles) {
+          const filePath = path.join(item.dir, item.file);
+          if (fs.existsSync(filePath)) {
+            archive.file(filePath, { name: `${item.type}/${item.file}` });
+          }
+        }
+      }
+    }
+
+    if (fs.existsSync(diffsDir)) {
+      // Get latest session diff files
+      const diffFiles = fs.readdirSync(diffsDir).filter(f => f.endsWith('.png'));
+      const timestamps = [...new Set(diffFiles.map(f => {
+        const match = f.match(/(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z)/);
+        return match ? match[1] : null;
+      }).filter(Boolean))];
+      
+      if (timestamps.length > 0) {
+        const latestTimestamp = timestamps.sort().reverse()[0];
+        const latestDiffFiles = diffFiles.filter(f => f.includes(latestTimestamp));
+        
+        for (const file of latestDiffFiles) {
+          const filePath = path.join(diffsDir, file);
+          if (fs.existsSync(filePath)) {
+            archive.file(filePath, { name: `diff/${file}` });
+          }
+        }
+      }
+    }
+
+    await archive.finalize();
+
+  } catch (error) {
+    console.error('❌ 比較画像ZIP ダウンロードエラー:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`🎉 Local WordPress VRT Server running on port ${PORT}`);
   console.log(`🌐 API URL: http://localhost:${PORT}`);

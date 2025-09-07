@@ -1,0 +1,244 @@
+{
+  "timestamp": "2025-09-05T05:45:49.735Z",
+  "type": "compare",
+  "siteId": "site-17-実之和フーズ",
+  "siteName": "実之和フーズ",
+  "device": "desktop",
+  "threshold": 2,
+  "captureCount": 10,
+  "captureResults": [
+    {
+      "url": "https://minowafoods.com/",
+      "filename": "page-001_top_2025-09-05T05-43-56-058Z.png",
+      "timestamp": "2025-09-05T05:44:27.766Z"
+    },
+    {
+      "url": "https://minowafoods.com/taste-of-the-queue-shop/",
+      "filename": "page-002_taste-of-the-queue-shop_2025-09-05T05-43-56-058Z.png",
+      "timestamp": "2025-09-05T05:44:44.442Z"
+    },
+    {
+      "url": "https://minowafoods.com/company/",
+      "filename": "page-003_company_2025-09-05T05-43-56-058Z.png",
+      "timestamp": "2025-09-05T05:44:22.772Z"
+    },
+    {
+      "url": "https://minowafoods.com/my-account/",
+      "filename": "page-004_my-account_2025-09-05T05-43-56-058Z.png",
+      "timestamp": "2025-09-05T05:44:23.164Z"
+    },
+    {
+      "url": "https://minowafoods.com/contact/",
+      "filename": "page-005_contact_2025-09-05T05-43-56-058Z.png",
+      "timestamp": "2025-09-05T05:44:23.305Z"
+    },
+    {
+      "url": "https://minowafoods.com/privacy-policy/",
+      "filename": "page-006_privacy-policy_2025-09-05T05-43-56-058Z.png",
+      "timestamp": "2025-09-05T05:44:25.741Z"
+    },
+    {
+      "url": "https://minowafoods.com/law/",
+      "filename": "page-007_law_2025-09-05T05-43-56-058Z.png",
+      "timestamp": "2025-09-05T05:44:23.018Z"
+    },
+    {
+      "url": "https://minowafoods.com/my-account/lost-password/",
+      "filename": "page-008_my-account-lost-password_2025-09-05T05-43-56-058Z.png",
+      "timestamp": "2025-09-05T05:44:23.162Z"
+    },
+    {
+      "url": "https://minowafoods.com/membership-join/",
+      "filename": "page-009_membership-join_2025-09-05T05-43-56-058Z.png",
+      "timestamp": "2025-09-05T05:45:10.635Z"
+    },
+    {
+      "url": "https://minowafoods.com/term/",
+      "filename": "page-010_term_2025-09-05T05-43-56-058Z.png",
+      "timestamp": "2025-09-05T05:45:15.547Z"
+    }
+  ],
+  "compareResults": {
+    "siteId": "site-17-実之和フーズ",
+    "device": "desktop",
+    "summary": {
+      "totalPages": 10,
+      "ok": 10,
+      "ng": 0,
+      "error": 0,
+      "threshold": 2
+    },
+    "results": [
+      {
+        "pageId": "001",
+        "pageIdentifier": "top",
+        "baselineFile": "page-001_top_2025-09-05T04-32-13-333Z.png",
+        "afterFile": "page-001_top_2025-09-05T05-43-56-058Z.png",
+        "baselineTimestamp": "2025-09-05T04-32-13-333Z",
+        "afterTimestamp": "2025-09-05T05-43-56-058Z",
+        "diffPath": "/diffs/site-17-実之和フーズ/desktop/threshold-2/page-001_top_2025-09-05T05-45-17-259Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2557
+        }
+      },
+      {
+        "pageId": "002",
+        "pageIdentifier": "taste-of-the-queue-shop",
+        "baselineFile": "page-002_taste-of-the-queue-shop_2025-09-05T04-32-13-333Z.png",
+        "afterFile": "page-002_taste-of-the-queue-shop_2025-09-05T05-43-56-058Z.png",
+        "baselineTimestamp": "2025-09-05T04-32-13-333Z",
+        "afterTimestamp": "2025-09-05T05-43-56-058Z",
+        "diffPath": "/diffs/site-17-実之和フーズ/desktop/threshold-2/page-002_taste-of-the-queue-shop_2025-09-05T05-45-31-808Z_diff-1.1978%.png",
+        "diffPixels": 343988,
+        "diffPercentage": 1.197837,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 14957
+        }
+      },
+      {
+        "pageId": "003",
+        "pageIdentifier": "company",
+        "baselineFile": "page-003_company_2025-09-05T04-32-13-333Z.png",
+        "afterFile": "page-003_company_2025-09-05T05-43-56-058Z.png",
+        "baselineTimestamp": "2025-09-05T04-32-13-333Z",
+        "afterTimestamp": "2025-09-05T05-43-56-058Z",
+        "diffPath": "/diffs/site-17-実之和フーズ/desktop/threshold-2/page-003_company_2025-09-05T05-45-39-470Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "pageId": "004",
+        "pageIdentifier": "my-account",
+        "baselineFile": "page-004_my-account_2025-09-05T04-32-13-333Z.png",
+        "afterFile": "page-004_my-account_2025-09-05T05-43-56-058Z.png",
+        "baselineTimestamp": "2025-09-05T04-32-13-333Z",
+        "afterTimestamp": "2025-09-05T05-43-56-058Z",
+        "diffPath": "/diffs/site-17-実之和フーズ/desktop/threshold-2/page-004_my-account_2025-09-05T05-45-41-250Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "pageId": "005",
+        "pageIdentifier": "contact",
+        "baselineFile": "page-005_contact_2025-09-05T04-32-13-333Z.png",
+        "afterFile": "page-005_contact_2025-09-05T05-43-56-058Z.png",
+        "baselineTimestamp": "2025-09-05T04-32-13-333Z",
+        "afterTimestamp": "2025-09-05T05-43-56-058Z",
+        "diffPath": "/diffs/site-17-実之和フーズ/desktop/threshold-2/page-005_contact_2025-09-05T05-45-42-149Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1269
+        }
+      },
+      {
+        "pageId": "006",
+        "pageIdentifier": "privacy-policy",
+        "baselineFile": "page-006_privacy-policy_2025-09-05T04-32-13-333Z.png",
+        "afterFile": "page-006_privacy-policy_2025-09-05T05-43-56-058Z.png",
+        "baselineTimestamp": "2025-09-05T04-32-13-333Z",
+        "afterTimestamp": "2025-09-05T05-43-56-058Z",
+        "diffPath": "/diffs/site-17-実之和フーズ/desktop/threshold-2/page-006_privacy-policy_2025-09-05T05-45-43-741Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 3784
+        }
+      },
+      {
+        "pageId": "007",
+        "pageIdentifier": "law",
+        "baselineFile": "page-007_law_2025-09-05T04-32-13-333Z.png",
+        "afterFile": "page-007_law_2025-09-05T05-43-56-058Z.png",
+        "baselineTimestamp": "2025-09-05T04-32-13-333Z",
+        "afterTimestamp": "2025-09-05T05-43-56-058Z",
+        "diffPath": "/diffs/site-17-実之和フーズ/desktop/threshold-2/page-007_law_2025-09-05T05-45-45-320Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "pageId": "008",
+        "pageIdentifier": "my-account-lost-password",
+        "baselineFile": "page-008_my-account-lost-password_2025-09-05T04-32-13-333Z.png",
+        "afterFile": "page-008_my-account-lost-password_2025-09-05T05-43-56-058Z.png",
+        "baselineTimestamp": "2025-09-05T04-32-13-333Z",
+        "afterTimestamp": "2025-09-05T05-43-56-058Z",
+        "diffPath": "/diffs/site-17-実之和フーズ/desktop/threshold-2/page-008_my-account-lost-password_2025-09-05T05-45-46-654Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "pageId": "009",
+        "pageIdentifier": "membership-join",
+        "baselineFile": "page-009_membership-join_2025-09-05T04-32-13-333Z.png",
+        "afterFile": "page-009_membership-join_2025-09-05T05-43-56-058Z.png",
+        "baselineTimestamp": "2025-09-05T04-32-13-333Z",
+        "afterTimestamp": "2025-09-05T05-43-56-058Z",
+        "diffPath": "/diffs/site-17-実之和フーズ/desktop/threshold-2/page-009_membership-join_2025-09-05T05-45-45-928Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "pageId": "010",
+        "pageIdentifier": "term",
+        "baselineFile": "page-010_term_2025-09-05T04-32-13-333Z.png",
+        "afterFile": "page-010_term_2025-09-05T05-43-56-058Z.png",
+        "baselineTimestamp": "2025-09-05T04-32-13-333Z",
+        "afterTimestamp": "2025-09-05T05-43-56-058Z",
+        "diffPath": "/diffs/site-17-実之和フーズ/desktop/threshold-2/page-010_term_2025-09-05T05-45-48-356Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 4688
+        }
+      }
+    ]
+  }
+}

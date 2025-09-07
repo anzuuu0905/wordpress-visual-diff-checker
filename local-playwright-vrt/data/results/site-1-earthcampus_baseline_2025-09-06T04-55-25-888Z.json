@@ -1,0 +1,232 @@
+{
+  "timestamp": "2025-09-06T04:55:25.888Z",
+  "type": "baseline",
+  "siteId": "site-1-earthcampus",
+  "siteName": "earthcampus",
+  "device": "desktop",
+  "captureCount": 20,
+  "captureResults": [
+    {
+      "url": "https://earthcampus.co.jp/",
+      "filename": "page-001_top_2025-09-06T04-53-16-526Z.png",
+      "timestamp": "2025-09-06T04:53:56.996Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/works/",
+      "filename": "page-002_works_2025-09-06T04-53-16-526Z.png",
+      "timestamp": "2025-09-06T04:54:07.925Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/about/",
+      "filename": "page-003_about_2025-09-06T04-53-16-526Z.png",
+      "timestamp": "2025-09-06T04:53:52.496Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/member/",
+      "filename": "page-004_member_2025-09-06T04-53-16-526Z.png",
+      "timestamp": "2025-09-06T04:53:46.073Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/category/news/",
+      "filename": "page-005_category-news_2025-09-06T04-53-16-526Z.png",
+      "timestamp": "2025-09-06T04:53:43.372Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/category/journal/",
+      "filename": "page-006_category-journal_2025-09-06T04-53-16-526Z.png",
+      "timestamp": "2025-09-06T04:53:44.241Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/recruit/",
+      "filename": "page-007_recruit_2025-09-06T04-53-16-526Z.png",
+      "timestamp": "2025-09-06T04:53:43.473Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/contact/",
+      "filename": "page-008_contact_2025-09-06T04-53-16-526Z.png",
+      "timestamp": "2025-09-06T04:53:53.549Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/nafudel/",
+      "filename": "page-009_nafudel_2025-09-06T04-53-16-526Z.png",
+      "timestamp": "2025-09-06T04:53:46.658Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/works/meijiyu/",
+      "filename": "page-010_works-meijiyu_2025-09-06T04-53-16-526Z.png",
+      "timestamp": "2025-09-06T04:53:52.696Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/works/manzara/",
+      "filename": "page-011_works-manzara_2025-09-06T04-53-16-526Z.png",
+      "timestamp": "2025-09-06T04:54:21.479Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/works/oudon-hajime/",
+      "filename": "page-012_works-oudon-hajime_2025-09-06T04-53-16-526Z.png",
+      "timestamp": "2025-09-06T04:53:50.681Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/works/kyotosi-teijuiju-logo/",
+      "filename": "page-013_works-kyotosi-teijuiju-logo_2025-09-06T04-53-16-526Z.png",
+      "timestamp": "2025-09-06T04:54:53.862Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/works/2025-ehimefc/",
+      "filename": "page-014_works-2025-ehimefc_2025-09-06T04-53-16-526Z.png",
+      "timestamp": "2025-09-06T04:55:25.882Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/works/%e3%82%b0%e3%83%aa%e3%83%a0%e6%9c%ac%e7%a4%be/",
+      "filename": "page-015_works--e3-82-b0-e3-83-aa-e3-83_2025-09-06T04-53-16-526Z.png",
+      "timestamp": "2025-09-06T04:54:50.465Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/instagram-tech-location/",
+      "filename": "page-016_instagram-tech-location_2025-09-06T04-53-16-526Z.png",
+      "timestamp": "2025-09-06T04:55:22.208Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/instagram-tech-reserve/",
+      "filename": "page-017_instagram-tech-reserve_2025-09-06T04-53-16-526Z.png",
+      "timestamp": "2025-09-06T04:55:04.791Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/hidden-cost-of-outsourcing/",
+      "filename": "page-018_hidden-cost-of-outsourcing_2025-09-06T04-53-16-526Z.png",
+      "timestamp": "2025-09-06T04:54:49.520Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/designing-your-first-step/",
+      "filename": "page-019_designing-your-first-step_2025-09-06T04-53-16-526Z.png",
+      "timestamp": "2025-09-06T04:54:49.003Z"
+    },
+    {
+      "url": "https://earthcampus.co.jp/solving-budget-worries/",
+      "filename": "page-020_solving-budget-worries_2025-09-06T04-53-16-526Z.png",
+      "timestamp": "2025-09-06T04:54:55.479Z"
+    }
+  ],
+  "pages": [
+    {
+      "url": "https://earthcampus.co.jp/",
+      "pageId": "001",
+      "identifier": "top",
+      "title": "earthcampus株式会社 | 「ビジネスをアートに」"
+    },
+    {
+      "url": "https://earthcampus.co.jp/works/",
+      "pageId": "002",
+      "identifier": "works",
+      "title": "works | earthcampus株式会社"
+    },
+    {
+      "url": "https://earthcampus.co.jp/about/",
+      "pageId": "003",
+      "identifier": "about",
+      "title": "About | earthcampus株式会社"
+    },
+    {
+      "url": "https://earthcampus.co.jp/member/",
+      "pageId": "004",
+      "identifier": "member",
+      "title": "members | earthcampus株式会社"
+    },
+    {
+      "url": "https://earthcampus.co.jp/category/news/",
+      "pageId": "005",
+      "identifier": "category-news",
+      "title": "News | earthcampus株式会社"
+    },
+    {
+      "url": "https://earthcampus.co.jp/category/journal/",
+      "pageId": "006",
+      "identifier": "category-journal",
+      "title": "Journal | earthcampus株式会社"
+    },
+    {
+      "url": "https://earthcampus.co.jp/recruit/",
+      "pageId": "007",
+      "identifier": "recruit",
+      "title": "Recruit | earthcampus株式会社"
+    },
+    {
+      "url": "https://earthcampus.co.jp/contact/",
+      "pageId": "008",
+      "identifier": "contact",
+      "title": "Contact | earthcampus株式会社"
+    },
+    {
+      "url": "https://earthcampus.co.jp/nafudel/",
+      "pageId": "009",
+      "identifier": "nafudel",
+      "title": "NAFUDEL｜ナフデル"
+    },
+    {
+      "url": "https://earthcampus.co.jp/works/meijiyu/",
+      "pageId": "010",
+      "identifier": "works-meijiyu",
+      "title": "明司湯 | earthcampus株式会社"
+    },
+    {
+      "url": "https://earthcampus.co.jp/works/manzara/",
+      "pageId": "011",
+      "identifier": "works-manzara",
+      "title": "まんざら亭 | earthcampus株式会社"
+    },
+    {
+      "url": "https://earthcampus.co.jp/works/oudon-hajime/",
+      "pageId": "012",
+      "identifier": "works-oudon-hajime",
+      "title": "おうどん一 | earthcampus株式会社"
+    },
+    {
+      "url": "https://earthcampus.co.jp/works/kyotosi-teijuiju-logo/",
+      "pageId": "013",
+      "identifier": "works-kyotosi-teijuiju-logo",
+      "title": "京都市定住・移住応援団ロゴ | earthcampus株式会社"
+    },
+    {
+      "url": "https://earthcampus.co.jp/works/2025-ehimefc/",
+      "pageId": "014",
+      "identifier": "works-2025-ehimefc",
+      "title": "愛媛FC クリエイティブディレクション2025 | earthcampus株式会社"
+    },
+    {
+      "url": "https://earthcampus.co.jp/works/%e3%82%b0%e3%83%aa%e3%83%a0%e6%9c%ac%e7%a4%be/",
+      "pageId": "015",
+      "identifier": "works--e3-82-b0-e3-83-aa-e3-83",
+      "title": "グリム本社 | earthcampus株式会社"
+    },
+    {
+      "url": "https://earthcampus.co.jp/instagram-tech-location/",
+      "pageId": "016",
+      "identifier": "instagram-tech-location",
+      "title": "【設定でつまずいて進めない＃2】Instagramで位置情報を登録する方法 | earthcampus株式会社"
+    },
+    {
+      "url": "https://earthcampus.co.jp/instagram-tech-reserve/",
+      "pageId": "017",
+      "identifier": "instagram-tech-reserve",
+      "title": "【設定でつまずいて進めない】Instagramで予約投稿する方法 | earthcampus株式会社"
+    },
+    {
+      "url": "https://earthcampus.co.jp/hidden-cost-of-outsourcing/",
+      "pageId": "018",
+      "identifier": "hidden-cost-of-outsourcing",
+      "title": "「外注したのに、増える手間」 その積み重ねが、利益をじわじわ削る | earthcampus株式会社"
+    },
+    {
+      "url": "https://earthcampus.co.jp/designing-your-first-step/",
+      "pageId": "019",
+      "identifier": "designing-your-first-step",
+      "title": "“やってみたい”を支える、入り口のデザイン | earthcampus株式会社"
+    },
+    {
+      "url": "https://earthcampus.co.jp/solving-budget-worries/",
+      "pageId": "020",
+      "identifier": "solving-budget-worries",
+      "title": "社内で予算が出ない。私たちはそんなモヤモヤを解決する「支援者」です。 | earthcampus株式会社"
+    }
+  ]
+}

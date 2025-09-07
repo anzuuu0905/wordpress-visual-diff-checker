@@ -1,0 +1,498 @@
+{
+  "timestamp": "2025-09-05T05:36:11.749Z",
+  "type": "compare",
+  "siteId": "site-15-株式会社杣長",
+  "siteName": "株式会社杣長",
+  "device": "desktop",
+  "threshold": 2,
+  "captureCount": 20,
+  "captureResults": [
+    {
+      "url": "https://somacho.co.jp/",
+      "filename": "page-001_top_2025-09-05T05-32-53-305Z.png",
+      "timestamp": "2025-09-05T05:33:45.822Z"
+    },
+    {
+      "url": "https://somacho.co.jp/for-companies/",
+      "filename": "page-002_for-companies_2025-09-05T05-32-53-305Z.png",
+      "timestamp": "2025-09-05T05:33:25.288Z"
+    },
+    {
+      "url": "https://somacho.co.jp/shop/",
+      "filename": "page-003_shop_2025-09-05T05-32-53-305Z.png",
+      "timestamp": "2025-09-05T05:33:24.055Z"
+    },
+    {
+      "url": "https://somacho.co.jp/history/",
+      "filename": "page-004_history_2025-09-05T05-32-53-305Z.png",
+      "timestamp": "2025-09-05T05:33:27.258Z"
+    },
+    {
+      "url": "https://somacho.co.jp/blog/",
+      "filename": "page-005_blog_2025-09-05T05-32-53-305Z.png",
+      "timestamp": "2025-09-05T05:33:26.000Z"
+    },
+    {
+      "url": "https://somacho.co.jp/museum/",
+      "filename": "page-006_museum_2025-09-05T05-32-53-305Z.png",
+      "timestamp": "2025-09-05T05:33:43.442Z"
+    },
+    {
+      "url": "https://somacho.co.jp/about/",
+      "filename": "page-007_about_2025-09-05T05-32-53-305Z.png",
+      "timestamp": "2025-09-05T05:33:22.304Z"
+    },
+    {
+      "url": "https://somacho.co.jp/contact/",
+      "filename": "page-008_contact_2025-09-05T05-32-53-305Z.png",
+      "timestamp": "2025-09-05T05:33:22.664Z"
+    },
+    {
+      "url": "https://somacho.co.jp/cart/",
+      "filename": "page-009_cart_2025-09-05T05-32-53-305Z.png",
+      "timestamp": "2025-09-05T05:34:16.943Z"
+    },
+    {
+      "url": "https://somacho.co.jp/en/top-english/",
+      "filename": "page-010_en-top-english_2025-09-05T05-32-53-305Z.png",
+      "timestamp": "2025-09-05T05:34:21.822Z"
+    },
+    {
+      "url": "https://somacho.co.jp/original-products/",
+      "filename": "page-011_original-products_2025-09-05T05-32-53-305Z.png",
+      "timestamp": "2025-09-05T05:34:21.855Z"
+    },
+    {
+      "url": "https://somacho.co.jp/original-materials/",
+      "filename": "page-012_original-materials_2025-09-05T05-32-53-305Z.png",
+      "timestamp": "2025-09-05T05:34:16.924Z"
+    },
+    {
+      "url": "https://somacho.co.jp/2025/08/01/%e5%a4%a9%e9%b5%9e%e7%b5%a8%e7%be%8e%e8%a1%93%e9%a4%a8%e3%80%808%e3%83%bb9%e6%9c%88%e9%96%8b%e9%a4%a8%e6%97%a5%e3%81%ae%e3%81%8a%e7%9f%a5%e3%82%89%e3%81%9b-2/",
+      "filename": "page-013_2025-08-01--e5-a4-a9-e9-b5-9e-_2025-09-05T05-32-53-305Z.png",
+      "timestamp": "2025-09-05T05:34:16.311Z"
+    },
+    {
+      "url": "https://somacho.co.jp/2025/08/01/%e3%81%8a%e7%9b%86%e4%bc%91%e6%a5%ad%e3%81%ae%e3%81%8a%e7%9f%a5%e3%82%89%e3%81%9b/",
+      "filename": "page-014_2025-08-01--e3-81-8a-e7-9b-86-_2025-09-05T05-32-53-305Z.png",
+      "timestamp": "2025-09-05T05:34:34.179Z"
+    },
+    {
+      "url": "https://somacho.co.jp/2025/07/29/%e3%83%9f%e3%83%8b%e8%8c%b6%e7%ae%b1%e3%83%af%e3%83%bc%e3%82%af%e3%82%b7%e3%83%a7%e3%83%83%e3%83%97%e9%96%8b%e5%82%ac%e3%81%ae%e3%81%8a%e7%9f%a5%e3%82%89%e3%81%9b/",
+      "filename": "page-015_2025-07-29--e3-83-9f-e3-83-8b-_2025-09-05T05-32-53-305Z.png",
+      "timestamp": "2025-09-05T05:34:36.241Z"
+    },
+    {
+      "url": "https://somacho.co.jp/2025/07/17/%e6%96%b0%e7%99%ba%e5%a3%b2%e3%80%8c%e3%82%b9%e3%82%af%e3%82%a8%e3%82%a2%e3%83%91%e3%83%95-%e3%83%9f%e3%83%8b-%e3%80%8d/",
+      "filename": "page-016_2025-07-17--e6-96-b0-e7-99-ba-_2025-09-05T05-32-53-305Z.png",
+      "timestamp": "2025-09-05T05:34:36.703Z"
+    },
+    {
+      "url": "https://somacho.co.jp/2025/07/16/2025%e5%b9%b47%e6%9c%88%e7%b9%8a%e7%b6%ad%e5%ad%a6%e4%bc%9a%e8%aa%8c%e3%80%8c%e5%a4%a9%e9%b5%9e%e7%b5%a8%e7%be%8e%e8%a1%93%e9%a4%a8%e8%a8%aa%e5%95%8f%e8%a8%98%e3%80%8d%e6%8e%b2%e8%bc%89/",
+      "filename": "page-017_2025-07-16-2025-e5-b9-b47-e6-9_2025-09-05T05-32-53-305Z.png",
+      "timestamp": "2025-09-05T05:35:21.453Z"
+    },
+    {
+      "url": "https://somacho.co.jp/2025/07/08/%e3%82%a4%e3%83%8e%e3%83%96%e3%83%b3%e3%80%8c%e4%ba%ac%e9%83%bd%e5%8d%9a-2025%e3%80%8d%e3%81%ab%e3%82%bb%e3%83%ac%e3%82%af%e3%83%88%e3%81%84%e3%81%9f%e3%81%a0%e3%81%8d%e3%81%be%e3%81%97%e3%81%9f/",
+      "filename": "page-018_2025-07-08--e3-82-a4-e3-83-8e-_2025-09-05T05-32-53-305Z.png",
+      "timestamp": "2025-09-05T05:35:22.064Z"
+    },
+    {
+      "url": "https://somacho.co.jp/privacy-policy/",
+      "filename": "page-019_privacy-policy_2025-09-05T05-32-53-305Z.png",
+      "timestamp": "2025-09-05T05:35:07.217Z"
+    },
+    {
+      "url": "https://somacho.co.jp/refund-policy/",
+      "filename": "page-020_refund-policy_2025-09-05T05-32-53-305Z.png",
+      "timestamp": "2025-09-05T05:35:04.009Z"
+    }
+  ],
+  "compareResults": {
+    "siteId": "site-15-株式会社杣長",
+    "device": "desktop",
+    "summary": {
+      "totalPages": 22,
+      "ok": 21,
+      "ng": 1,
+      "error": 0,
+      "threshold": 2
+    },
+    "results": [
+      {
+        "pageId": "001",
+        "pageIdentifier": "top",
+        "baselineFile": "page-001_top_2025-09-05T04-21-38-224Z.png",
+        "afterFile": "page-001_top_2025-09-05T05-32-53-305Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-38-224Z",
+        "afterTimestamp": "2025-09-05T05-32-53-305Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-001_top_2025-09-05T05-35-23-971Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 5639
+        }
+      },
+      {
+        "pageId": "002",
+        "pageIdentifier": "for-companies",
+        "baselineFile": "page-002_for-companies_2025-09-05T04-21-38-224Z.png",
+        "afterFile": "page-002_for-companies_2025-09-05T05-32-53-305Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-38-224Z",
+        "afterTimestamp": "2025-09-05T05-32-53-305Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-002_for-companies_2025-09-05T05-35-27-311Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 4165
+        }
+      },
+      {
+        "pageId": "003",
+        "pageIdentifier": "shop",
+        "baselineFile": "page-003_shop_2025-09-05T04-21-38-224Z.png",
+        "afterFile": "page-003_shop_2025-09-05T05-32-53-305Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-38-224Z",
+        "afterTimestamp": "2025-09-05T05-32-53-305Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-003_shop_2025-09-05T05-35-30-015Z_diff-0.0259%.png",
+        "diffPixels": 1304,
+        "diffPercentage": 0.025853,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2627
+        }
+      },
+      {
+        "pageId": "004",
+        "pageIdentifier": "history",
+        "baselineFile": "page-004_history_2025-09-05T04-21-38-224Z.png",
+        "afterFile": "page-004_history_2025-09-05T05-32-53-305Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-38-224Z",
+        "afterTimestamp": "2025-09-05T05-32-53-305Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-004_history_2025-09-05T05-35-33-148Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 4796
+        }
+      },
+      {
+        "pageId": "005",
+        "pageIdentifier": "blog",
+        "baselineFile": "page-005_blog_2025-09-05T04-21-38-224Z.png",
+        "afterFile": "page-005_blog_2025-09-05T05-32-53-305Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-38-224Z",
+        "afterTimestamp": "2025-09-05T05-32-53-305Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-005_blog_2025-09-05T05-35-36-043Z_diff-0.2095%.png",
+        "diffPixels": 11930,
+        "diffPercentage": 0.209492,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2966
+        }
+      },
+      {
+        "pageId": "006",
+        "pageIdentifier": "museum",
+        "baselineFile": "page-006_museum_2025-09-05T04-21-38-224Z.png",
+        "afterFile": "page-006_museum_2025-09-05T05-32-53-305Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-38-224Z",
+        "afterTimestamp": "2025-09-05T05-32-53-305Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-006_museum_2025-09-05T05-35-40-717Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 3546
+        }
+      },
+      {
+        "pageId": "007",
+        "pageIdentifier": "about",
+        "baselineFile": "page-007_about_2025-09-05T04-21-38-224Z.png",
+        "afterFile": "page-007_about_2025-09-05T05-32-53-305Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-38-224Z",
+        "afterTimestamp": "2025-09-05T05-32-53-305Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-007_about_2025-09-05T05-35-42-871Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2108
+        }
+      },
+      {
+        "pageId": "008",
+        "pageIdentifier": "contact",
+        "baselineFile": "page-008_contact_2025-09-05T04-21-38-224Z.png",
+        "afterFile": "page-008_contact_2025-09-05T05-32-53-305Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-38-224Z",
+        "afterTimestamp": "2025-09-05T05-32-53-305Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-008_contact_2025-09-05T05-35-44-606Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1680
+        }
+      },
+      {
+        "pageId": "009",
+        "pageIdentifier": "cart",
+        "baselineFile": "page-009_cart_2025-09-05T04-21-38-224Z.png",
+        "afterFile": "page-009_cart_2025-09-05T05-32-53-305Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-38-224Z",
+        "afterTimestamp": "2025-09-05T05-32-53-305Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-009_cart_2025-09-05T05-35-47-890Z_diff-4.1622%.png",
+        "diffPixels": 87905,
+        "diffPercentage": 4.162169,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1100
+        }
+      },
+      {
+        "pageId": "010",
+        "pageIdentifier": "en-top-english",
+        "baselineFile": "page-010_en-top-english_2025-09-05T04-21-38-224Z.png",
+        "afterFile": "page-010_en-top-english_2025-09-05T05-32-53-305Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-38-224Z",
+        "afterTimestamp": "2025-09-05T05-32-53-305Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-010_en-top-english_2025-09-05T05-35-50-687Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 4288
+        }
+      },
+      {
+        "pageId": "011",
+        "pageIdentifier": "original-products",
+        "baselineFile": "page-011_original-products_2025-09-05T04-21-38-224Z.png",
+        "afterFile": "page-011_original-products_2025-09-05T05-32-53-305Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-38-224Z",
+        "afterTimestamp": "2025-09-05T05-32-53-305Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-011_original-products_2025-09-05T05-35-54-837Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 3392
+        }
+      },
+      {
+        "pageId": "012",
+        "pageIdentifier": "original-materials",
+        "baselineFile": "page-012_original-materials_2025-09-05T04-21-38-224Z.png",
+        "afterFile": "page-012_original-materials_2025-09-05T05-32-53-305Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-38-224Z",
+        "afterTimestamp": "2025-09-05T05-32-53-305Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-012_original-materials_2025-09-05T05-35-56-940Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1861
+        }
+      },
+      {
+        "pageId": "013",
+        "pageIdentifier": "2025-08-01--e5-a4-a9-e9-b5-9e-",
+        "baselineFile": "page-013_2025-08-01--e5-a4-a9-e9-b5-9e-_2025-09-05T04-21-38-224Z.png",
+        "afterFile": "page-013_2025-08-01--e5-a4-a9-e9-b5-9e-_2025-09-05T05-32-53-305Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-38-224Z",
+        "afterTimestamp": "2025-09-05T05-32-53-305Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-013_2025-08-01--e5-a4-a9-e9-b5-9e-_2025-09-05T05-35-59-667Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1357
+        }
+      },
+      {
+        "pageId": "014",
+        "pageIdentifier": "2025-08-01--e3-81-8a-e7-9b-86-",
+        "baselineFile": "page-014_2025-08-01--e3-81-8a-e7-9b-86-_2025-09-05T04-21-38-224Z.png",
+        "afterFile": "page-014_2025-08-01--e3-81-8a-e7-9b-86-_2025-09-05T05-32-53-305Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-38-224Z",
+        "afterTimestamp": "2025-09-05T05-32-53-305Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-014_2025-08-01--e3-81-8a-e7-9b-86-_2025-09-05T05-36-02-260Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1300
+        }
+      },
+      {
+        "pageId": "015",
+        "pageIdentifier": "2025-07-29--e3-83-9f-e3-83-8b-",
+        "baselineFile": "page-015_2025-07-29--e3-83-9f-e3-83-8b-_2025-09-05T04-21-38-224Z.png",
+        "afterFile": "page-015_2025-07-29--e3-83-9f-e3-83-8b-_2025-09-05T05-32-53-305Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-38-224Z",
+        "afterTimestamp": "2025-09-05T05-32-53-305Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-015_2025-07-29--e3-83-9f-e3-83-8b-_2025-09-05T05-36-05-050Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2664
+        }
+      },
+      {
+        "pageId": "016",
+        "pageIdentifier": "2025-07-17--e6-96-b0-e7-99-ba-",
+        "baselineFile": "page-016_2025-07-17--e6-96-b0-e7-99-ba-_2025-09-05T04-21-38-224Z.png",
+        "afterFile": "page-016_2025-07-17--e6-96-b0-e7-99-ba-_2025-09-05T05-32-53-305Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-38-224Z",
+        "afterTimestamp": "2025-09-05T05-32-53-305Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-016_2025-07-17--e6-96-b0-e7-99-ba-_2025-09-05T05-35-58-226Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1919
+        }
+      },
+      {
+        "pageId": "016",
+        "pageIdentifier": "2025-07-08--e5-a4-a7-e9-98-aa-",
+        "baselineFile": "page-016_2025-07-08--e5-a4-a7-e9-98-aa-_2025-07-23T02-31-48-170Z.png",
+        "afterFile": "page-016_2025-07-08--e5-a4-a7-e9-98-aa-_2025-07-23T04-37-41-767Z.png",
+        "baselineTimestamp": "2025-07-23T02-31-48-170Z",
+        "afterTimestamp": "2025-07-23T04-37-41-767Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-016_2025-07-08--e5-a4-a7-e9-98-aa-_2025-09-05T05-36-06-308Z_diff-0.0367%.png",
+        "diffPixels": 1236,
+        "diffPercentage": 0.03666,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1756
+        }
+      },
+      {
+        "pageId": "017",
+        "pageIdentifier": "2025-07-16-2025-e5-b9-b47-e6-9",
+        "baselineFile": "page-017_2025-07-16-2025-e5-b9-b47-e6-9_2025-09-05T04-21-38-224Z.png",
+        "afterFile": "page-017_2025-07-16-2025-e5-b9-b47-e6-9_2025-09-05T05-32-53-305Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-38-224Z",
+        "afterTimestamp": "2025-09-05T05-32-53-305Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-017_2025-07-16-2025-e5-b9-b47-e6-9_2025-09-05T05-36-00-963Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1480
+        }
+      },
+      {
+        "pageId": "017",
+        "pageIdentifier": "2025-05-29--e5-a4-a9-e9-b5-9e-",
+        "baselineFile": "page-017_2025-05-29--e5-a4-a9-e9-b5-9e-_2025-07-23T02-31-48-170Z.png",
+        "afterFile": "page-017_2025-05-29--e5-a4-a9-e9-b5-9e-_2025-07-23T04-37-41-767Z.png",
+        "baselineTimestamp": "2025-07-23T02-31-48-170Z",
+        "afterTimestamp": "2025-07-23T04-37-41-767Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-017_2025-05-29--e5-a4-a9-e9-b5-9e-_2025-09-05T05-36-07-226Z_diff-0.0068%.png",
+        "diffPixels": 181,
+        "diffPercentage": 0.006782,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1390
+        }
+      },
+      {
+        "pageId": "018",
+        "pageIdentifier": "2025-07-08--e3-82-a4-e3-83-8e-",
+        "baselineFile": "page-018_2025-07-08--e3-82-a4-e3-83-8e-_2025-09-05T04-21-38-224Z.png",
+        "afterFile": "page-018_2025-07-08--e3-82-a4-e3-83-8e-_2025-09-05T05-32-53-305Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-38-224Z",
+        "afterTimestamp": "2025-09-05T05-32-53-305Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-018_2025-07-08--e3-82-a4-e3-83-8e-_2025-09-05T05-36-03-548Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1823
+        }
+      },
+      {
+        "pageId": "019",
+        "pageIdentifier": "privacy-policy",
+        "baselineFile": "page-019_privacy-policy_2025-09-05T04-21-38-224Z.png",
+        "afterFile": "page-019_privacy-policy_2025-09-05T05-32-53-305Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-38-224Z",
+        "afterTimestamp": "2025-09-05T05-32-53-305Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-019_privacy-policy_2025-09-05T05-36-09-020Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 4253
+        }
+      },
+      {
+        "pageId": "020",
+        "pageIdentifier": "refund-policy",
+        "baselineFile": "page-020_refund-policy_2025-09-05T04-21-38-224Z.png",
+        "afterFile": "page-020_refund-policy_2025-09-05T05-32-53-305Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-38-224Z",
+        "afterTimestamp": "2025-09-05T05-32-53-305Z",
+        "diffPath": "/diffs/site-15-株式会社杣長/desktop/threshold-2/page-020_refund-policy_2025-09-05T05-36-11-104Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1867
+        }
+      }
+    ]
+  }
+}

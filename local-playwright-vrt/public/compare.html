@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VRT 画像比較ビューア</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 24px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            background: #5a67d8;
+        }
+        
+        .btn.download {
+            background: #4caf50;
+        }
+        
+        .btn.download:hover {
+            background: #45a049;
+        }
+        
+        select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .site-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .compare-grid {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .page-comparison {
+            border-bottom: 1px solid #eee;
+            padding: 20px 0;
+        }
+        
+        .page-comparison:last-child {
+            border-bottom: none;
+        }
+        
+        .page-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .diff-indicator {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .diff-ok {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .diff-ng {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .images-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        
+        .image-section {
+            text-align: center;
+        }
+        
+        .image-label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #666;
+            padding: 8px;
+            border-radius: 6px;
+        }
+        
+        .baseline-label {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .after-label {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+        
+        .diff-label {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+        
+        .image-container {
+            position: relative;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f9f9f9;
+        }
+        
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .image-not-found {
+            padding: 40px 20px;
+            color: #999;
+            font-style: italic;
+            background: #f5f5f5;
+        }
+        
+        .download-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .image-container:hover .download-btn {
+            opacity: 1;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .stats {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .stat-ok .stat-number {
+            color: #4caf50;
+        }
+        
+        .stat-ng .stat-number {
+            color: #f44336;
+        }
+        
+        @media (max-width: 1200px) {
+            .images-row {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .page-title {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 VRT 画像比較ビューア</h1>
+            <div class="controls">
+                <div class="site-selector">
+                    <label for="siteSelect">サイト選択:</label>
+                    <select id="siteSelect" onchange="loadSiteComparisons()">
+                        <option value="">サイトを選択してください</option>
+                        <option value="all">🌐 全サイト表示</option>
+                    </select>
+                </div>
+                <button class="btn download" onclick="downloadAllImages()">📥 全画像ダウンロード</button>
+                <a href="/dashboard.html" class="btn">📊 ダッシュボードに戻る</a>
+            </div>
+        </div>
+        
+        <div id="statsContainer" style="display: none;">
+            <div class="stats">
+                <div class="stat-item stat-ok">
+                    <div class="stat-number" id="okCount">0</div>
+                    <div class="stat-label">OK ページ</div>
+                </div>
+                <div class="stat-item stat-ng">
+                    <div class="stat-number" id="ngCount">0</div>
+                    <div class="stat-label">NG ページ</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="avgDiff">0%</div>
+                    <div class="stat-label">平均差分率</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="contentContainer">
+            <div class="loading">サイトを選択してください</div>
+        </div>
+    </div>
+    
+    <script>
+        let currentSiteId = '';
+        let comparisonData = [];
+        
+        // 初期化
+        async function init() {
+            await loadSites();
+        }
+        
+        // サイト一覧を読み込み
+        async function loadSites() {
+            try {
+                const response = await fetch('/sites');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const sites = data.managed || data.sites || [];
+                    const select = document.getElementById('siteSelect');
+                    
+                    sites.forEach(site => {
+                        const option = document.createElement('option');
+                        option.value = site.id;
+                        option.textContent = site.name;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('サイト一覧取得エラー:', error);
+            }
+        }
+        
+        // サイトの比較データを読み込み
+        async function loadSiteComparisons() {
+            const siteId = document.getElementById('siteSelect').value;
+            console.log('🔍 loadSiteComparisons called with siteId:', siteId);
+            
+            if (!siteId) {
+                document.getElementById('contentContainer').innerHTML = '<div class="loading">サイトを選択してください</div>';
+                document.getElementById('statsContainer').style.display = 'none';
+                return;
+            }
+            
+            currentSiteId = siteId;
+            document.getElementById('contentContainer').innerHTML = '<div class="loading">画像を読み込み中...</div>';
+            
+            try {
+                let response, data;
+                
+                if (siteId === 'all') {
+                    console.log('🌐 Fetching all sites data...');
+                    // 全サイトの場合
+                    response = await fetch('/compare-images-all');
+                    data = await response.json();
+                    console.log('📊 All sites data received:', data);
+                    
+                    if (data.success) {
+                        renderAllSitesComparisons(data.sites);
+                    } else {
+                        document.getElementById('contentContainer').innerHTML = 
+                            `<div class="loading">エラー: ${data.error}</div>`;
+                    }
+                } else {
+                    console.log('🔍 Fetching single site data for:', siteId);
+                    // 単一サイトの場合
+                    response = await fetch(`/compare-images/${siteId}`);
+                    data = await response.json();
+                    console.log('📊 Single site data received:', data);
+                    
+                    if (data.success) {
+                        comparisonData = data.comparisons;
+                        renderComparisons(data.comparisons, data.stats);
+                    } else {
+                        document.getElementById('contentContainer').innerHTML = 
+                            `<div class="loading">エラー: ${data.error}</div>`;
+                    }
+                }
+            } catch (error) {
+                console.error('比較データ取得エラー:', error);
+                document.getElementById('contentContainer').innerHTML = 
+                    '<div class="loading">データの取得に失敗しました</div>';
+            }
+        }
+        
+        // 比較結果を表示
+        function renderComparisons(comparisons, stats) {
+            if (comparisons.length === 0) {
+                document.getElementById('contentContainer').innerHTML = 
+                    '<div class="loading">比較データがありません</div>';
+                return;
+            }
+            
+            // 統計情報を更新
+            document.getElementById('okCount').textContent = stats.okCount;
+            document.getElementById('ngCount').textContent = stats.ngCount;
+            document.getElementById('avgDiff').textContent = stats.avgDiffRate.toFixed(2) + '%';
+            document.getElementById('statsContainer').style.display = 'block';
+            
+            // 比較グリッドを生成
+            const html = `
+                <div class="compare-grid">
+                    ${comparisons.map(comparison => `
+                        <div class="page-comparison">
+                            <div class="page-title">
+                                📄 ${comparison.pageName}
+                                <span class="diff-indicator ${comparison.diffRate <= 2.0 ? 'diff-ok' : 'diff-ng'}">
+                                    差分率: ${comparison.diffRate.toFixed(2)}%
+                                </span>
+                            </div>
+                            ${comparison.url ? `
+                                <div style="margin: 10px 0; padding: 8px 12px; background: #f8f9fa; border-radius: 4px; border-left: 3px solid #667eea;">
+                                    <a href="${comparison.url}" target="_blank" style="color: #667eea; text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 5px;">
+                                        🔗 ${comparison.url} <span style="font-size: 12px;">↗</span>
+                                    </a>
+                                </div>
+                            ` : ''}
+                            
+                            <div class="images-row">
+                                <div class="image-section">
+                                    <div class="image-label baseline-label">📸 Baseline (更新前)</div>
+                                    <div class="image-container">
+                                        ${comparison.baseline ? 
+                                            `<img src="/screenshots/${comparison.baseline}" alt="Baseline">
+                                             <button class="download-btn" onclick="downloadImage('/screenshots/${comparison.baseline}', 'baseline_${comparison.pageName}.png')">⬇️</button>` :
+                                            '<div class="image-not-found">画像なし</div>'
+                                        }
+                                    </div>
+                                </div>
+                                
+                                <div class="image-section">
+                                    <div class="image-label after-label">🔄 After (更新後)</div>
+                                    <div class="image-container">
+                                        ${comparison.after ? 
+                                            `<img src="/screenshots/${comparison.after}" alt="After">
+                                             <button class="download-btn" onclick="downloadImage('/screenshots/${comparison.after}', 'after_${comparison.pageName}.png')">⬇️</button>` :
+                                            '<div class="image-not-found">画像なし</div>'
+                                        }
+                                    </div>
+                                </div>
+                                
+                                <div class="image-section">
+                                    <div class="image-label diff-label">🔍 差分 (Diff)</div>
+                                    <div class="image-container">
+                                        ${comparison.diff ? 
+                                            `<img src="/diffs/${comparison.diff}" alt="Diff">
+                                             <button class="download-btn" onclick="downloadImage('/diffs/${comparison.diff}', 'diff_${comparison.pageName}.png')">⬇️</button>` :
+                                            '<div class="image-not-found">差分画像なし</div>'
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            document.getElementById('contentContainer').innerHTML = html;
+        }
+        
+        // 全サイト比較結果を表示
+        function renderAllSitesComparisons(sites) {
+            console.log('🎨 renderAllSitesComparisons called with', sites.length, 'sites');
+            
+            if (sites.length === 0) {
+                document.getElementById('contentContainer').innerHTML = 
+                    '<div class="loading">比較データがありません</div>';
+                document.getElementById('statsContainer').style.display = 'none';
+                return;
+            }
+            
+            // 全体統計を計算
+            let totalOkCount = 0;
+            let totalNgCount = 0;
+            let totalDiffRate = 0;
+            let totalComparisons = 0;
+            
+            sites.forEach(site => {
+                totalOkCount += site.stats.okCount;
+                totalNgCount += site.stats.ngCount;
+                totalDiffRate += site.stats.totalDiffRate;
+                totalComparisons += site.comparisons.length;
+            });
+            
+            const avgDiffRate = totalComparisons > 0 ? totalDiffRate / totalComparisons : 0;
+            
+            // 統計情報を更新
+            document.getElementById('okCount').textContent = totalOkCount;
+            document.getElementById('ngCount').textContent = totalNgCount;
+            document.getElementById('avgDiff').textContent = avgDiffRate.toFixed(2) + '%';
+            document.getElementById('statsContainer').style.display = 'block';
+            
+            // 全サイトの比較グリッドを生成
+            const html = `
+                <div class="compare-grid">
+                    ${sites.map(site => `
+                        <div class="site-section" style="border: 3px solid #667eea; margin-bottom: 40px; padding: 25px; border-radius: 12px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 15px;">
+                                <h2 style="margin: 0; color: #667eea; font-size: 22px;">🌐 ${site.siteName}</h2>
+                                <div style="display: flex; gap: 15px;">
+                                    <span class="diff-indicator ${site.stats.okCount > 0 ? 'diff-ok' : ''}" style="padding: 6px 12px;">
+                                        ✅ OK: ${site.stats.okCount}
+                                    </span>
+                                    <span class="diff-indicator ${site.stats.ngCount > 0 ? 'diff-ng' : ''}" style="padding: 6px 12px;">
+                                        ❌ NG: ${site.stats.ngCount}
+                                    </span>
+                                    <span class="diff-indicator" style="background: #f0f4f8; color: #555; padding: 6px 12px;">
+                                        平均: ${site.stats.avgDiffRate.toFixed(2)}%
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            ${site.comparisons.length === 0 ? 
+                                '<div style="text-align: center; padding: 30px; color: #999; font-style: italic;">比較データがありません</div>' :
+                                site.comparisons.map(comparison => `
+                                    <div class="page-comparison" style="margin-bottom: 30px;">
+                                        <div class="page-title">
+                                            📄 ${comparison.pageName}
+                                            <span class="diff-indicator ${comparison.diffRate <= 2.0 ? 'diff-ok' : 'diff-ng'}">
+                                                差分率: ${comparison.diffRate.toFixed(2)}%
+                                            </span>
+                                        </div>
+                                        ${comparison.url ? `
+                                            <div style="margin: 10px 0; padding: 8px 12px; background: #f8f9fa; border-radius: 4px; border-left: 3px solid #667eea;">
+                                                <a href="${comparison.url}" target="_blank" style="color: #667eea; text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 5px;">
+                                                    🔗 ${comparison.url} <span style="font-size: 12px;">↗</span>
+                                                </a>
+                                            </div>
+                                        ` : ''}
+                                        
+                                        <div class="images-row">
+                                            <div class="image-section">
+                                                <div class="image-label baseline-label">📸 Baseline (更新前)</div>
+                                                <div class="image-container">
+                                                    ${comparison.baseline ? 
+                                                        `<img src="/screenshots/${comparison.baseline}" alt="Baseline">
+                                                         <button class="download-btn" onclick="downloadImage('/screenshots/${comparison.baseline}', 'baseline_${site.siteId}_${comparison.pageName}.png')">⬇️</button>` :
+                                                        '<div class="image-not-found">画像なし</div>'
+                                                    }
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="image-section">
+                                                <div class="image-label after-label">🔄 After (更新後)</div>
+                                                <div class="image-container">
+                                                    ${comparison.after ? 
+                                                        `<img src="/screenshots/${comparison.after}" alt="After">
+                                                         <button class="download-btn" onclick="downloadImage('/screenshots/${comparison.after}', 'after_${site.siteId}_${comparison.pageName}.png')">⬇️</button>` :
+                                                        '<div class="image-not-found">画像なし</div>'
+                                                    }
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="image-section">
+                                                <div class="image-label diff-label">🔍 差分 (Diff)</div>
+                                                <div class="image-container">
+                                                    ${comparison.diff ? 
+                                                        `<img src="/diffs/${comparison.diff}" alt="Diff">
+                                                         <button class="download-btn" onclick="downloadImage('/diffs/${comparison.diff}', 'diff_${site.siteId}_${comparison.pageName}.png')">⬇️</button>` :
+                                                        '<div class="image-not-found">差分画像なし</div>'
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')
+                            }
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            document.getElementById('contentContainer').innerHTML = html;
+        }
+        
+        // 個別画像をダウンロード
+        function downloadImage(url, filename) {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+        
+        // 全画像をダウンロード（ZIP形式）
+        async function downloadAllImages() {
+            if (!currentSiteId) {
+                alert('サイトを選択してください');
+                return;
+            }
+            
+            try {
+                if (currentSiteId === 'all') {
+                    // 全サイトの場合は、まだZIP機能は実装していないことを通知
+                    alert('💡 全サイト一括ダウンロード機能は現在開発中です。\n個別のサイトを選択してダウンロードしてください。');
+                    return;
+                }
+                
+                const response = await fetch(`/download-comparison-zip/${currentSiteId}`);
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${currentSiteId}_comparison_images.zip`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    
+                    alert('✅ 全画像のダウンロードが完了しました');
+                } else {
+                    const error = await response.json();
+                    alert(`❌ ダウンロードエラー: ${error.error}`);
+                }
+            } catch (error) {
+                console.error('ダウンロードエラー:', error);
+                alert('❌ ダウンロード中にエラーが発生しました');
+            }
+        }
+        
+        // 初期化実行
+        console.log('🚀 Initializing compare.html');
+        console.log('Functions available:', {
+            loadSiteComparisons: typeof loadSiteComparisons,
+            renderAllSitesComparisons: typeof renderAllSitesComparisons,
+            renderComparisons: typeof renderComparisons
+        });
+        init();
+    </script>
+</body>
+</html>
