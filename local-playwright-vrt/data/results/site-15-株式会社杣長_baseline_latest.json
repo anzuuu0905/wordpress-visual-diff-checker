@@ -1,0 +1,232 @@
+{
+  "timestamp": "2025-09-05T04:24:34.785Z",
+  "type": "baseline",
+  "siteId": "site-15-株式会社杣長",
+  "siteName": "株式会社杣長",
+  "device": "desktop",
+  "captureCount": 20,
+  "captureResults": [
+    {
+      "url": "https://somacho.co.jp/",
+      "filename": "page-001_top_2025-09-05T04-21-38-224Z.png",
+      "timestamp": "2025-09-05T04:22:51.542Z"
+    },
+    {
+      "url": "https://somacho.co.jp/for-companies/",
+      "filename": "page-002_for-companies_2025-09-05T04-21-38-224Z.png",
+      "timestamp": "2025-09-05T04:22:32.095Z"
+    },
+    {
+      "url": "https://somacho.co.jp/shop/",
+      "filename": "page-003_shop_2025-09-05T04-21-38-224Z.png",
+      "timestamp": "2025-09-05T04:22:30.317Z"
+    },
+    {
+      "url": "https://somacho.co.jp/history/",
+      "filename": "page-004_history_2025-09-05T04-21-38-224Z.png",
+      "timestamp": "2025-09-05T04:22:42.870Z"
+    },
+    {
+      "url": "https://somacho.co.jp/blog/",
+      "filename": "page-005_blog_2025-09-05T04-21-38-224Z.png",
+      "timestamp": "2025-09-05T04:22:31.972Z"
+    },
+    {
+      "url": "https://somacho.co.jp/museum/",
+      "filename": "page-006_museum_2025-09-05T04-21-38-224Z.png",
+      "timestamp": "2025-09-05T04:22:54.334Z"
+    },
+    {
+      "url": "https://somacho.co.jp/about/",
+      "filename": "page-007_about_2025-09-05T04-21-38-224Z.png",
+      "timestamp": "2025-09-05T04:22:31.998Z"
+    },
+    {
+      "url": "https://somacho.co.jp/contact/",
+      "filename": "page-008_contact_2025-09-05T04-21-38-224Z.png",
+      "timestamp": "2025-09-05T04:22:31.985Z"
+    },
+    {
+      "url": "https://somacho.co.jp/cart/",
+      "filename": "page-009_cart_2025-09-05T04-21-38-224Z.png",
+      "timestamp": "2025-09-05T04:23:32.188Z"
+    },
+    {
+      "url": "https://somacho.co.jp/en/top-english/",
+      "filename": "page-010_en-top-english_2025-09-05T04-21-38-224Z.png",
+      "timestamp": "2025-09-05T04:23:34.919Z"
+    },
+    {
+      "url": "https://somacho.co.jp/original-products/",
+      "filename": "page-011_original-products_2025-09-05T04-21-38-224Z.png",
+      "timestamp": "2025-09-05T04:23:34.053Z"
+    },
+    {
+      "url": "https://somacho.co.jp/original-materials/",
+      "filename": "page-012_original-materials_2025-09-05T04-21-38-224Z.png",
+      "timestamp": "2025-09-05T04:23:32.462Z"
+    },
+    {
+      "url": "https://somacho.co.jp/2025/08/01/%e5%a4%a9%e9%b5%9e%e7%b5%a8%e7%be%8e%e8%a1%93%e9%a4%a8%e3%80%808%e3%83%bb9%e6%9c%88%e9%96%8b%e9%a4%a8%e6%97%a5%e3%81%ae%e3%81%8a%e7%9f%a5%e3%82%89%e3%81%9b-2/",
+      "filename": "page-013_2025-08-01--e5-a4-a9-e9-b5-9e-_2025-09-05T04-21-38-224Z.png",
+      "timestamp": "2025-09-05T04:23:32.464Z"
+    },
+    {
+      "url": "https://somacho.co.jp/2025/08/01/%e3%81%8a%e7%9b%86%e4%bc%91%e6%a5%ad%e3%81%ae%e3%81%8a%e7%9f%a5%e3%82%89%e3%81%9b/",
+      "filename": "page-014_2025-08-01--e3-81-8a-e7-9b-86-_2025-09-05T04-21-38-224Z.png",
+      "timestamp": "2025-09-05T04:23:48.348Z"
+    },
+    {
+      "url": "https://somacho.co.jp/2025/07/29/%e3%83%9f%e3%83%8b%e8%8c%b6%e7%ae%b1%e3%83%af%e3%83%bc%e3%82%af%e3%82%b7%e3%83%a7%e3%83%83%e3%83%97%e9%96%8b%e5%82%ac%e3%81%ae%e3%81%8a%e7%9f%a5%e3%82%89%e3%81%9b/",
+      "filename": "page-015_2025-07-29--e3-83-9f-e3-83-8b-_2025-09-05T04-21-38-224Z.png",
+      "timestamp": "2025-09-05T04:23:50.155Z"
+    },
+    {
+      "url": "https://somacho.co.jp/2025/07/17/%e6%96%b0%e7%99%ba%e5%a3%b2%e3%80%8c%e3%82%b9%e3%82%af%e3%82%a8%e3%82%a2%e3%83%91%e3%83%95-%e3%83%9f%e3%83%8b-%e3%80%8d/",
+      "filename": "page-016_2025-07-17--e6-96-b0-e7-99-ba-_2025-09-05T04-21-38-224Z.png",
+      "timestamp": "2025-09-05T04:23:50.405Z"
+    },
+    {
+      "url": "https://somacho.co.jp/2025/07/16/2025%e5%b9%b47%e6%9c%88%e7%b9%8a%e7%b6%ad%e5%ad%a6%e4%bc%9a%e8%aa%8c%e3%80%8c%e5%a4%a9%e9%b5%9e%e7%b5%a8%e7%be%8e%e8%a1%93%e9%a4%a8%e8%a8%aa%e5%95%8f%e8%a8%98%e3%80%8d%e6%8e%b2%e8%bc%89/",
+      "filename": "page-017_2025-07-16-2025-e5-b9-b47-e6-9_2025-09-05T04-21-38-224Z.png",
+      "timestamp": "2025-09-05T04:24:34.228Z"
+    },
+    {
+      "url": "https://somacho.co.jp/2025/07/08/%e3%82%a4%e3%83%8e%e3%83%96%e3%83%b3%e3%80%8c%e4%ba%ac%e9%83%bd%e5%8d%9a-2025%e3%80%8d%e3%81%ab%e3%82%bb%e3%83%ac%e3%82%af%e3%83%88%e3%81%84%e3%81%9f%e3%81%a0%e3%81%8d%e3%81%be%e3%81%97%e3%81%9f/",
+      "filename": "page-018_2025-07-08--e3-82-a4-e3-83-8e-_2025-09-05T04-21-38-224Z.png",
+      "timestamp": "2025-09-05T04:24:34.777Z"
+    },
+    {
+      "url": "https://somacho.co.jp/privacy-policy/",
+      "filename": "page-019_privacy-policy_2025-09-05T04-21-38-224Z.png",
+      "timestamp": "2025-09-05T04:24:19.601Z"
+    },
+    {
+      "url": "https://somacho.co.jp/refund-policy/",
+      "filename": "page-020_refund-policy_2025-09-05T04-21-38-224Z.png",
+      "timestamp": "2025-09-05T04:24:16.705Z"
+    }
+  ],
+  "pages": [
+    {
+      "url": "https://somacho.co.jp/",
+      "pageId": "001",
+      "identifier": "top",
+      "title": "株式会社杣長"
+    },
+    {
+      "url": "https://somacho.co.jp/for-companies/",
+      "pageId": "002",
+      "identifier": "for-companies",
+      "title": "企業様向け – 株式会社杣長"
+    },
+    {
+      "url": "https://somacho.co.jp/shop/",
+      "pageId": "003",
+      "identifier": "shop",
+      "title": "ショップ – 株式会社杣長"
+    },
+    {
+      "url": "https://somacho.co.jp/history/",
+      "pageId": "004",
+      "identifier": "history",
+      "title": "杣長の歴史 – 株式会社杣長"
+    },
+    {
+      "url": "https://somacho.co.jp/blog/",
+      "pageId": "005",
+      "identifier": "blog",
+      "title": "ブログ – 株式会社杣長"
+    },
+    {
+      "url": "https://somacho.co.jp/museum/",
+      "pageId": "006",
+      "identifier": "museum",
+      "title": "天鵞絨美術館 – 株式会社杣長"
+    },
+    {
+      "url": "https://somacho.co.jp/about/",
+      "pageId": "007",
+      "identifier": "about",
+      "title": "会社概要 – 株式会社杣長"
+    },
+    {
+      "url": "https://somacho.co.jp/contact/",
+      "pageId": "008",
+      "identifier": "contact",
+      "title": "お問い合わせ – 株式会社杣長"
+    },
+    {
+      "url": "https://somacho.co.jp/cart/",
+      "pageId": "009",
+      "identifier": "cart",
+      "title": "お買い物カゴ – 株式会社杣長"
+    },
+    {
+      "url": "https://somacho.co.jp/en/top-english/",
+      "pageId": "010",
+      "identifier": "en-top-english",
+      "title": "株式会社杣長"
+    },
+    {
+      "url": "https://somacho.co.jp/original-products/",
+      "pageId": "011",
+      "identifier": "original-products",
+      "title": "【ショップ】ビロード商品 – 株式会社杣長"
+    },
+    {
+      "url": "https://somacho.co.jp/original-materials/",
+      "pageId": "012",
+      "identifier": "original-materials",
+      "title": "【ショップ】パフ生地 – 株式会社杣長"
+    },
+    {
+      "url": "https://somacho.co.jp/2025/08/01/%e5%a4%a9%e9%b5%9e%e7%b5%a8%e7%be%8e%e8%a1%93%e9%a4%a8%e3%80%808%e3%83%bb9%e6%9c%88%e9%96%8b%e9%a4%a8%e6%97%a5%e3%81%ae%e3%81%8a%e7%9f%a5%e3%82%89%e3%81%9b-2/",
+      "pageId": "013",
+      "identifier": "2025-08-01--e5-a4-a9-e9-b5-9e-",
+      "title": "天鵞絨美術館　8・9月開館日のお知らせ – 株式会社杣長"
+    },
+    {
+      "url": "https://somacho.co.jp/2025/08/01/%e3%81%8a%e7%9b%86%e4%bc%91%e6%a5%ad%e3%81%ae%e3%81%8a%e7%9f%a5%e3%82%89%e3%81%9b/",
+      "pageId": "014",
+      "identifier": "2025-08-01--e3-81-8a-e7-9b-86-",
+      "title": "お盆休業のお知らせ – 株式会社杣長"
+    },
+    {
+      "url": "https://somacho.co.jp/2025/07/29/%e3%83%9f%e3%83%8b%e8%8c%b6%e7%ae%b1%e3%83%af%e3%83%bc%e3%82%af%e3%82%b7%e3%83%a7%e3%83%83%e3%83%97%e9%96%8b%e5%82%ac%e3%81%ae%e3%81%8a%e7%9f%a5%e3%82%89%e3%81%9b/",
+      "pageId": "015",
+      "identifier": "2025-07-29--e3-83-9f-e3-83-8b-",
+      "title": "ミニ茶箱ワークショップ開催のお知らせ – 株式会社杣長"
+    },
+    {
+      "url": "https://somacho.co.jp/2025/07/17/%e6%96%b0%e7%99%ba%e5%a3%b2%e3%80%8c%e3%82%b9%e3%82%af%e3%82%a8%e3%82%a2%e3%83%91%e3%83%95-%e3%83%9f%e3%83%8b-%e3%80%8d/",
+      "pageId": "016",
+      "identifier": "2025-07-17--e6-96-b0-e7-99-ba-",
+      "title": "新発売「スクエアパフ-ミニ-」 – 株式会社杣長"
+    },
+    {
+      "url": "https://somacho.co.jp/2025/07/16/2025%e5%b9%b47%e6%9c%88%e7%b9%8a%e7%b6%ad%e5%ad%a6%e4%bc%9a%e8%aa%8c%e3%80%8c%e5%a4%a9%e9%b5%9e%e7%b5%a8%e7%be%8e%e8%a1%93%e9%a4%a8%e8%a8%aa%e5%95%8f%e8%a8%98%e3%80%8d%e6%8e%b2%e8%bc%89/",
+      "pageId": "017",
+      "identifier": "2025-07-16-2025-e5-b9-b47-e6-9",
+      "title": "2025年7月繊維学会誌「天鵞絨美術館訪問記」掲載 – 株式会社杣長"
+    },
+    {
+      "url": "https://somacho.co.jp/2025/07/08/%e3%82%a4%e3%83%8e%e3%83%96%e3%83%b3%e3%80%8c%e4%ba%ac%e9%83%bd%e5%8d%9a-2025%e3%80%8d%e3%81%ab%e3%82%bb%e3%83%ac%e3%82%af%e3%83%88%e3%81%84%e3%81%9f%e3%81%a0%e3%81%8d%e3%81%be%e3%81%97%e3%81%9f/",
+      "pageId": "018",
+      "identifier": "2025-07-08--e3-82-a4-e3-83-8e-",
+      "title": "イノブン「京都博 2025」にセレクトいただきました – 株式会社杣長"
+    },
+    {
+      "url": "https://somacho.co.jp/privacy-policy/",
+      "pageId": "019",
+      "identifier": "privacy-policy",
+      "title": "プライバシーポリシー – 株式会社杣長"
+    },
+    {
+      "url": "https://somacho.co.jp/refund-policy/",
+      "pageId": "020",
+      "identifier": "refund-policy",
+      "title": "返品・返金に関して – 株式会社杣長"
+    }
+  ]
+}

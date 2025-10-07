@@ -366,6 +366,7 @@
                     <button type="submit" class="button" id="executeButton">🎯 実行</button>
                     <button type="button" class="button secondary" onclick="showSiteManager()">🌐 サイト管理</button>
                     <button type="button" class="button secondary" onclick="showResults()">📈 結果確認</button>
+                    <button type="button" class="button success" onclick="window.open('/dashboard.html', '_blank')">📊 ダッシュボード</button>
                     <button type="button" class="button warning" onclick="refreshSites()">🔄 サイト一覧更新</button>
                 </div>
 
@@ -1500,7 +1501,16 @@
         }
 
         function displayAllResults(results) {
-            const totalSites = results.length;
+            // サイトIDでソート（site-1, site-2, site-3...の順）
+            const sortedResults = results.sort((a, b) => {
+                const extractSiteNumber = (siteId) => {
+                    const match = siteId.match(/site-(\d+)/);
+                    return match ? parseInt(match[1], 10) : 9999;
+                };
+                return extractSiteNumber(a.siteId) - extractSiteNumber(b.siteId);
+            });
+            
+            const totalSites = sortedResults.length;
 
             document.getElementById('results').innerHTML = `
                 <div class="card">
@@ -1509,7 +1519,7 @@
                         <p><strong>対象サイト:</strong> ${totalSites}サイト</p>
                     </div>
 
-                    ${results.map(site => `
+                    ${sortedResults.map(site => `
                         <div class="diff-info">
                             <h4>🌐 ${site.siteName}</h4>
                             <p><strong>URL:</strong> ${site.baseUrl}</p>

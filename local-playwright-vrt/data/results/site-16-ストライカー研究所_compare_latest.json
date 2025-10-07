@@ -1,0 +1,464 @@
+{
+  "timestamp": "2025-09-05T05:40:29.413Z",
+  "type": "compare",
+  "siteId": "site-16-ストライカー研究所",
+  "siteName": "ストライカー研究所",
+  "device": "desktop",
+  "threshold": 2,
+  "captureCount": 20,
+  "captureResults": [
+    {
+      "url": "https://strikerlabo.jp/",
+      "filename": "page-001_top_2025-09-05T05-36-51-601Z.png",
+      "timestamp": "2025-09-05T05:37:36.064Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/labo/",
+      "filename": "page-002_labo_2025-09-05T05-36-51-601Z.png",
+      "timestamp": "2025-09-05T05:37:29.146Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/service/",
+      "filename": "page-003_service_2025-09-05T05-36-51-601Z.png",
+      "timestamp": "2025-09-05T05:37:29.131Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/company/",
+      "filename": "page-004_company_2025-09-05T05-36-51-601Z.png",
+      "timestamp": "2025-09-05T05:37:22.999Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/faq/",
+      "filename": "page-005_faq_2025-09-05T05-36-51-601Z.png",
+      "timestamp": "2025-09-05T05:37:21.531Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/2025/04/30/news-x39pqt/",
+      "filename": "page-006_2025-04-30-news-x39pqt_2025-09-05T05-36-51-601Z.png",
+      "timestamp": "2025-09-05T05:37:24.375Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/2025/04/30/news-km84zr/",
+      "filename": "page-007_2025-04-30-news-km84zr_2025-09-05T05-36-51-601Z.png",
+      "timestamp": "2025-09-05T05:37:34.401Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/2022/08/01/%e3%82%aa%e3%83%b3%e3%83%a9%e3%82%a4%e3%83%b3%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88/",
+      "filename": "page-008_2022-08-01--e3-82-aa-e3-83-b3-_2025-09-05T05-36-51-601Z.png",
+      "timestamp": "2025-09-05T05:37:23.708Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/privacy-policy/",
+      "filename": "page-009_privacy-policy_2025-09-05T05-36-51-601Z.png",
+      "timestamp": "2025-09-05T05:38:09.053Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/term/",
+      "filename": "page-010_term_2025-09-05T05-36-51-601Z.png",
+      "timestamp": "2025-09-05T05:38:10.305Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/law/",
+      "filename": "page-011_law_2025-09-05T05-36-51-601Z.png",
+      "timestamp": "2025-09-05T05:38:05.986Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/refund_returns/",
+      "filename": "page-012_refund-returns_2025-09-05T05-36-51-601Z.png",
+      "timestamp": "2025-09-05T05:38:05.503Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/contact",
+      "filename": "page-013_contact_2025-09-05T05-36-51-601Z.png",
+      "timestamp": "2025-09-05T05:38:06.186Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/product/personal-lesson/",
+      "filename": "page-014_product-personal-lesson_2025-09-05T05-36-51-601Z.png",
+      "timestamp": "2025-09-05T05:38:05.683Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/category/news/",
+      "filename": "page-015_category-news_2025-09-05T05-36-51-601Z.png",
+      "timestamp": "2025-09-05T05:38:05.252Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/2025/04/30/news-rd21xv/",
+      "filename": "page-016_2025-04-30-news-rd21xv_2025-09-05T05-36-51-601Z.png",
+      "timestamp": "2025-09-05T05:38:13.071Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/2022/06/01/%e3%82%b9%e3%83%88%e3%83%a9%e3%82%a4%e3%82%ab%e3%83%bc%e3%82%af%e3%83%aa%e3%83%8b%e3%83%83%e3%82%afin%e5%b2%90%e9%98%9c/",
+      "filename": "page-017_2022-06-01--e3-82-b9-e3-83-88-_2025-09-05T05-36-51-601Z.png",
+      "timestamp": "2025-09-05T05:38:42.332Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/2022/06/01/%e3%82%b9%e3%83%88%e3%83%a9%e3%82%a4%e3%82%ab%e3%83%bc%e3%82%af%e3%83%aa%e3%83%8b%e3%83%83%e3%82%afin%e7%86%8a%e6%9c%ac/",
+      "filename": "page-018_2022-06-01--e3-82-b9-e3-83-88-_2025-09-05T05-36-51-601Z.png",
+      "timestamp": "2025-09-05T05:38:41.510Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/2025/09/03/news-hd59qx/",
+      "filename": "page-019_2025-09-03-news-hd59qx_2025-09-05T05-36-51-601Z.png",
+      "timestamp": "2025-09-05T05:38:48.123Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/2025/09/03/news-t7m4gb/",
+      "filename": "page-020_2025-09-03-news-t7m4gb_2025-09-05T05-36-51-601Z.png",
+      "timestamp": "2025-09-05T05:38:55.421Z"
+    }
+  ],
+  "compareResults": {
+    "siteId": "site-16-ストライカー研究所",
+    "device": "desktop",
+    "summary": {
+      "totalPages": 20,
+      "ok": 15,
+      "ng": 5,
+      "error": 0,
+      "threshold": 2
+    },
+    "results": [
+      {
+        "pageId": "001",
+        "pageIdentifier": "top",
+        "baselineFile": "page-001_top_2025-09-05T04-29-38-164Z.png",
+        "afterFile": "page-001_top_2025-09-05T05-36-51-601Z.png",
+        "baselineTimestamp": "2025-09-05T04-29-38-164Z",
+        "afterTimestamp": "2025-09-05T05-36-51-601Z",
+        "diffPath": "/diffs/site-16-ストライカー研究所/desktop/threshold-2/page-001_top_2025-09-05T05-38-59-679Z_diff-3.82%.png",
+        "diffPixels": 628486,
+        "diffPercentage": 3.820008,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 8569
+        }
+      },
+      {
+        "pageId": "002",
+        "pageIdentifier": "labo",
+        "baselineFile": "page-002_labo_2025-09-05T04-29-38-164Z.png",
+        "afterFile": "page-002_labo_2025-09-05T05-36-51-601Z.png",
+        "baselineTimestamp": "2025-09-05T04-29-38-164Z",
+        "afterTimestamp": "2025-09-05T05-36-51-601Z",
+        "diffPath": "/diffs/site-16-ストライカー研究所/desktop/threshold-2/page-002_labo_2025-09-05T05-39-06-916Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 4600
+        }
+      },
+      {
+        "pageId": "003",
+        "pageIdentifier": "service",
+        "baselineFile": "page-003_service_2025-09-05T04-29-38-164Z.png",
+        "afterFile": "page-003_service_2025-09-05T05-36-51-601Z.png",
+        "baselineTimestamp": "2025-09-05T04-29-38-164Z",
+        "afterTimestamp": "2025-09-05T05-36-51-601Z",
+        "diffPath": "/diffs/site-16-ストライカー研究所/desktop/threshold-2/page-003_service_2025-09-05T05-39-10-681Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 4471
+        }
+      },
+      {
+        "pageId": "004",
+        "pageIdentifier": "company",
+        "baselineFile": "page-004_company_2025-09-05T04-29-38-164Z.png",
+        "afterFile": "page-004_company_2025-09-05T05-36-51-601Z.png",
+        "baselineTimestamp": "2025-09-05T04-29-38-164Z",
+        "afterTimestamp": "2025-09-05T05-36-51-601Z",
+        "diffPath": "/diffs/site-16-ストライカー研究所/desktop/threshold-2/page-004_company_2025-09-05T05-39-14-143Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2321
+        }
+      },
+      {
+        "pageId": "005",
+        "pageIdentifier": "faq",
+        "baselineFile": "page-005_faq_2025-09-05T04-29-38-164Z.png",
+        "afterFile": "page-005_faq_2025-09-05T05-36-51-601Z.png",
+        "baselineTimestamp": "2025-09-05T04-29-38-164Z",
+        "afterTimestamp": "2025-09-05T05-36-51-601Z",
+        "diffPath": "/diffs/site-16-ストライカー研究所/desktop/threshold-2/page-005_faq_2025-09-05T05-39-17-080Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1815
+        }
+      },
+      {
+        "pageId": "006",
+        "pageIdentifier": "2025-04-30-news-x39pqt",
+        "baselineFile": "page-006_2025-04-30-news-x39pqt_2025-09-05T04-29-38-164Z.png",
+        "afterFile": "page-006_2025-04-30-news-x39pqt_2025-09-05T05-36-51-601Z.png",
+        "baselineTimestamp": "2025-09-05T04-29-38-164Z",
+        "afterTimestamp": "2025-09-05T05-36-51-601Z",
+        "diffPath": "/diffs/site-16-ストライカー研究所/desktop/threshold-2/page-006_2025-04-30-news-x39pqt_2025-09-05T05-39-19-702Z_diff-2.5241%.png",
+        "diffPixels": 163804,
+        "diffPercentage": 2.5241,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 3380
+        }
+      },
+      {
+        "pageId": "007",
+        "pageIdentifier": "2025-04-30-news-km84zr",
+        "baselineFile": "page-007_2025-04-30-news-km84zr_2025-09-05T04-29-38-164Z.png",
+        "afterFile": "page-007_2025-04-30-news-km84zr_2025-09-05T05-36-51-601Z.png",
+        "baselineTimestamp": "2025-09-05T04-29-38-164Z",
+        "afterTimestamp": "2025-09-05T05-36-51-601Z",
+        "diffPath": "/diffs/site-16-ストライカー研究所/desktop/threshold-2/page-007_2025-04-30-news-km84zr_2025-09-05T05-39-28-497Z_diff-1.0492%.png",
+        "diffPixels": 170889,
+        "diffPercentage": 1.049212,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 8483
+        }
+      },
+      {
+        "pageId": "008",
+        "pageIdentifier": "2022-08-01--e3-82-aa-e3-83-b3-",
+        "baselineFile": "page-008_2022-08-01--e3-82-aa-e3-83-b3-_2025-09-05T04-29-38-164Z.png",
+        "afterFile": "page-008_2022-08-01--e3-82-aa-e3-83-b3-_2025-09-05T05-36-51-601Z.png",
+        "baselineTimestamp": "2025-09-05T04-29-38-164Z",
+        "afterTimestamp": "2025-09-05T05-36-51-601Z",
+        "diffPath": "/diffs/site-16-ストライカー研究所/desktop/threshold-2/page-008_2022-08-01--e3-82-aa-e3-83-b3-_2025-09-05T05-39-35-610Z_diff-2.4338%.png",
+        "diffPixels": 117292,
+        "diffPercentage": 2.433848,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2510
+        }
+      },
+      {
+        "pageId": "009",
+        "pageIdentifier": "privacy-policy",
+        "baselineFile": "page-009_privacy-policy_2025-09-05T04-29-38-164Z.png",
+        "afterFile": "page-009_privacy-policy_2025-09-05T05-36-51-601Z.png",
+        "baselineTimestamp": "2025-09-05T04-29-38-164Z",
+        "afterTimestamp": "2025-09-05T05-36-51-601Z",
+        "diffPath": "/diffs/site-16-ストライカー研究所/desktop/threshold-2/page-009_privacy-policy_2025-09-05T05-39-38-933Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 4031
+        }
+      },
+      {
+        "pageId": "010",
+        "pageIdentifier": "term",
+        "baselineFile": "page-010_term_2025-09-05T04-29-38-164Z.png",
+        "afterFile": "page-010_term_2025-09-05T05-36-51-601Z.png",
+        "baselineTimestamp": "2025-09-05T04-29-38-164Z",
+        "afterTimestamp": "2025-09-05T05-36-51-601Z",
+        "diffPath": "/diffs/site-16-ストライカー研究所/desktop/threshold-2/page-010_term_2025-09-05T05-39-44-445Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 4992
+        }
+      },
+      {
+        "pageId": "011",
+        "pageIdentifier": "law",
+        "baselineFile": "page-011_law_2025-09-05T04-29-38-164Z.png",
+        "afterFile": "page-011_law_2025-09-05T05-36-51-601Z.png",
+        "baselineTimestamp": "2025-09-05T04-29-38-164Z",
+        "afterTimestamp": "2025-09-05T05-36-51-601Z",
+        "diffPath": "/diffs/site-16-ストライカー研究所/desktop/threshold-2/page-011_law_2025-09-05T05-39-46-592Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1184
+        }
+      },
+      {
+        "pageId": "012",
+        "pageIdentifier": "refund-returns",
+        "baselineFile": "page-012_refund-returns_2025-09-05T04-29-38-164Z.png",
+        "afterFile": "page-012_refund-returns_2025-09-05T05-36-51-601Z.png",
+        "baselineTimestamp": "2025-09-05T04-29-38-164Z",
+        "afterTimestamp": "2025-09-05T05-36-51-601Z",
+        "diffPath": "/diffs/site-16-ストライカー研究所/desktop/threshold-2/page-012_refund-returns_2025-09-05T05-39-47-352Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "pageId": "013",
+        "pageIdentifier": "contact",
+        "baselineFile": "page-013_contact_2025-09-05T04-29-38-164Z.png",
+        "afterFile": "page-013_contact_2025-09-05T05-36-51-601Z.png",
+        "baselineTimestamp": "2025-09-05T04-29-38-164Z",
+        "afterTimestamp": "2025-09-05T05-36-51-601Z",
+        "diffPath": "/diffs/site-16-ストライカー研究所/desktop/threshold-2/page-013_contact_2025-09-05T05-39-48-144Z_diff-0.0402%.png",
+        "diffPixels": 1042,
+        "diffPercentage": 0.040171,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1351
+        }
+      },
+      {
+        "pageId": "014",
+        "pageIdentifier": "product-personal-lesson",
+        "baselineFile": "page-014_product-personal-lesson_2025-09-05T04-29-38-164Z.png",
+        "afterFile": "page-014_product-personal-lesson_2025-09-05T05-36-51-601Z.png",
+        "baselineTimestamp": "2025-09-05T04-29-38-164Z",
+        "afterTimestamp": "2025-09-05T05-36-51-601Z",
+        "diffPath": "/diffs/site-16-ストライカー研究所/desktop/threshold-2/page-014_product-personal-lesson_2025-09-05T05-39-49-014Z_diff-0.0012%.png",
+        "diffPixels": 29,
+        "diffPercentage": 0.001179,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1281
+        }
+      },
+      {
+        "pageId": "015",
+        "pageIdentifier": "category-news",
+        "baselineFile": "page-015_category-news_2025-09-05T04-29-38-164Z.png",
+        "afterFile": "page-015_category-news_2025-09-05T05-36-51-601Z.png",
+        "baselineTimestamp": "2025-09-05T04-29-38-164Z",
+        "afterTimestamp": "2025-09-05T05-36-51-601Z",
+        "diffPath": "/diffs/site-16-ストライカー研究所/desktop/threshold-2/page-015_category-news_2025-09-05T05-39-50-220Z_diff-0.1316%.png",
+        "diffPixels": 4224,
+        "diffPercentage": 0.131579,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1672
+        }
+      },
+      {
+        "pageId": "016",
+        "pageIdentifier": "2025-04-30-news-rd21xv",
+        "baselineFile": "page-016_2025-04-30-news-rd21xv_2025-09-05T04-29-38-164Z.png",
+        "afterFile": "page-016_2025-04-30-news-rd21xv_2025-09-05T05-36-51-601Z.png",
+        "baselineTimestamp": "2025-09-05T04-29-38-164Z",
+        "afterTimestamp": "2025-09-05T05-36-51-601Z",
+        "diffPath": "/diffs/site-16-ストライカー研究所/desktop/threshold-2/page-016_2025-04-30-news-rd21xv_2025-09-05T05-39-59-118Z_diff-22.5926%.png",
+        "diffPixels": 3135350,
+        "diffPercentage": 22.592623,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 7228
+        }
+      },
+      {
+        "pageId": "017",
+        "pageIdentifier": "2022-06-01--e3-82-b9-e3-83-88-",
+        "baselineFile": "page-017_2022-06-01--e3-82-b9-e3-83-88-_2025-09-05T04-29-38-164Z.png",
+        "afterFile": "page-017_2022-06-01--e3-82-b9-e3-83-88-_2025-09-05T05-36-51-601Z.png",
+        "baselineTimestamp": "2025-09-05T04-29-38-164Z",
+        "afterTimestamp": "2025-09-05T05-36-51-601Z",
+        "diffPath": "/diffs/site-16-ストライカー研究所/desktop/threshold-2/page-017_2022-06-01--e3-82-b9-e3-83-88-_2025-09-05T05-40-04-566Z_diff-17.8346%.png",
+        "diffPixels": 911535,
+        "diffPercentage": 17.834629,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2662
+        }
+      },
+      {
+        "pageId": "019",
+        "pageIdentifier": "2025-06-30-news-kd85rw",
+        "baselineFile": "page-019_2025-06-30-news-kd85rw_2025-07-23T02-28-38-872Z.png",
+        "afterFile": "page-019_2025-06-30-news-kd85rw_2025-07-23T03-51-41-053Z.png",
+        "baselineTimestamp": "2025-07-23T02-28-38-872Z",
+        "afterTimestamp": "2025-07-23T03-51-41-053Z",
+        "diffPath": "/diffs/site-16-ストライカー研究所/desktop/threshold-2/page-019_2025-06-30-news-kd85rw_2025-09-05T05-40-08-174Z_diff-0.6194%.png",
+        "diffPixels": 64137,
+        "diffPercentage": 0.619408,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 5393
+        }
+      },
+      {
+        "pageId": "019",
+        "pageIdentifier": "2025-09-03-news-hd59qx",
+        "baselineFile": "page-019_2025-09-03-news-hd59qx_2025-09-05T04-29-38-164Z.png",
+        "afterFile": "page-019_2025-09-03-news-hd59qx_2025-09-05T05-36-51-601Z.png",
+        "baselineTimestamp": "2025-09-05T04-29-38-164Z",
+        "afterTimestamp": "2025-09-05T05-36-51-601Z",
+        "diffPath": "/diffs/site-16-ストライカー研究所/desktop/threshold-2/page-019_2025-09-03-news-hd59qx_2025-09-05T05-40-14-295Z_diff-0.0921%.png",
+        "diffPixels": 13486,
+        "diffPercentage": 0.09213,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 7624
+        }
+      },
+      {
+        "pageId": "020",
+        "pageIdentifier": "2025-09-03-news-t7m4gb",
+        "baselineFile": "page-020_2025-09-03-news-t7m4gb_2025-09-05T04-29-38-164Z.png",
+        "afterFile": "page-020_2025-09-03-news-t7m4gb_2025-09-05T05-36-51-601Z.png",
+        "baselineTimestamp": "2025-09-05T04-29-38-164Z",
+        "afterTimestamp": "2025-09-05T05-36-51-601Z",
+        "diffPath": "/diffs/site-16-ストライカー研究所/desktop/threshold-2/page-020_2025-09-03-news-t7m4gb_2025-09-05T05-40-22-262Z_diff-0.0631%.png",
+        "diffPixels": 13059,
+        "diffPercentage": 0.063088,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 10781
+        }
+      }
+    ]
+  }
+}

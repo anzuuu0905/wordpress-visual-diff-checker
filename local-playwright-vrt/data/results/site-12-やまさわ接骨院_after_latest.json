@@ -1,0 +1,207 @@
+{
+  "timestamp": "2025-09-05T08:41:07.562Z",
+  "type": "after",
+  "siteId": "site-12-やまさわ接骨院",
+  "siteName": "やまさわ接骨院",
+  "device": "desktop",
+  "threshold": 2,
+  "captureCount": 6,
+  "captureResults": [
+    {
+      "url": "https://yamasawa-sekkotsuin.jp/",
+      "filename": "page-001_top_2025-09-05T08-40-03-204Z.png",
+      "timestamp": "2025-09-05T08:40:43.864Z"
+    },
+    {
+      "url": "https://yamasawa-sekkotsuin.jp/store/",
+      "filename": "page-002_store_2025-09-05T08-40-03-204Z.png",
+      "timestamp": "2025-09-05T08:40:20.339Z"
+    },
+    {
+      "url": "https://yamasawa-sekkotsuin.jp/equipment/",
+      "filename": "page-003_equipment_2025-09-05T08-40-03-204Z.png",
+      "timestamp": "2025-09-05T08:40:21.303Z"
+    },
+    {
+      "url": "https://yamasawa-sekkotsuin.jp/interview/",
+      "filename": "page-004_interview_2025-09-05T08-40-03-204Z.png",
+      "timestamp": "2025-09-05T08:40:24.777Z"
+    },
+    {
+      "url": "https://yamasawa-sekkotsuin.jp/privacy-policy/",
+      "filename": "page-005_privacy-policy_2025-09-05T08-40-03-204Z.png",
+      "timestamp": "2025-09-05T08:40:29.062Z"
+    },
+    {
+      "url": "https://yamasawa-sekkotsuin.jp/term/",
+      "filename": "page-006_term_2025-09-05T08-40-03-204Z.png",
+      "timestamp": "2025-09-05T08:40:23.069Z"
+    }
+  ],
+  "compareResults": {
+    "siteId": "site-12-やまさわ接骨院",
+    "device": "desktop",
+    "summary": {
+      "totalPages": 9,
+      "ok": 4,
+      "ng": 5,
+      "error": 0,
+      "threshold": 2
+    },
+    "results": [
+      {
+        "pageId": "001",
+        "pageIdentifier": "top",
+        "baselineFile": "page-001_top_2025-09-05T04-21-07-292Z.png",
+        "afterFile": "page-001_top_2025-09-05T08-40-03-204Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-07-292Z",
+        "afterTimestamp": "2025-09-05T08-40-03-204Z",
+        "diffPath": "/diffs/site-12-やまさわ接骨院/desktop/threshold-2/page-001_top_2025-09-05T08-40-49-296Z_diff-26.1492%.png",
+        "diffPixels": 3759454,
+        "diffPercentage": 26.149158,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 7488
+        }
+      },
+      {
+        "pageId": "002",
+        "pageIdentifier": "store",
+        "baselineFile": "page-002_store_2025-09-05T04-21-07-292Z.png",
+        "afterFile": "page-002_store_2025-09-05T08-40-03-204Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-07-292Z",
+        "afterTimestamp": "2025-09-05T08-40-03-204Z",
+        "diffPath": "/diffs/site-12-やまさわ接骨院/desktop/threshold-2/page-002_store_2025-09-05T08-40-52-606Z_diff-17.4207%.png",
+        "diffPixels": 792375,
+        "diffPercentage": 17.420655,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2369
+        }
+      },
+      {
+        "pageId": "003",
+        "pageIdentifier": "equipment",
+        "baselineFile": "page-003_equipment_2025-09-05T04-21-07-292Z.png",
+        "afterFile": "page-003_equipment_2025-09-05T08-40-03-204Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-07-292Z",
+        "afterTimestamp": "2025-09-05T08-40-03-204Z",
+        "diffPath": "/diffs/site-12-やまさわ接骨院/desktop/threshold-2/page-003_equipment_2025-09-05T08-40-54-210Z_diff-3.1258%.png",
+        "diffPixels": 202430,
+        "diffPercentage": 3.125772,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 3373
+        }
+      },
+      {
+        "pageId": "004",
+        "pageIdentifier": "interview",
+        "baselineFile": "page-004_interview_2025-09-05T04-21-07-292Z.png",
+        "afterFile": "page-004_interview_2025-09-05T08-40-03-204Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-07-292Z",
+        "afterTimestamp": "2025-09-05T08-40-03-204Z",
+        "diffPath": "/diffs/site-12-やまさわ接骨院/desktop/threshold-2/page-004_interview_2025-09-05T08-40-58-549Z_diff-21.8824%.png",
+        "diffPixels": 2469179,
+        "diffPercentage": 21.882435,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 5877
+        }
+      },
+      {
+        "pageId": "005",
+        "pageIdentifier": "privacy-policy",
+        "baselineFile": "page-005_privacy-policy_2025-09-05T04-21-07-292Z.png",
+        "afterFile": "page-005_privacy-policy_2025-09-05T08-40-03-204Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-07-292Z",
+        "afterTimestamp": "2025-09-05T08-40-03-204Z",
+        "diffPath": "/diffs/site-12-やまさわ接骨院/desktop/threshold-2/page-005_privacy-policy_2025-09-05T08-41-01-954Z_diff-7.954%.png",
+        "diffPixels": 634993,
+        "diffPercentage": 7.953957,
+        "status": "NG",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 4158
+        }
+      },
+      {
+        "pageId": "005",
+        "pageIdentifier": "product-ticket",
+        "baselineFile": "page-005_product-ticket_2025-07-23T02-24-32-902Z.png",
+        "afterFile": "page-005_product-ticket_2025-09-05T08-06-39-118Z.png",
+        "baselineTimestamp": "2025-07-23T02-24-32-902Z",
+        "afterTimestamp": "2025-09-05T08-06-39-118Z",
+        "diffPath": "/diffs/site-12-やまさわ接骨院/desktop/threshold-2/page-005_product-ticket_2025-09-05T08-41-03-521Z_diff-0.9265%.png",
+        "diffPixels": 19212,
+        "diffPercentage": 0.926505,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "pageId": "006",
+        "pageIdentifier": "term",
+        "baselineFile": "page-006_term_2025-09-05T04-21-07-292Z.png",
+        "afterFile": "page-006_term_2025-09-05T08-40-03-204Z.png",
+        "baselineTimestamp": "2025-09-05T04-21-07-292Z",
+        "afterTimestamp": "2025-09-05T08-40-03-204Z",
+        "diffPath": "/diffs/site-12-やまさわ接骨院/desktop/threshold-2/page-006_term_2025-09-05T08-41-04-769Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 4804
+        }
+      },
+      {
+        "pageId": "008",
+        "pageIdentifier": "wp-content-uploads-2022-03-tic",
+        "baselineFile": "page-008_wp-content-uploads-2022-03-tic_2025-07-23T02-24-32-902Z.png",
+        "afterFile": "page-008_wp-content-uploads-2022-03-tic_2025-09-05T08-06-39-118Z.png",
+        "baselineTimestamp": "2025-07-23T02-24-32-902Z",
+        "afterTimestamp": "2025-09-05T08-06-39-118Z",
+        "diffPath": "/diffs/site-12-やまさわ接骨院/desktop/threshold-2/page-008_wp-content-uploads-2022-03-tic_2025-09-05T08-41-06-587Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "pageId": "009",
+        "pageIdentifier": "product-category--e5-9b-9e-e6-",
+        "baselineFile": "page-009_product-category--e5-9b-9e-e6-_2025-07-23T02-24-32-902Z.png",
+        "afterFile": "page-009_product-category--e5-9b-9e-e6-_2025-09-05T08-06-39-118Z.png",
+        "baselineTimestamp": "2025-07-23T02-24-32-902Z",
+        "afterTimestamp": "2025-09-05T08-06-39-118Z",
+        "diffPath": "/diffs/site-12-やまさわ接骨院/desktop/threshold-2/page-009_product-category--e5-9b-9e-e6-_2025-09-05T08-41-07-228Z_diff-0.3359%.png",
+        "diffPixels": 6966,
+        "diffPercentage": 0.335938,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      }
+    ]
+  }
+}

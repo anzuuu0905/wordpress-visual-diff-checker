@@ -1,0 +1,232 @@
+{
+  "timestamp": "2025-09-05T04:33:50.589Z",
+  "type": "baseline",
+  "siteId": "site-16-ストライカー研究所",
+  "siteName": "ストライカー研究所",
+  "device": "desktop",
+  "captureCount": 20,
+  "captureResults": [
+    {
+      "url": "https://strikerlabo.jp/",
+      "filename": "page-001_top_2025-09-05T04-29-38-164Z.png",
+      "timestamp": "2025-09-05T04:31:46.847Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/labo/",
+      "filename": "page-002_labo_2025-09-05T04-29-38-164Z.png",
+      "timestamp": "2025-09-05T04:31:49.677Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/service/",
+      "filename": "page-003_service_2025-09-05T04-29-38-164Z.png",
+      "timestamp": "2025-09-05T04:30:35.372Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/company/",
+      "filename": "page-004_company_2025-09-05T04-29-38-164Z.png",
+      "timestamp": "2025-09-05T04:31:49.644Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/faq/",
+      "filename": "page-005_faq_2025-09-05T04-29-38-164Z.png",
+      "timestamp": "2025-09-05T04:30:33.709Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/2025/04/30/news-x39pqt/",
+      "filename": "page-006_2025-04-30-news-x39pqt_2025-09-05T04-29-38-164Z.png",
+      "timestamp": "2025-09-05T04:30:33.729Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/2025/04/30/news-km84zr/",
+      "filename": "page-007_2025-04-30-news-km84zr_2025-09-05T04-29-38-164Z.png",
+      "timestamp": "2025-09-05T04:30:56.984Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/2022/08/01/%e3%82%aa%e3%83%b3%e3%83%a9%e3%82%a4%e3%83%b3%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88/",
+      "filename": "page-008_2022-08-01--e3-82-aa-e3-83-b3-_2025-09-05T04-29-38-164Z.png",
+      "timestamp": "2025-09-05T04:30:34.307Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/privacy-policy/",
+      "filename": "page-009_privacy-policy_2025-09-05T04-29-38-164Z.png",
+      "timestamp": "2025-09-05T04:32:55.012Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/term/",
+      "filename": "page-010_term_2025-09-05T04-29-38-164Z.png",
+      "timestamp": "2025-09-05T04:32:57.051Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/law/",
+      "filename": "page-011_law_2025-09-05T04-29-38-164Z.png",
+      "timestamp": "2025-09-05T04:32:52.273Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/refund_returns/",
+      "filename": "page-012_refund-returns_2025-09-05T04-29-38-164Z.png",
+      "timestamp": "2025-09-05T04:32:51.761Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/contact",
+      "filename": "page-013_contact_2025-09-05T04-29-38-164Z.png",
+      "timestamp": "2025-09-05T04:32:52.272Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/product/personal-lesson/",
+      "filename": "page-014_product-personal-lesson_2025-09-05T04-29-38-164Z.png",
+      "timestamp": "2025-09-05T04:32:52.384Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/category/news/",
+      "filename": "page-015_category-news_2025-09-05T04-29-38-164Z.png",
+      "timestamp": "2025-09-05T04:32:52.270Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/2025/04/30/news-rd21xv/",
+      "filename": "page-016_2025-04-30-news-rd21xv_2025-09-05T04-29-38-164Z.png",
+      "timestamp": "2025-09-05T04:32:57.733Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/2022/06/01/%e3%82%b9%e3%83%88%e3%83%a9%e3%82%a4%e3%82%ab%e3%83%bc%e3%82%af%e3%83%aa%e3%83%8b%e3%83%83%e3%82%afin%e7%86%8a%e6%9c%ac/",
+      "filename": "page-017_2022-06-01--e3-82-b9-e3-83-88-_2025-09-05T04-29-38-164Z.png",
+      "timestamp": "2025-09-05T04:33:33.815Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/2022/06/01/%e3%82%b9%e3%83%88%e3%83%a9%e3%82%a4%e3%82%ab%e3%83%bc%e3%82%af%e3%83%aa%e3%83%8b%e3%83%83%e3%82%afin%e5%b2%90%e9%98%9c/",
+      "filename": "page-018_2022-06-01--e3-82-b9-e3-83-88-_2025-09-05T04-29-38-164Z.png",
+      "timestamp": "2025-09-05T04:33:34.292Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/2025/09/03/news-hd59qx/",
+      "filename": "page-019_2025-09-03-news-hd59qx_2025-09-05T04-29-38-164Z.png",
+      "timestamp": "2025-09-05T04:33:43.940Z"
+    },
+    {
+      "url": "https://strikerlabo.jp/2025/09/03/news-t7m4gb/",
+      "filename": "page-020_2025-09-03-news-t7m4gb_2025-09-05T04-29-38-164Z.png",
+      "timestamp": "2025-09-05T04:33:50.388Z"
+    }
+  ],
+  "pages": [
+    {
+      "url": "https://strikerlabo.jp/",
+      "pageId": "001",
+      "identifier": "top",
+      "title": "ストライカー研究所"
+    },
+    {
+      "url": "https://strikerlabo.jp/labo/",
+      "pageId": "002",
+      "identifier": "labo",
+      "title": "ラボ – ストライカー研究所"
+    },
+    {
+      "url": "https://strikerlabo.jp/service/",
+      "pageId": "003",
+      "identifier": "service",
+      "title": "サービス – ストライカー研究所"
+    },
+    {
+      "url": "https://strikerlabo.jp/company/",
+      "pageId": "004",
+      "identifier": "company",
+      "title": "運営会社 – ストライカー研究所"
+    },
+    {
+      "url": "https://strikerlabo.jp/faq/",
+      "pageId": "005",
+      "identifier": "faq",
+      "title": "FAQ – ストライカー研究所"
+    },
+    {
+      "url": "https://strikerlabo.jp/2025/04/30/news-x39pqt/",
+      "pageId": "006",
+      "identifier": "2025-04-30-news-x39pqt",
+      "title": "2025年度ユニフォームスポンサー契約のお知らせ – ストライカー研究所"
+    },
+    {
+      "url": "https://strikerlabo.jp/2025/04/30/news-km84zr/",
+      "pageId": "007",
+      "identifier": "2025-04-30-news-km84zr",
+      "title": "【活動レポート】卒団式で小野伸二さんの著書『GIFTED』を贈呈しました！ – ストライカー研究所"
+    },
+    {
+      "url": "https://strikerlabo.jp/2022/08/01/%e3%82%aa%e3%83%b3%e3%83%a9%e3%82%a4%e3%83%b3%e3%82%a4%e3%83%99%e3%83%b3%e3%83%88/",
+      "pageId": "008",
+      "identifier": "2022-08-01--e3-82-aa-e3-83-b3-",
+      "title": "オンラインイベント – ストライカー研究所"
+    },
+    {
+      "url": "https://strikerlabo.jp/privacy-policy/",
+      "pageId": "009",
+      "identifier": "privacy-policy",
+      "title": "プライバシーポリシー – ストライカー研究所"
+    },
+    {
+      "url": "https://strikerlabo.jp/term/",
+      "pageId": "010",
+      "identifier": "term",
+      "title": "利用規約 – ストライカー研究所"
+    },
+    {
+      "url": "https://strikerlabo.jp/law/",
+      "pageId": "011",
+      "identifier": "law",
+      "title": "特定商取引法に基づく表記 – ストライカー研究所"
+    },
+    {
+      "url": "https://strikerlabo.jp/refund_returns/",
+      "pageId": "012",
+      "identifier": "refund-returns",
+      "title": "返金ポリシー – ストライカー研究所"
+    },
+    {
+      "url": "https://strikerlabo.jp/contact",
+      "pageId": "013",
+      "identifier": "contact",
+      "title": "お問合せ – ストライカー研究所"
+    },
+    {
+      "url": "https://strikerlabo.jp/product/personal-lesson/",
+      "pageId": "014",
+      "identifier": "product-personal-lesson",
+      "title": "パーソナルレッスン – ストライカー研究所"
+    },
+    {
+      "url": "https://strikerlabo.jp/category/news/",
+      "pageId": "015",
+      "identifier": "category-news",
+      "title": "NEWS – ストライカー研究所"
+    },
+    {
+      "url": "https://strikerlabo.jp/2025/04/30/news-rd21xv/",
+      "pageId": "016",
+      "identifier": "2025-04-30-news-rd21xv",
+      "title": "【活動レポート】４月ストライカークリニック – ストライカー研究所"
+    },
+    {
+      "url": "https://strikerlabo.jp/2022/06/01/%e3%82%b9%e3%83%88%e3%83%a9%e3%82%a4%e3%82%ab%e3%83%bc%e3%82%af%e3%83%aa%e3%83%8b%e3%83%83%e3%82%afin%e7%86%8a%e6%9c%ac/",
+      "pageId": "017",
+      "identifier": "2022-06-01--e3-82-b9-e3-83-88-",
+      "title": "ストライカークリニックin熊本 – ストライカー研究所"
+    },
+    {
+      "url": "https://strikerlabo.jp/2022/06/01/%e3%82%b9%e3%83%88%e3%83%a9%e3%82%a4%e3%82%ab%e3%83%bc%e3%82%af%e3%83%aa%e3%83%8b%e3%83%83%e3%82%afin%e5%b2%90%e9%98%9c/",
+      "pageId": "018",
+      "identifier": "2022-06-01--e3-82-b9-e3-83-88-",
+      "title": "ストライカークリニックin岐阜 – ストライカー研究所"
+    },
+    {
+      "url": "https://strikerlabo.jp/2025/09/03/news-hd59qx/",
+      "pageId": "019",
+      "identifier": "2025-09-03-news-hd59qx",
+      "title": "【活動レポート】クラッキスメニーナ・夏の合宿に「火の本豚」を提供しました！ – ストライカー研究所"
+    },
+    {
+      "url": "https://strikerlabo.jp/2025/09/03/news-t7m4gb/",
+      "pageId": "020",
+      "identifier": "2025-09-03-news-t7m4gb",
+      "title": "【活動レポート】8月ストライカークリニック – ストライカー研究所"
+    }
+  ]
+}

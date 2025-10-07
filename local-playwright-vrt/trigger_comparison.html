@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>URL修正テスト</title>
+</head>
+<body>
+    <h1>URL修正テスト</h1>
+    <p>新しい比較を実行してURL表示をテストします</p>
+    <button onclick="testComparison()">Step3比較実行</button>
+    <div id="result"></div>
+    
+    <script>
+    async function testComparison() {
+        const resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = '<p>比較実行中...</p>';
+        
+        try {
+            // Step3のみ実行（比較のみ）
+            const response = await fetch('/capture-and-compare', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    sites: [{
+                        id: 'site-1-earthcampus',
+                        name: 'earthcampus',
+                        baseUrl: 'https://earthcampus.co.jp/'
+                    }],
+                    device: 'desktop',
+                    maxPages: 3,
+                    threshold: 2.0,
+                    crawlMethod: 'single',
+                    mode: 'compare-only'
+                })
+            });
+            
+            const data = await response.json();
+            resultDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            
+            // 比較データを取得してURL確認
+            setTimeout(async () => {
+                const sessionResponse = await fetch('/session-images/site-1-earthcampus/desktop');
+                const sessionData = await sessionResponse.json();
+                
+                const comparisons = sessionData.images?.comparisons || [];
+                let urlDisplay = '<h2>URL表示確認結果:</h2>';
+                
+                for (let i = 0; i < Math.min(3, comparisons.length); i++) {
+                    const comp = comparisons[i];
+                    urlDisplay += `<div style="border: 1px solid #ccc; padding: 10px; margin: 10px;">`;
+                    urlDisplay += `<strong>ページ ${i+1}: ${comp.pageIdentifier}</strong><br>`;
+                    urlDisplay += `ステータス: ${comp.status || 'N/A'}<br>`;
+                    urlDisplay += `差分率: ${comp.diffPercentage || 'N/A'}%<br>`;
+                    
+                    if (comp.url) {
+                        urlDisplay += `<div style="color: green; font-weight: bold;">✅ URL: ${comp.url}</div>`;
+                        urlDisplay += `<div style="color: green;">URL修正が適用されています！</div>`;
+                    } else {
+                        urlDisplay += `<div style="color: red; font-weight: bold;">❌ URLなし</div>`;
+                        urlDisplay += `<div style="color: red;">URL修正が適用されていません</div>`;
+                    }
+                    
+                    urlDisplay += `</div>`;
+                }
+                
+                resultDiv.innerHTML += urlDisplay;
+            }, 2000);
+            
+        } catch (error) {
+            resultDiv.innerHTML = `<p style="color: red;">エラー: ${error.message}</p>`;
+        }
+    }
+    </script>
+</body>
+</html>

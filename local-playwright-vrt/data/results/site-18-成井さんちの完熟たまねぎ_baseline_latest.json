@@ -1,0 +1,232 @@
+{
+  "timestamp": "2025-09-05T04:33:01.465Z",
+  "type": "baseline",
+  "siteId": "site-18-成井さんちの完熟たまねぎ",
+  "siteName": "成井さんちの完熟たまねぎ",
+  "device": "desktop",
+  "captureCount": 20,
+  "captureResults": [
+    {
+      "url": "https://naruisonion.com/",
+      "filename": "page-001_top_2025-09-05T04-28-56-582Z.png",
+      "timestamp": "2025-09-05T04:30:12.716Z"
+    },
+    {
+      "url": "https://naruisonion.com/about/",
+      "filename": "page-002_about_2025-09-05T04-28-56-582Z.png",
+      "timestamp": "2025-09-05T04:29:36.229Z"
+    },
+    {
+      "url": "https://naruisonion.com/blog/",
+      "filename": "page-003_blog_2025-09-05T04-28-56-582Z.png",
+      "timestamp": "2025-09-05T04:29:38.138Z"
+    },
+    {
+      "url": "https://naruisonion.com/gallery/",
+      "filename": "page-004_gallery_2025-09-05T04-28-56-582Z.png",
+      "timestamp": "2025-09-05T04:30:04.159Z"
+    },
+    {
+      "url": "https://naruisonion.com/recipe/",
+      "filename": "page-005_recipe_2025-09-05T04-28-56-582Z.png",
+      "timestamp": "2025-09-05T04:29:36.293Z"
+    },
+    {
+      "url": "https://naruisonion.com/wp-content/uploads/2023/07/naruisonion-pc.png",
+      "filename": "page-006_wp-content-uploads-2023-07-nar_2025-09-05T04-28-56-582Z.png",
+      "timestamp": "2025-09-05T04:29:12.189Z"
+    },
+    {
+      "url": "https://naruisonion.com/recipe/%e5%8d%b3%e5%b8%ad%e3%82%aa%e3%83%8b%e3%82%aa%e3%83%b3%e3%83%94%e3%82%af%e3%83%ab%e3%82%b9/",
+      "filename": "page-007_recipe--e5-8d-b3-e5-b8-ad-e3-8_2025-09-05T04-28-56-582Z.png",
+      "timestamp": "2025-09-05T04:29:33.130Z"
+    },
+    {
+      "url": "https://naruisonion.com/recipe/%e4%b8%b8%e3%81%94%e3%81%a8%e7%8e%89%e3%81%ad%e3%81%8e%e3%81%ae%e3%82%aa%e3%83%8b%e3%82%aa%e3%83%b3%e3%83%94%e3%83%a9%e3%83%95/",
+      "filename": "page-008_recipe--e4-b8-b8-e3-81-94-e3-8_2025-09-05T04-28-56-582Z.png",
+      "timestamp": "2025-09-05T04:29:36.412Z"
+    },
+    {
+      "url": "https://naruisonion.com/recipe/%e4%b8%87%e8%83%bd%ef%bc%81%e3%83%94%e3%83%aa%e8%be%9b%e3%81%9f%e3%81%be%e3%81%ad%e3%81%8e%e3%83%9d%e3%83%b3%e9%85%a2%e3%83%80%e3%83%ac/",
+      "filename": "page-009_recipe--e4-b8-87-e8-83-bd-ef-b_2025-09-05T04-28-56-582Z.png",
+      "timestamp": "2025-09-05T04:30:47.957Z"
+    },
+    {
+      "url": "https://naruisonion.com/recipe/%e8%92%b8%e3%81%97%e7%84%bc%e3%81%8d%e3%81%9f%e3%81%be%e3%81%ad%e3%81%8e%e3%82%b9%e3%83%86%e3%83%bc%e3%82%ad/",
+      "filename": "page-010_recipe--e8-92-b8-e3-81-97-e7-8_2025-09-05T04-28-56-582Z.png",
+      "timestamp": "2025-09-05T04:31:06.311Z"
+    },
+    {
+      "url": "https://naruisonion.com/2024%e5%b9%b4%e5%8f%8e%e7%a9%ab%e3%81%9f%e3%81%be%e3%81%ad%e3%81%8e%e3%80%80%ef%bc%92%e6%9c%88%ef%bc%91%ef%bc%95%e6%97%a5%e3%81%a7%e6%8f%90%e4%be%9b%e7%b5%82%e4%ba%86%e3%81%97%e3%81%be%e3%81%99/",
+      "filename": "page-011_2024-e5-b9-b4-e5-8f-8e-e7-a9-a_2025-09-05T04-28-56-582Z.png",
+      "timestamp": "2025-09-05T04:31:27.492Z"
+    },
+    {
+      "url": "https://naruisonion.com/%e5%85%a8%e5%9b%bd%e5%88%9d%e3%80%80%e3%81%9f%e3%81%be%e3%81%ad%e3%81%8e%e3%81%ae%e8%87%aa%e5%8b%95%e8%b2%a9%e5%a3%b2%e6%a9%9f%e8%a8%ad%e7%bd%ae%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6%ef%bc%882024/",
+      "filename": "page-012_-e5-85-a8-e5-9b-bd-e5-88-9d-e3_2025-09-05T04-28-56-582Z.png",
+      "timestamp": "2025-09-05T04:31:04.607Z"
+    },
+    {
+      "url": "https://naruisonion.com/%e3%81%8a%e7%9b%86%e6%9c%9f%e9%96%93%e3%81%ae%e9%85%8d%e9%80%81%e3%81%a8%e4%bc%91%e6%a5%ad%e3%81%ab%e9%96%a2%e3%81%97%e3%81%a6/",
+      "filename": "page-013_-e3-81-8a-e7-9b-86-e6-9c-9f-e9_2025-09-05T04-28-56-582Z.png",
+      "timestamp": "2025-09-05T04:31:07.503Z"
+    },
+    {
+      "url": "https://naruisonion.com/%e6%8f%90%e4%be%9b%e5%93%81%e7%a8%ae%e3%81%ae%e5%88%87%e3%82%8a%e6%9b%bf%e3%81%88%e3%81%ab%e9%96%a2%e3%81%99%e3%82%8b%e3%81%94%e6%a1%88%e5%86%85/",
+      "filename": "page-014_-e6-8f-90-e4-be-9b-e5-93-81-e7_2025-09-05T04-28-56-582Z.png",
+      "timestamp": "2025-09-05T04:31:49.628Z"
+    },
+    {
+      "url": "https://naruisonion.com/%e8%a8%83%e5%a0%b1%e3%81%ae%e3%81%8a%e7%9f%a5%e3%82%89%e3%81%9b/",
+      "filename": "page-015_-e8-a8-83-e5-a0-b1-e3-81-ae-e3_2025-09-05T04-28-56-582Z.png",
+      "timestamp": "2025-09-05T04:30:56.792Z"
+    },
+    {
+      "url": "https://naruisonion.com/%e6%96%b0%e3%81%9f%e3%81%be%e3%81%ad%e3%81%8e%e5%87%ba%e8%8d%b7%e3%82%92%e9%96%8b%e5%a7%8b%e3%81%97%e3%81%be%e3%81%97%e3%81%9f%e3%80%82/",
+      "filename": "page-016_-e6-96-b0-e3-81-9f-e3-81-be-e3_2025-09-05T04-28-56-582Z.png",
+      "timestamp": "2025-09-05T04:31:03.151Z"
+    },
+    {
+      "url": "http://naruisonion.com/",
+      "filename": "page-017_top_2025-09-05T04-28-56-582Z.png",
+      "timestamp": "2025-09-05T04:33:01.363Z"
+    },
+    {
+      "url": "https://naruisonion.com/privacy-policy/",
+      "filename": "page-018_privacy-policy_2025-09-05T04-28-56-582Z.png",
+      "timestamp": "2025-09-05T04:32:57.183Z"
+    },
+    {
+      "url": "https://naruisonion.com/wp-content/uploads/2023/07/946492ceb02f303d09740613e913de41.jpg",
+      "filename": "page-019_wp-content-uploads-2023-07-946_2025-09-05T04-28-56-582Z.png",
+      "timestamp": "2025-09-05T04:32:15.013Z"
+    },
+    {
+      "url": "https://naruisonion.com/%e3%83%9b%e3%83%bc%e3%83%a0%e3%83%9a%e3%83%bc%e3%82%b8%e3%82%92%e3%83%aa%e3%83%8b%e3%83%a5%e3%83%bc%e3%82%a2%e3%83%ab%e3%81%97%e3%81%be%e3%81%97%e3%81%9f/",
+      "filename": "page-020_-e3-83-9b-e3-83-bc-e3-83-a0-e3_2025-09-05T04-28-56-582Z.png",
+      "timestamp": "2025-09-05T04:32:39.350Z"
+    }
+  ],
+  "pages": [
+    {
+      "url": "https://naruisonion.com/",
+      "pageId": "001",
+      "identifier": "top",
+      "title": "成井さんちの完熟たまねぎ – 淡路島　たまねぎ"
+    },
+    {
+      "url": "https://naruisonion.com/about/",
+      "pageId": "002",
+      "identifier": "about",
+      "title": "会社概要 – 成井さんちの完熟たまねぎ"
+    },
+    {
+      "url": "https://naruisonion.com/blog/",
+      "pageId": "003",
+      "identifier": "blog",
+      "title": "お知らせ – 成井さんちの完熟たまねぎ"
+    },
+    {
+      "url": "https://naruisonion.com/gallery/",
+      "pageId": "004",
+      "identifier": "gallery",
+      "title": "ギャラリー – 成井さんちの完熟たまねぎ"
+    },
+    {
+      "url": "https://naruisonion.com/recipe/",
+      "pageId": "005",
+      "identifier": "recipe",
+      "title": "レシピ – 成井さんちの完熟たまねぎ"
+    },
+    {
+      "url": "https://naruisonion.com/wp-content/uploads/2023/07/naruisonion-pc.png",
+      "pageId": "006",
+      "identifier": "wp-content-uploads-2023-07-nar",
+      "title": "naruisonion-pc.png (2160×496)"
+    },
+    {
+      "url": "https://naruisonion.com/recipe/%e5%8d%b3%e5%b8%ad%e3%82%aa%e3%83%8b%e3%82%aa%e3%83%b3%e3%83%94%e3%82%af%e3%83%ab%e3%82%b9/",
+      "pageId": "007",
+      "identifier": "recipe--e5-8d-b3-e5-b8-ad-e3-8",
+      "title": "即席オニオンピクルス – 成井さんちの完熟たまねぎ"
+    },
+    {
+      "url": "https://naruisonion.com/recipe/%e4%b8%b8%e3%81%94%e3%81%a8%e7%8e%89%e3%81%ad%e3%81%8e%e3%81%ae%e3%82%aa%e3%83%8b%e3%82%aa%e3%83%b3%e3%83%94%e3%83%a9%e3%83%95/",
+      "pageId": "008",
+      "identifier": "recipe--e4-b8-b8-e3-81-94-e3-8",
+      "title": "丸ごと玉ねぎのオニオンピラフ – 成井さんちの完熟たまねぎ"
+    },
+    {
+      "url": "https://naruisonion.com/recipe/%e4%b8%87%e8%83%bd%ef%bc%81%e3%83%94%e3%83%aa%e8%be%9b%e3%81%9f%e3%81%be%e3%81%ad%e3%81%8e%e3%83%9d%e3%83%b3%e9%85%a2%e3%83%80%e3%83%ac/",
+      "pageId": "009",
+      "identifier": "recipe--e4-b8-87-e8-83-bd-ef-b",
+      "title": "万能！ピリ辛たまねぎポン酢ダレ – 成井さんちの完熟たまねぎ"
+    },
+    {
+      "url": "https://naruisonion.com/recipe/%e8%92%b8%e3%81%97%e7%84%bc%e3%81%8d%e3%81%9f%e3%81%be%e3%81%ad%e3%81%8e%e3%82%b9%e3%83%86%e3%83%bc%e3%82%ad/",
+      "pageId": "010",
+      "identifier": "recipe--e8-92-b8-e3-81-97-e7-8",
+      "title": "蒸し焼きたまねぎステーキ – 成井さんちの完熟たまねぎ"
+    },
+    {
+      "url": "https://naruisonion.com/2024%e5%b9%b4%e5%8f%8e%e7%a9%ab%e3%81%9f%e3%81%be%e3%81%ad%e3%81%8e%e3%80%80%ef%bc%92%e6%9c%88%ef%bc%91%ef%bc%95%e6%97%a5%e3%81%a7%e6%8f%90%e4%be%9b%e7%b5%82%e4%ba%86%e3%81%97%e3%81%be%e3%81%99/",
+      "pageId": "011",
+      "identifier": "2024-e5-b9-b4-e5-8f-8e-e7-a9-a",
+      "title": "2024年収穫たまねぎ　２月１５日で提供終了します。 – 成井さんちの完熟たまねぎ"
+    },
+    {
+      "url": "https://naruisonion.com/%e5%85%a8%e5%9b%bd%e5%88%9d%e3%80%80%e3%81%9f%e3%81%be%e3%81%ad%e3%81%8e%e3%81%ae%e8%87%aa%e5%8b%95%e8%b2%a9%e5%a3%b2%e6%a9%9f%e8%a8%ad%e7%bd%ae%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6%ef%bc%882024/",
+      "pageId": "012",
+      "identifier": "-e5-85-a8-e5-9b-bd-e5-88-9d-e3",
+      "title": "全国初　たまねぎの自動販売機設置について（2024年10月10日より） – 成井さんちの完熟たまねぎ"
+    },
+    {
+      "url": "https://naruisonion.com/%e3%81%8a%e7%9b%86%e6%9c%9f%e9%96%93%e3%81%ae%e9%85%8d%e9%80%81%e3%81%a8%e4%bc%91%e6%a5%ad%e3%81%ab%e9%96%a2%e3%81%97%e3%81%a6/",
+      "pageId": "013",
+      "identifier": "-e3-81-8a-e7-9b-86-e6-9c-9f-e9",
+      "title": "お盆期間の配送と休業に関して – 成井さんちの完熟たまねぎ"
+    },
+    {
+      "url": "https://naruisonion.com/%e6%8f%90%e4%be%9b%e5%93%81%e7%a8%ae%e3%81%ae%e5%88%87%e3%82%8a%e6%9b%bf%e3%81%88%e3%81%ab%e9%96%a2%e3%81%99%e3%82%8b%e3%81%94%e6%a1%88%e5%86%85/",
+      "pageId": "014",
+      "identifier": "-e6-8f-90-e4-be-9b-e5-93-81-e7",
+      "title": "提供品種の切り替えに関するご案内 – 成井さんちの完熟たまねぎ"
+    },
+    {
+      "url": "https://naruisonion.com/%e8%a8%83%e5%a0%b1%e3%81%ae%e3%81%8a%e7%9f%a5%e3%82%89%e3%81%9b/",
+      "pageId": "015",
+      "identifier": "-e8-a8-83-e5-a0-b1-e3-81-ae-e3",
+      "title": "訃報のお知らせ – 成井さんちの完熟たまねぎ"
+    },
+    {
+      "url": "https://naruisonion.com/%e6%96%b0%e3%81%9f%e3%81%be%e3%81%ad%e3%81%8e%e5%87%ba%e8%8d%b7%e3%82%92%e9%96%8b%e5%a7%8b%e3%81%97%e3%81%be%e3%81%97%e3%81%9f%e3%80%82/",
+      "pageId": "016",
+      "identifier": "-e6-96-b0-e3-81-9f-e3-81-be-e3",
+      "title": "新たまねぎ出荷を開始しました。 – 成井さんちの完熟たまねぎ"
+    },
+    {
+      "url": "http://naruisonion.com/",
+      "pageId": "017",
+      "identifier": "top",
+      "title": "成井さんちの完熟たまねぎ – 淡路島　たまねぎ"
+    },
+    {
+      "url": "https://naruisonion.com/privacy-policy/",
+      "pageId": "018",
+      "identifier": "privacy-policy",
+      "title": "プライバシーポリシー – 成井さんちの完熟たまねぎ"
+    },
+    {
+      "url": "https://naruisonion.com/wp-content/uploads/2023/07/946492ceb02f303d09740613e913de41.jpg",
+      "pageId": "019",
+      "identifier": "wp-content-uploads-2023-07-946",
+      "title": "946492ceb02f303d09740613e913de41.jpg (2080×960)"
+    },
+    {
+      "url": "https://naruisonion.com/%e3%83%9b%e3%83%bc%e3%83%a0%e3%83%9a%e3%83%bc%e3%82%b8%e3%82%92%e3%83%aa%e3%83%8b%e3%83%a5%e3%83%bc%e3%82%a2%e3%83%ab%e3%81%97%e3%81%be%e3%81%97%e3%81%9f/",
+      "pageId": "020",
+      "identifier": "-e3-83-9b-e3-83-bc-e3-83-a0-e3",
+      "title": "ホームページをリニューアルしました – 成井さんちの完熟たまねぎ"
+    }
+  ]
+}

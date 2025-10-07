@@ -1,0 +1,376 @@
+{
+  "timestamp": "2025-09-05T06:04:02.675Z",
+  "type": "after",
+  "siteId": "site-20-堂ヶ島製麺",
+  "siteName": "堂ヶ島製麺",
+  "device": "desktop",
+  "threshold": 2,
+  "captureCount": 16,
+  "captureResults": [
+    {
+      "url": "https://dougasima-seimen.com/",
+      "filename": "page-001_top_2025-09-05T06-02-59-775Z.png",
+      "timestamp": "2025-09-05T06:03:22.956Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/shop/",
+      "filename": "page-002_shop_2025-09-05T06-02-59-775Z.png",
+      "timestamp": "2025-09-05T06:03:19.088Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/company/",
+      "filename": "page-003_company_2025-09-05T06-02-59-775Z.png",
+      "timestamp": "2025-09-05T06:03:18.663Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/contact/",
+      "filename": "page-004_contact_2025-09-05T06-02-59-775Z.png",
+      "timestamp": "2025-09-05T06:03:17.972Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/cart/",
+      "filename": "page-005_cart_2025-09-05T06-02-59-775Z.png",
+      "timestamp": "2025-09-05T06:03:18.149Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/my-account/",
+      "filename": "page-006_my-account_2025-09-05T06-02-59-775Z.png",
+      "timestamp": "2025-09-05T06:03:17.482Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/delivery-policy/",
+      "filename": "page-007_delivery-policy_2025-09-05T06-02-59-775Z.png",
+      "timestamp": "2025-09-05T06:03:18.284Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/privacy-policy/",
+      "filename": "page-008_privacy-policy_2025-09-05T06-02-59-775Z.png",
+      "timestamp": "2025-09-05T06:03:19.439Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/law/",
+      "filename": "page-009_law_2025-09-05T06-02-59-775Z.png",
+      "timestamp": "2025-09-05T06:03:39.432Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/shop/page/2/",
+      "filename": "page-010_shop-page-2_2025-09-05T06-02-59-775Z.png",
+      "timestamp": "2025-09-05T06:03:39.211Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/product-category/udon/",
+      "filename": "page-011_product-category-udon_2025-09-05T06-02-59-775Z.png",
+      "timestamp": "2025-09-05T06:03:39.214Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/product-category/soba/",
+      "filename": "page-012_product-category-soba_2025-09-05T06-02-59-775Z.png",
+      "timestamp": "2025-09-05T06:03:40.667Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/product-category/noodle/",
+      "filename": "page-013_product-category-noodle_2025-09-05T06-02-59-775Z.png",
+      "timestamp": "2025-09-05T06:03:38.734Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/product-category/fried-soba/",
+      "filename": "page-014_product-category-fried-soba_2025-09-05T06-02-59-775Z.png",
+      "timestamp": "2025-09-05T06:03:38.858Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/my-account/lost-password/",
+      "filename": "page-015_my-account-lost-password_2025-09-05T06-02-59-775Z.png",
+      "timestamp": "2025-09-05T06:03:38.976Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/shop/page/1/",
+      "filename": "page-016_shop-page-1_2025-09-05T06-02-59-775Z.png",
+      "timestamp": "2025-09-05T06:03:42.293Z"
+    }
+  ],
+  "compareResults": {
+    "siteId": "site-20-堂ヶ島製麺",
+    "device": "desktop",
+    "summary": {
+      "totalPages": 16,
+      "ok": 16,
+      "ng": 0,
+      "error": 0,
+      "threshold": 2
+    },
+    "results": [
+      {
+        "pageId": "001",
+        "pageIdentifier": "top",
+        "baselineFile": "page-001_top_2025-09-05T04-37-54-961Z.png",
+        "afterFile": "page-001_top_2025-09-05T06-02-59-775Z.png",
+        "baselineTimestamp": "2025-09-05T04-37-54-961Z",
+        "afterTimestamp": "2025-09-05T06-02-59-775Z",
+        "diffPath": "/diffs/site-20-堂ヶ島製麺/desktop/threshold-2/page-001_top_2025-09-05T06-03-46-013Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 5430
+        }
+      },
+      {
+        "pageId": "002",
+        "pageIdentifier": "shop",
+        "baselineFile": "page-002_shop_2025-09-05T04-37-54-961Z.png",
+        "afterFile": "page-002_shop_2025-09-05T06-02-59-775Z.png",
+        "baselineTimestamp": "2025-09-05T04-37-54-961Z",
+        "afterTimestamp": "2025-09-05T06-02-59-775Z",
+        "diffPath": "/diffs/site-20-堂ヶ島製麺/desktop/threshold-2/page-002_shop_2025-09-05T06-03-49-205Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2430
+        }
+      },
+      {
+        "pageId": "003",
+        "pageIdentifier": "company",
+        "baselineFile": "page-003_company_2025-09-05T04-37-54-961Z.png",
+        "afterFile": "page-003_company_2025-09-05T06-02-59-775Z.png",
+        "baselineTimestamp": "2025-09-05T04-37-54-961Z",
+        "afterTimestamp": "2025-09-05T06-02-59-775Z",
+        "diffPath": "/diffs/site-20-堂ヶ島製麺/desktop/threshold-2/page-003_company_2025-09-05T06-03-50-594Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2262
+        }
+      },
+      {
+        "pageId": "004",
+        "pageIdentifier": "contact",
+        "baselineFile": "page-004_contact_2025-09-05T04-37-54-961Z.png",
+        "afterFile": "page-004_contact_2025-09-05T06-02-59-775Z.png",
+        "baselineTimestamp": "2025-09-05T04-37-54-961Z",
+        "afterTimestamp": "2025-09-05T06-02-59-775Z",
+        "diffPath": "/diffs/site-20-堂ヶ島製麺/desktop/threshold-2/page-004_contact_2025-09-05T06-03-51-773Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1972
+        }
+      },
+      {
+        "pageId": "005",
+        "pageIdentifier": "cart",
+        "baselineFile": "page-005_cart_2025-09-05T04-37-54-961Z.png",
+        "afterFile": "page-005_cart_2025-09-05T06-02-59-775Z.png",
+        "baselineTimestamp": "2025-09-05T04-37-54-961Z",
+        "afterTimestamp": "2025-09-05T06-02-59-775Z",
+        "diffPath": "/diffs/site-20-堂ヶ島製麺/desktop/threshold-2/page-005_cart_2025-09-05T06-03-52-618Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1205
+        }
+      },
+      {
+        "pageId": "006",
+        "pageIdentifier": "my-account",
+        "baselineFile": "page-006_my-account_2025-09-05T04-37-54-961Z.png",
+        "afterFile": "page-006_my-account_2025-09-05T06-02-59-775Z.png",
+        "baselineTimestamp": "2025-09-05T04-37-54-961Z",
+        "afterTimestamp": "2025-09-05T06-02-59-775Z",
+        "diffPath": "/diffs/site-20-堂ヶ島製麺/desktop/threshold-2/page-006_my-account_2025-09-05T06-03-53-433Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1114
+        }
+      },
+      {
+        "pageId": "008",
+        "pageIdentifier": "delivery-policy",
+        "baselineFile": "page-008_delivery-policy_2025-09-05T04-37-54-961Z.png",
+        "afterFile": "page-007_delivery-policy_2025-09-05T06-02-59-775Z.png",
+        "baselineTimestamp": "2025-09-05T04-37-54-961Z",
+        "afterTimestamp": "2025-09-05T06-02-59-775Z",
+        "diffPath": "/diffs/site-20-堂ヶ島製麺/desktop/threshold-2/page-008_delivery-policy_2025-09-05T06-03-54-106Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1771
+        }
+      },
+      {
+        "pageId": "009",
+        "pageIdentifier": "privacy-policy",
+        "baselineFile": "page-009_privacy-policy_2025-09-05T04-37-54-961Z.png",
+        "afterFile": "page-008_privacy-policy_2025-09-05T06-02-59-775Z.png",
+        "baselineTimestamp": "2025-09-05T04-37-54-961Z",
+        "afterTimestamp": "2025-09-05T06-02-59-775Z",
+        "diffPath": "/diffs/site-20-堂ヶ島製麺/desktop/threshold-2/page-009_privacy-policy_2025-09-05T06-03-55-570Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2870
+        }
+      },
+      {
+        "pageId": "010",
+        "pageIdentifier": "law",
+        "baselineFile": "page-010_law_2025-09-05T04-37-54-961Z.png",
+        "afterFile": "page-009_law_2025-09-05T06-02-59-775Z.png",
+        "baselineTimestamp": "2025-09-05T04-37-54-961Z",
+        "afterTimestamp": "2025-09-05T06-02-59-775Z",
+        "diffPath": "/diffs/site-20-堂ヶ島製麺/desktop/threshold-2/page-010_law_2025-09-05T06-03-56-776Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1707
+        }
+      },
+      {
+        "pageId": "011",
+        "pageIdentifier": "shop-page-2",
+        "baselineFile": "page-011_shop-page-2_2025-09-05T04-37-54-961Z.png",
+        "afterFile": "page-010_shop-page-2_2025-09-05T06-02-59-775Z.png",
+        "baselineTimestamp": "2025-09-05T04-37-54-961Z",
+        "afterTimestamp": "2025-09-05T06-02-59-775Z",
+        "diffPath": "/diffs/site-20-堂ヶ島製麺/desktop/threshold-2/page-011_shop-page-2_2025-09-05T06-03-57-531Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1175
+        }
+      },
+      {
+        "pageId": "012",
+        "pageIdentifier": "product-category-udon",
+        "baselineFile": "page-012_product-category-udon_2025-09-05T04-37-54-961Z.png",
+        "afterFile": "page-011_product-category-udon_2025-09-05T06-02-59-775Z.png",
+        "baselineTimestamp": "2025-09-05T04-37-54-961Z",
+        "afterTimestamp": "2025-09-05T06-02-59-775Z",
+        "diffPath": "/diffs/site-20-堂ヶ島製麺/desktop/threshold-2/page-012_product-category-udon_2025-09-05T06-03-58-094Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1142
+        }
+      },
+      {
+        "pageId": "013",
+        "pageIdentifier": "product-category-soba",
+        "baselineFile": "page-013_product-category-soba_2025-09-05T04-37-54-961Z.png",
+        "afterFile": "page-012_product-category-soba_2025-09-05T06-02-59-775Z.png",
+        "baselineTimestamp": "2025-09-05T04-37-54-961Z",
+        "afterTimestamp": "2025-09-05T06-02-59-775Z",
+        "diffPath": "/diffs/site-20-堂ヶ島製麺/desktop/threshold-2/page-013_product-category-soba_2025-09-05T06-03-58-854Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1967
+        }
+      },
+      {
+        "pageId": "014",
+        "pageIdentifier": "product-category-noodle",
+        "baselineFile": "page-014_product-category-noodle_2025-09-05T04-37-54-961Z.png",
+        "afterFile": "page-013_product-category-noodle_2025-09-05T06-02-59-775Z.png",
+        "baselineTimestamp": "2025-09-05T04-37-54-961Z",
+        "afterTimestamp": "2025-09-05T06-02-59-775Z",
+        "diffPath": "/diffs/site-20-堂ヶ島製麺/desktop/threshold-2/page-014_product-category-noodle_2025-09-05T06-03-59-605Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1142
+        }
+      },
+      {
+        "pageId": "015",
+        "pageIdentifier": "product-category-fried-soba",
+        "baselineFile": "page-015_product-category-fried-soba_2025-09-05T04-37-54-961Z.png",
+        "afterFile": "page-014_product-category-fried-soba_2025-09-05T06-02-59-775Z.png",
+        "baselineTimestamp": "2025-09-05T04-37-54-961Z",
+        "afterTimestamp": "2025-09-05T06-02-59-775Z",
+        "diffPath": "/diffs/site-20-堂ヶ島製麺/desktop/threshold-2/page-015_product-category-fried-soba_2025-09-05T06-04-00-401Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1142
+        }
+      },
+      {
+        "pageId": "016",
+        "pageIdentifier": "my-account-lost-password",
+        "baselineFile": "page-016_my-account-lost-password_2025-09-05T04-37-54-961Z.png",
+        "afterFile": "page-015_my-account-lost-password_2025-09-05T06-02-59-775Z.png",
+        "baselineTimestamp": "2025-09-05T04-37-54-961Z",
+        "afterTimestamp": "2025-09-05T06-02-59-775Z",
+        "diffPath": "/diffs/site-20-堂ヶ島製麺/desktop/threshold-2/page-016_my-account-lost-password_2025-09-05T06-04-01-050Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "pageId": "018",
+        "pageIdentifier": "shop-page-1",
+        "baselineFile": "page-018_shop-page-1_2025-09-05T04-37-54-961Z.png",
+        "afterFile": "page-016_shop-page-1_2025-09-05T06-02-59-775Z.png",
+        "baselineTimestamp": "2025-09-05T04-37-54-961Z",
+        "afterTimestamp": "2025-09-05T06-02-59-775Z",
+        "diffPath": "/diffs/site-20-堂ヶ島製麺/desktop/threshold-2/page-018_shop-page-1_2025-09-05T06-04-01-967Z_diff-0%.png",
+        "diffPixels": 0,
+        "diffPercentage": 0,
+        "status": "OK",
+        "threshold": 2,
+        "dimensions": {
+          "width": 1920,
+          "height": 2430
+        }
+      }
+    ]
+  }
+}

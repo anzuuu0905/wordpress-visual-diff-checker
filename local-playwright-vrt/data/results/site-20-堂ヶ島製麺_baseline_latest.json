@@ -1,0 +1,205 @@
+{
+  "timestamp": "2025-09-05T04:42:36.724Z",
+  "type": "baseline",
+  "siteId": "site-20-堂ヶ島製麺",
+  "siteName": "堂ヶ島製麺",
+  "device": "desktop",
+  "captureCount": 17,
+  "captureResults": [
+    {
+      "url": "https://dougasima-seimen.com/",
+      "filename": "page-001_top_2025-09-05T04-37-54-961Z.png",
+      "timestamp": "2025-09-05T04:38:16.796Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/shop/",
+      "filename": "page-002_shop_2025-09-05T04-37-54-961Z.png",
+      "timestamp": "2025-09-05T04:38:13.336Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/company/",
+      "filename": "page-003_company_2025-09-05T04-37-54-961Z.png",
+      "timestamp": "2025-09-05T04:38:12.128Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/contact/",
+      "filename": "page-004_contact_2025-09-05T04-37-54-961Z.png",
+      "timestamp": "2025-09-05T04:38:12.871Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/cart/",
+      "filename": "page-005_cart_2025-09-05T04-37-54-961Z.png",
+      "timestamp": "2025-09-05T04:38:11.649Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/my-account/",
+      "filename": "page-006_my-account_2025-09-05T04-37-54-961Z.png",
+      "timestamp": "2025-09-05T04:38:11.495Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/delivery-policy/",
+      "filename": "page-008_delivery-policy_2025-09-05T04-37-54-961Z.png",
+      "timestamp": "2025-09-05T04:38:12.568Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/privacy-policy/",
+      "filename": "page-009_privacy-policy_2025-09-05T04-37-54-961Z.png",
+      "timestamp": "2025-09-05T04:42:20.238Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/law/",
+      "filename": "page-010_law_2025-09-05T04-37-54-961Z.png",
+      "timestamp": "2025-09-05T04:42:18.740Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/shop/page/2/",
+      "filename": "page-011_shop-page-2_2025-09-05T04-37-54-961Z.png",
+      "timestamp": "2025-09-05T04:42:17.809Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/product-category/udon/",
+      "filename": "page-012_product-category-udon_2025-09-05T04-37-54-961Z.png",
+      "timestamp": "2025-09-05T04:42:18.242Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/product-category/soba/",
+      "filename": "page-013_product-category-soba_2025-09-05T04-37-54-961Z.png",
+      "timestamp": "2025-09-05T04:42:19.309Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/product-category/noodle/",
+      "filename": "page-014_product-category-noodle_2025-09-05T04-37-54-961Z.png",
+      "timestamp": "2025-09-05T04:42:18.736Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/product-category/fried-soba/",
+      "filename": "page-015_product-category-fried-soba_2025-09-05T04-37-54-961Z.png",
+      "timestamp": "2025-09-05T04:42:18.236Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/my-account/lost-password/",
+      "filename": "page-016_my-account-lost-password_2025-09-05T04-37-54-961Z.png",
+      "timestamp": "2025-09-05T04:42:18.475Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/wp-content/uploads/2023/08/DSC06696_re01.png",
+      "filename": "page-017_wp-content-uploads-2023-08-dsc_2025-09-05T04-37-54-961Z.png",
+      "timestamp": "2025-09-05T04:42:32.993Z"
+    },
+    {
+      "url": "https://dougasima-seimen.com/shop/page/1/",
+      "filename": "page-018_shop-page-1_2025-09-05T04-37-54-961Z.png",
+      "timestamp": "2025-09-05T04:42:36.720Z"
+    }
+  ],
+  "pages": [
+    {
+      "url": "https://dougasima-seimen.com/",
+      "pageId": "001",
+      "identifier": "top",
+      "title": "堂ヶ島製麺"
+    },
+    {
+      "url": "https://dougasima-seimen.com/shop/",
+      "pageId": "002",
+      "identifier": "shop",
+      "title": "商品一覧 – 堂ヶ島製麺"
+    },
+    {
+      "url": "https://dougasima-seimen.com/company/",
+      "pageId": "003",
+      "identifier": "company",
+      "title": "会社概要 – 堂ヶ島製麺"
+    },
+    {
+      "url": "https://dougasima-seimen.com/contact/",
+      "pageId": "004",
+      "identifier": "contact",
+      "title": "お問い合わせ – 堂ヶ島製麺"
+    },
+    {
+      "url": "https://dougasima-seimen.com/cart/",
+      "pageId": "005",
+      "identifier": "cart",
+      "title": "お買い物カゴ – 堂ヶ島製麺"
+    },
+    {
+      "url": "https://dougasima-seimen.com/my-account/",
+      "pageId": "006",
+      "identifier": "my-account",
+      "title": "マイアカウント – 堂ヶ島製麺"
+    },
+    {
+      "url": "https://dougasima-seimen.com/product/%e4%bc%8a%e8%b1%86%e5%90%8d%e7%94%a3%e6%a1%9c%e8%91%89%e3%81%9d%e3%81%b0100g4%e6%9c%ac%e3%81%a4%e3%82%864%e5%80%8b%e4%bb%98%e3%81%8d/",
+      "pageId": "007",
+      "identifier": "product--e4-bc-8a-e8-b1-86-e5-",
+      "title": "伊豆名産桜葉そば(100g4本つゆ4個付き) – 堂ヶ島製麺"
+    },
+    {
+      "url": "https://dougasima-seimen.com/delivery-policy/",
+      "pageId": "008",
+      "identifier": "delivery-policy",
+      "title": "配送ポリシー – 堂ヶ島製麺"
+    },
+    {
+      "url": "https://dougasima-seimen.com/privacy-policy/",
+      "pageId": "009",
+      "identifier": "privacy-policy",
+      "title": "プライバシーポリシー – 堂ヶ島製麺"
+    },
+    {
+      "url": "https://dougasima-seimen.com/law/",
+      "pageId": "010",
+      "identifier": "law",
+      "title": "特定商取引法に基づく表記 – 堂ヶ島製麺"
+    },
+    {
+      "url": "https://dougasima-seimen.com/shop/page/2/",
+      "pageId": "011",
+      "identifier": "shop-page-2",
+      "title": "商品一覧 – ページ 2 – 堂ヶ島製麺"
+    },
+    {
+      "url": "https://dougasima-seimen.com/product-category/udon/",
+      "pageId": "012",
+      "identifier": "product-category-udon",
+      "title": "うどん – 堂ヶ島製麺"
+    },
+    {
+      "url": "https://dougasima-seimen.com/product-category/soba/",
+      "pageId": "013",
+      "identifier": "product-category-soba",
+      "title": "そば – 堂ヶ島製麺"
+    },
+    {
+      "url": "https://dougasima-seimen.com/product-category/noodle/",
+      "pageId": "014",
+      "identifier": "product-category-noodle",
+      "title": "ラーメン – 堂ヶ島製麺"
+    },
+    {
+      "url": "https://dougasima-seimen.com/product-category/fried-soba/",
+      "pageId": "015",
+      "identifier": "product-category-fried-soba",
+      "title": "焼きそば – 堂ヶ島製麺"
+    },
+    {
+      "url": "https://dougasima-seimen.com/my-account/lost-password/",
+      "pageId": "016",
+      "identifier": "my-account-lost-password",
+      "title": "パスワードを忘れた場合 – 堂ヶ島製麺"
+    },
+    {
+      "url": "https://dougasima-seimen.com/wp-content/uploads/2023/08/DSC06696_re01.png",
+      "pageId": "017",
+      "identifier": "wp-content-uploads-2023-08-dsc",
+      "title": "DSC06696_re01.png (1080×1080)"
+    },
+    {
+      "url": "https://dougasima-seimen.com/shop/page/1/",
+      "pageId": "018",
+      "identifier": "shop-page-1",
+      "title": "商品一覧 – 堂ヶ島製麺"
+    }
+  ]
+}
